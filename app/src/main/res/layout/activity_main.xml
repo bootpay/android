@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context="kr.co.bootpay.android.MainActivity">
+
+    <Button
+        android:text="Native 연동 예제"
+        android:background="#4529e5"
+        android:textColor="#fff"
+        android:onClick="goNativeActivity"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <Button
+        android:text="WebApp 연동 예제"
+        android:onClick="goWebAppActivity"
+        android:background="#4529e5"
+        android:layout_marginTop="10dp"
+        android:textColor="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+</LinearLayout>
