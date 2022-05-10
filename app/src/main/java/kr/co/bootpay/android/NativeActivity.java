@@ -123,7 +123,7 @@ public class NativeActivity extends AppCompatActivity {
         map.put("1", "abcdef");
         map.put("2", "abcdef55");
         map.put("3", 1234);
-        payload.setParams(new Gson().toJson(map));
+        payload.setMetadata(new Gson().toJson(map));
 
         Bootpay.init(getSupportFragmentManager(), getApplicationContext())
                 .setPayload(payload)
@@ -259,7 +259,7 @@ public class NativeActivity extends AppCompatActivity {
         map.put("1", "abcdef");
         map.put("2", "abcdef55");
         map.put("3", 1234);
-        payload.setParams(new Gson().toJson(map));
+        payload.setMetadata(new Gson().toJson(map));
 
         Bootpay.init(getSupportFragmentManager(), getApplicationContext())
                 .setPayload(payload)
@@ -334,7 +334,7 @@ public class NativeActivity extends AppCompatActivity {
         map.put("1", "abcdef");
         map.put("2", "abcdef55");
         map.put("3", 1234);
-        payload.setParams(new Gson().toJson(map));
+        payload.setMetadata(new Gson().toJson(map));
 
         Bootpay.init(getSupportFragmentManager(), getApplicationContext())
                 .setPayload(payload)

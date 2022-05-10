@@ -20,7 +20,7 @@ public class Payload {
     private String authenticationId = "";
 
 //    private int useOrderId = 0; // 1: 사용, 0: 미사용
-    private String params = "";
+    private String metadata = "";
     private boolean showAgreeWindow = false;
     private String userToken = "";
 
@@ -138,12 +138,12 @@ public class Payload {
 //        this.params = params;
 //        return this;
 //    }
-    public String getParams() {
-    return params;
+    public String getMetadata() {
+    return metadata;
 }
 
-    public Payload setParams(String params) {
-        this.params = params;
+    public Payload setMetadata(String metadata) {
+        this.metadata = metadata;
         return this;
     }
 

@@ -251,7 +251,7 @@ Bootpay.init(getSupportFragmentManager(), getApplicationContext())
   method: "vbank"
   method_name: "가상계좌"
   order_id: "1610591554856"
-  params: null
+  metadata: null
   payment_group: "vbank"
   payment_group_name: "가상계좌"
   payment_name: "가상계좌"
