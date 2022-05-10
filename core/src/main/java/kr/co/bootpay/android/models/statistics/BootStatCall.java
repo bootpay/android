@@ -2,6 +2,8 @@ package kr.co.bootpay.android.models.statistics;
 
 import java.util.List;
 
+import kr.co.bootpay.android.models.BootItem;
+
 public class BootStatCall {
     public String ver;
     public String application_id;

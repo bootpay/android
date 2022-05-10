@@ -3,8 +3,8 @@ package kr.co.bootpay.android.models.statistics;
 public class BootStatItem {
     public String unique;
     public Double price;
-    public String itemName;
-    public String itemImg;
+    public String item_name;
+    public String item_img;
     public String cat1;
     public String cat2;
     public String cat3;
@@ -14,28 +14,28 @@ public class BootStatItem {
     public BootStatItem(String unique, Double price, String itemName, String itemImg, String cat1, String cat2, String cat3) {
         this.unique = unique;
         this.price = price;
-        this.itemName = itemName;
-        this.itemImg = itemImg;
+        this.item_name = itemName;
+        this.item_img = itemImg;
         this.cat1 = cat1;
         this.cat2 = cat2;
         this.cat3 = cat3;
     }
 
     public String getItemName() {
-        return itemName;
+        return item_name;
     }
 
-    public BootStatItem setItemName(String itemName) {
-        this.itemName = itemName;
+    public BootStatItem setItemName(String item_name) {
+        this.item_name = item_name;
         return this;
     }
 
     public String getItemImg() {
-        return itemImg;
+        return item_img;
     }
 
-    public BootStatItem setItemImg(String itemImg) {
-        this.itemImg = itemImg;
+    public BootStatItem setItemImg(String item_img) {
+        this.item_img = item_img;
         return this;
     }
 

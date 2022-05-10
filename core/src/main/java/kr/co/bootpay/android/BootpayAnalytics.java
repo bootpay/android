@@ -7,6 +7,8 @@ import java.util.List;
 
 import kr.co.bootpay.android.analytics.AnalyticsPresenter;
 import kr.co.bootpay.android.analytics.AnalyticsService;
+//import kr.co.bootpay.android.models.statistics.BootStatItem;
+import kr.co.bootpay.android.models.BootItem;
 import kr.co.bootpay.android.models.statistics.BootStatItem;
 import kr.co.bootpay.android.pref.UserInfo;
 
@@ -99,5 +101,6 @@ public class BootpayAnalytics {
         if (presenter == null) throw new IllegalStateException("Analytics is not initialized.");
         else presenter.pageTrace(url, page_type, items);
     }
+
 }
 

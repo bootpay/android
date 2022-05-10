@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import java.util.List;
 
 import kr.co.bootpay.android.constants.BootpayBuildConfig;
+import kr.co.bootpay.android.models.BootItem;
 import kr.co.bootpay.android.models.statistics.BootStatCall;
 import kr.co.bootpay.android.models.statistics.BootStatItem;
 import kr.co.bootpay.android.models.statistics.BootStatLogin;
@@ -53,7 +54,7 @@ public class AnalyticsPresenter {
             @Override
             public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
                 if(response != null && response.body() != null) {
-                    UserInfo.getInstance(service.getContext()).setBootpayUserId(response.body().getData().getUserId());
+                    if(response.body().getData() != null) UserInfo.getInstance(service.getContext()).setBootpayUserId(response.body().getData().getUserId());
 //                    Log.d("bootpay", response.body().getData().toString());
                     Log.d("bootpay", new Gson().toJson(response.body().getData()));
                 }
@@ -64,37 +65,6 @@ public class AnalyticsPresenter {
                 Log.d("bootpay", t.getMessage());
             }
         });
-
-
-//        service.getApi()
-//                .login(
-//                        aes.strEncode(json),
-//                        aes.getSessionKey()
-//                )
-//                .retry(3)
-//                .subscribeOn(Schedulers.from(Executors.newCachedThreadPool()))
-//                .subscribe(
-//                        new Observer<LoginResult>() {
-//                            @Override
-//                            public void onComplete() {
-//
-//                                Log.d("BootpayAnalytics", "user trace onComplete");
-//                            }
-//
-//                            @Override
-//                            public void onError(Throwable e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                            @Override
-//                            public void onSubscribe(Disposable d) {}
-//
-//                            @Override
-//                            public void onNext(LoginResult res) {
-//                                if(res.getData() != null) UserInfo.getInstance(service.getContext()).setBootpayUserId(res.getData().getUserId());
-//                                Log.d("BootpayAnalytics", "user trace onNext " + new Gson().toJson(res));
-//                            }
-//                        });
 
     }
 
@@ -138,35 +108,6 @@ public class AnalyticsPresenter {
                 Log.d("bootpay", t.getMessage());
             }
         });
-
-//        service.getApi()
-//                .call(
-//                        aes.strEncode(json),
-//                        aes.getSessionKey()
-//                )
-//                .retry(3)
-//                .subscribeOn(Schedulers.from(Executors.newCachedThreadPool()))
-//                .subscribe(
-//                        new Observer<LoginResult>() {
-//                            @Override
-//                            public void onComplete() {
-//                                Log.d("BootpayAnalytics", "page trace onComplete");
-//                            }
-//
-//                            @Override
-//                            public void onError(Throwable e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                            @Override
-//                            public void onSubscribe(Disposable d) {}
-//
-//                            @Override
-//                            public void onNext(LoginResult res) {
-//                                Log.d("BootpayAnalytics", "page trace onNext " + new Gson().toJson(res));
-//                            }
-//                        });
-
 
     }
 

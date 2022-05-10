@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import kr.co.bootpay.android.constants.BootpayBuildConfig;
 import kr.co.bootpay.android.cookiejar.PersistentCookieJar;
 import kr.co.bootpay.android.cookiejar.cache.SetCookieCache;
 import kr.co.bootpay.android.cookiejar.persistence.SharedPrefsCookiePersistor;
@@ -33,9 +34,11 @@ public class AnalyticsService {
                 .setLenient()
                 .create();
 
+        String url = "https://analytics.bootpay.co.kr";
+        if(BootpayBuildConfig.DEBUG) url = "https://dev-analytics.bootpay.co.kr";
 
         api =  new Retrofit.Builder()
-                .baseUrl("https://analytics.bootpay.co.kr")
+                .baseUrl(url)
                 .client(client)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))

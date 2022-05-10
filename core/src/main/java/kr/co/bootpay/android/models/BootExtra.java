@@ -1,6 +1,12 @@
 package kr.co.bootpay.android.models;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import kr.co.bootpay.android.constants.Browser;
+import kr.co.bootpay.android.constants.OpenType;
+
 public class BootExtra {
     private String cardQuota; //카드 결제시 할부 기간 설정 (5만원 이상 구매시)
     private String sellerName; //노출되는 판매자명 설정
@@ -12,7 +18,7 @@ public class BootExtra {
 
     private String appScheme; //모바일 앱에서 결제 완료 후 돌아오는 옵션 ( 아이폰만 적용 )
     private boolean useCardPoint = true; //카드 포인트 사용 여부 (토스만 가능)
-    private String directCard = "ko"; //해당 카드로 바로 결제창 (토스만 가능)
+    private String directCard = ""; //해당 카드로 바로 결제창 (토스만 가능)
 
     private boolean useOrderId = false; //가맹점 order_id로 PG로 전송
     private boolean internationalCardOnly = false; //해외 결제카드 선택 여부 (토스만 가능)
@@ -27,6 +33,9 @@ public class BootExtra {
     private String redirectUrl; //open_type이 redirect일 경우 페이지 이동할 URL ( 오류 및 결제 완료 모두 수신 가능 )
     private boolean displaySuccessResult = false; // 결제 완료되면 부트페이가 제공하는 완료창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
     private boolean displayErrorResult = true; // 결제가 실패하면 부트페이가 제공하는 실패창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
+    private int disposableCupDeposit = 0; //배달대행 플랫폼을 위한 컵 보증급 가격
+    private BootExtraCardEasyOption cardEasyOption = new BootExtraCardEasyOption();
+    private List<BrowserOpenType> browserOpenType = new ArrayList<>();
 
     public String getCardQuota() {
         return cardQuota;
@@ -232,6 +241,33 @@ public class BootExtra {
 
     public BootExtra setDisplayErrorResult(boolean displayErrorResult) {
         this.displayErrorResult = displayErrorResult;
+        return this;
+    }
+
+    public int getDisposableCupDeposit() {
+        return disposableCupDeposit;
+    }
+
+    public BootExtra setDisposableCupDeposit(int disposableCupDeposit) {
+        this.disposableCupDeposit = disposableCupDeposit;
+        return this;
+    }
+
+    public BootExtraCardEasyOption getCardEasyOption() {
+        return cardEasyOption;
+    }
+
+    public BootExtra setCardEasyOption(BootExtraCardEasyOption cardEasyOption) {
+        this.cardEasyOption = cardEasyOption;
+        return this;
+    }
+
+    public List<BrowserOpenType> getBrowserOpenType() {
+        return browserOpenType;
+    }
+
+    public BootExtra setBrowserOpenType(List<BrowserOpenType> browserOpenType) {
+        this.browserOpenType = browserOpenType;
         return this;
     }
 }

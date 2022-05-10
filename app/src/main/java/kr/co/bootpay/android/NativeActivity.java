@@ -17,16 +17,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kr.co.bootpay.android.constants.Browser;
+import kr.co.bootpay.android.constants.OpenType;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.models.BootExtra;
 import kr.co.bootpay.android.models.BootItem;
 import kr.co.bootpay.android.models.BootUser;
+import kr.co.bootpay.android.models.BrowserOpenType;
 import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.models.statistics.BootStatItem;
 
 public class NativeActivity extends AppCompatActivity {
-    private String application_id = "5b8f6a4d396fa665fdc2b5e8"; //production
-//    private String application_id = "5b9f51264457636ab9a07cdc"; //development
+//    private String application_id = "5b8f6a4d396fa665fdc2b5e8"; //production
+    private String application_id = "5b9f51264457636ab9a07cdc"; //development
 
 
     Context context;
@@ -69,6 +72,7 @@ public class NativeActivity extends AppCompatActivity {
     }
 
     public void goTracePage(View v) {
+        //통계용 데이터 추가
         List<BootStatItem> items = new ArrayList<>();
         BootStatItem item1 = new BootStatItem().setItemName("마우's 스").setUnique("ITEM_CODE_MOUSE").setPrice(500d);
         BootStatItem item2 = new BootStatItem().setItemName("키보드").setUnique("ITEM_KEYBOARD_MOUSE").setPrice(500d);
@@ -86,22 +90,19 @@ public class NativeActivity extends AppCompatActivity {
 
         BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
 //        BootExtra extra = new BootExtra().setQuotas(new int[] {0,2,3}).setPopup(1).setQuickPopup(1);  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
+
         BootExtra extra = new BootExtra()
                 .setCardQuota("0,2,3")  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
                 .setOpenType("popup");
-//                .setCarrier("SKT") //본인인증 시 고정할 통신사명, SKT,KT,LGT 중 1개만 가능
-//                .setAgeLimit(40); // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
+
         Double price = 1000d;
 
         try {
             price = Double.parseDouble(edit_price.getText().toString());
         } catch (Exception e){}
 
-
         String pg = BootpayValueHelper.pgToString(spinner_pg.getSelectedItem().toString());
         String method = BootpayValueHelper.methodToString(spinner_method.getSelectedItem().toString());
-
-
 
         //통계용 데이터 추가
         List<BootItem> items = new ArrayList<>();
