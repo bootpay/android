@@ -184,7 +184,7 @@ payload.setApplicationId(application_id)
     .setOrderName("부트페이 결제테스트")
     .setPg("nicepay")
     .setMethod("card_rebill")
-    .setAuthenticationId("1234") //본인인증 실행함수
+    .setAuthenticationId("1234") //본인인증용 orderId
     .setMethod(method)
     .setPrice(price)
     .setUser(user)
