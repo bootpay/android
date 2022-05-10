@@ -28,8 +28,8 @@ import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.models.statistics.BootStatItem;
 
 public class NativeActivity extends AppCompatActivity {
-//    private String application_id = "5b8f6a4d396fa665fdc2b5e8"; //production
-    private String application_id = "5b9f51264457636ab9a07cdc"; //development
+    private String application_id = "5b8f6a4d396fa665fdc2b5e8"; //production
+//    private String application_id = "5b9f51264457636ab9a07cdc"; //development
 
 
     Context context;
@@ -87,9 +87,7 @@ public class NativeActivity extends AppCompatActivity {
     }
 
     public void goRequest(View v) {
-
         BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
-//        BootExtra extra = new BootExtra().setQuotas(new int[] {0,2,3}).setPopup(1).setQuickPopup(1);  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
 
         BootExtra extra = new BootExtra()
                 .setCardQuota("0,2,3")  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
@@ -104,15 +102,11 @@ public class NativeActivity extends AppCompatActivity {
         String pg = BootpayValueHelper.pgToString(spinner_pg.getSelectedItem().toString());
         String method = BootpayValueHelper.methodToString(spinner_method.getSelectedItem().toString());
 
-        //통계용 데이터 추가
         List<BootItem> items = new ArrayList<>();
         BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(500d);
         BootItem item2 = new BootItem().setName("키보드").setId("ITEM_KEYBOARD_MOUSE").setQty(1).setPrice(500d);
         items.add(item1);
         items.add(item2);
-
-//        String value = "{\"application_id\":\"5b8f6a4d396fa665fdc2b5e8\",\"pg\":\"\",\"method\":\"\",\"methods\":[\"easy_card\",\"easy_bank\",\"card\",\"phone\",\"bank\",\"vbank\"],\"name\":\"블링블링's 마스카라\",\"price\":1000.0,\"tax_free\":0.0,\"order_id\":\"1234_1234_1243\",\"use_order_id\":0,\"account_expire_at\":\"\",\"show_agree_window\":0,\"paramJson\":\"\",\"user_token\":\"\",\"extra\":{\"start_at\":\"\",\"end_at\":\"\",\"expire_month\":0,\"vbank_result\":0,\"quotas\":[],\"app_scheme\":\"\",\"app_scheme_host\":\"\",\"locale\":\"\",\"popup\":0,\"escrow\":0},\"user_info\":{\"user_id\":\"\",\"username\":\"홍길동\",\"email\":\"testUser@email.com\",\"gender\":0,\"birth\":\"\",\"phone\":\"01012345678\",\"area\":\"서울\"},\"items\":[{\"item_name\":\"미키 마우스\",\"qty\":1,\"unique\":\"ITEM_CODE_MOUSE\",\"price\":1000.0,\"cat1\":\"\",\"cat2\":\"\",\"cat3\":\"\"},{\"item_name\":\"키보드\",\"qty\":1,\"unique\":\"ITEM_CODE_KEYBOARD\",\"price\":1000.0,\"cat1\":\"패션\",\"cat2\":\"여성상의\",\"cat3\":\"블라우스\"}]}";
-//        Payload payload = Payload.fromJson(value);
 
         Payload payload = new Payload();
         payload.setApplicationId(application_id)
@@ -172,12 +166,8 @@ public class NativeActivity extends AppCompatActivity {
 
     public void goTotalRequest(View v) {
         BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
-//        BootExtra extra = new BootExtra().setQuotas(new int[] {0,2,3});  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
         BootExtra extra = new BootExtra().setCardQuota("0,2,3");  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
         Double price = 1000d;
-//        try {
-//            price = Double.parseDouble(edit_price.getText().toString());
-//        } catch (Exception e){}
 
 
 
@@ -233,5 +223,155 @@ public class NativeActivity extends AppCompatActivity {
                         Log.d("done", data);
                     }
                 }).requestPayment();
+    }
+
+
+    public void goSubscriptionRequest(View v) {
+        BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
+
+        BootExtra extra = new BootExtra()
+                .setCardQuota("0,2,3")  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
+                .setOpenType("popup");
+
+        Double price = 1000d;
+
+        String pg = "nicepay";
+        String method = "card_rebill";
+
+        List<BootItem> items = new ArrayList<>();
+        BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(500d);
+        BootItem item2 = new BootItem().setName("키보드").setId("ITEM_KEYBOARD_MOUSE").setQty(1).setPrice(500d);
+        items.add(item1);
+        items.add(item2);
+
+        Payload payload = new Payload();
+        payload.setApplicationId(application_id)
+                .setOrderName("부트페이 결제테스트")
+                .setPg(pg)
+                .setOrderId("1234")
+                .setMethod(method)
+                .setPrice(price)
+                .setUser(user)
+                .setExtra(extra)
+                .setItems(items);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("1", "abcdef");
+        map.put("2", "abcdef55");
+        map.put("3", 1234);
+        payload.setParams(new Gson().toJson(map));
+
+        Bootpay.init(getSupportFragmentManager(), getApplicationContext())
+                .setPayload(payload)
+                .setEventListener(new BootpayEventListener() {
+                    @Override
+                    public void onCancel(String data) {
+                        Log.d("bootpay", "cancel: " + data);
+                    }
+
+                    @Override
+                    public void onError(String data) {
+                        Log.d("bootpay", "error: " + data);
+                    }
+
+                    @Override
+                    public void onClose(String data) {
+                        Log.d("bootpay", "close: " + data);
+                        Bootpay.removePaymentWindow();
+                    }
+
+                    @Override
+                    public void onIssued(String data) {
+                        Log.d("bootpay", "issued: " +data);
+                    }
+
+                    @Override
+                    public boolean onConfirm(String data) {
+                        Log.d("bootpay", "confirm: " + data);
+//                        Bootpay.transactionConfirm(data); //재고가 있어서 결제를 진행하려 할때 true (방법 1)
+                        return true; //재고가 있어서 결제를 진행하려 할때 true (방법 2)
+//                        return false; //결제를 진행하지 않을때 false
+                    }
+
+                    @Override
+                    public void onDone(String data) {
+                        Log.d("done", data);
+                    }
+                }).requestSubscription();
+    }
+
+
+    public void goAuthenticationRequest(View v) {
+        BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
+
+        BootExtra extra = new BootExtra()
+                .setCardQuota("0,2,3");  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
+
+
+        Double price = 1000d;
+
+        String pg = "danal";
+        String method = "auth";
+
+        List<BootItem> items = new ArrayList<>();
+        BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(500d);
+        BootItem item2 = new BootItem().setName("키보드").setId("ITEM_KEYBOARD_MOUSE").setQty(1).setPrice(500d);
+        items.add(item1);
+        items.add(item2);
+
+        Payload payload = new Payload();
+        payload.setApplicationId(application_id)
+                .setOrderName("부트페이 결제테스트")
+                .setPg(pg)
+                .setOrderId("1234")
+                .setMethod(method)
+                .setPrice(price)
+                .setUser(user)
+                .setExtra(extra)
+                .setItems(items);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("1", "abcdef");
+        map.put("2", "abcdef55");
+        map.put("3", 1234);
+        payload.setParams(new Gson().toJson(map));
+
+        Bootpay.init(getSupportFragmentManager(), getApplicationContext())
+                .setPayload(payload)
+                .setEventListener(new BootpayEventListener() {
+                    @Override
+                    public void onCancel(String data) {
+                        Log.d("bootpay", "cancel: " + data);
+                    }
+
+                    @Override
+                    public void onError(String data) {
+                        Log.d("bootpay", "error: " + data);
+                    }
+
+                    @Override
+                    public void onClose(String data) {
+                        Log.d("bootpay", "close: " + data);
+                        Bootpay.removePaymentWindow();
+                    }
+
+                    @Override
+                    public void onIssued(String data) {
+                        Log.d("bootpay", "issued: " +data);
+                    }
+
+                    @Override
+                    public boolean onConfirm(String data) {
+                        Log.d("bootpay", "confirm: " + data);
+//                        Bootpay.transactionConfirm(data); //재고가 있어서 결제를 진행하려 할때 true (방법 1)
+                        return true; //재고가 있어서 결제를 진행하려 할때 true (방법 2)
+//                        return false; //결제를 진행하지 않을때 false
+                    }
+
+                    @Override
+                    public void onDone(String data) {
+                        Log.d("done", data);
+                    }
+                }).requestAuthentication();
     }
 }

@@ -94,6 +94,24 @@
                 android:layout_height="40dp" />
 
             <Button
+                android:text="정기결제창"
+                android:onClick="goSubscriptionRequest"
+                android:background="#4529e5"
+                android:layout_marginTop="10dp"
+                android:textColor="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <Button
+                android:text="본인인증창"
+                android:onClick="goAuthenticationRequest"
+                android:background="#4529e5"
+                android:layout_marginTop="10dp"
+                android:textColor="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <Button
                 android:text="통계 - 회원정보 송신"
                 android:onClick="goTraceUser"
                 android:background="#4529e5"
