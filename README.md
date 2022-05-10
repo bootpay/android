@@ -273,10 +273,6 @@ public class NativeActivity extends AppCompatActivity {
 }
 ```
 
-
- 결제 진행 상태에 따라 LifeCycle 함수가 실행됩니다. 각 함수에 대한 상세 설명은 아래를 참고하세요.
-
-
 ## 정기결제창 띄우기 
 
 ```java 
@@ -318,6 +314,9 @@ Bootpay.init(getSupportFragmentManager(), getApplicationContext())
             .setPayload(payload)
             .requestAuthentication(); //본인인증 실행함수
 ```
+
+
+결제 진행 상태에 따라 LifeCycle 함수가 실행됩니다. 각 함수에 대한 상세 설명은 아래를 참고하세요.
 
 ### onError 함수
 결제 진행 중 오류가 발생된 경우 호출되는 함수입니다. 진행중 에러가 발생되는 경우는 다음과 같습니다.
