@@ -52,8 +52,7 @@ Android [네트워크 보안 구성](https://developer.android.com/training/arti
 ```java
 
 public class NativeActivity extends AppCompatActivity {
-    //    private String application_id = "5b8f6a4d396fa665fdc2b5e8";
-    private String application_id = "5b9f51264457636ab9a07cdc";
+    private String application_id = "5b8f6a4d396fa665fdc2b5e8";
 
 
     Context context;
