@@ -235,7 +235,7 @@ Bootpay.init(getSupportFragmentManager(), getApplicationContext())
 
 
 ### onIssued 함수
-가상계좌 발급이 완료되면 호출되는 함수입니다. 가상계좌는 다른 결제와 다르게 입금할 계좌 번호 발급 이후 입금 후에 Feedback URL을 통해 통지가 됩니다. 발급된 가상계좌 정보를 ready 함수를 통해 확인하실 수 있습니다.
+가상계좌 발급이 완료되면 호출되는 함수입니다(가상계좌를 위한 Done). 가상계좌는 다른 결제와 다르게 입금할 계좌 번호 발급 이후 입금 후에 Feedback URL을 통해 통지가 됩니다. 발급된 가상계좌 정보를 issued 함수를 통해 확인하실 수 있습니다.
 
   data 포맷은 아래와 같습니다.
 
