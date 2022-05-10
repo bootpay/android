@@ -355,6 +355,7 @@ public class NativeActivity extends AppCompatActivity {
                         Bootpay.removePaymentWindow();
                     }
 
+                    //본인인증에선 호출되지 않음
                     @Override
                     public void onIssued(String data) {
                         Log.d("bootpay", "issued: " +data);
@@ -362,10 +363,7 @@ public class NativeActivity extends AppCompatActivity {
 
                     @Override
                     public boolean onConfirm(String data) {
-                        Log.d("bootpay", "confirm: " + data);
-//                        Bootpay.transactionConfirm(data); //재고가 있어서 결제를 진행하려 할때 true (방법 1)
-                        return true; //재고가 있어서 결제를 진행하려 할때 true (방법 2)
-//                        return false; //결제를 진행하지 않을때 false
+                        return true; //본인인증에선 호출되지 않음
                     }
 
                     @Override
