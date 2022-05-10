@@ -248,7 +248,7 @@ public class NativeActivity extends AppCompatActivity {
         payload.setApplicationId(application_id)
                 .setOrderName("부트페이 결제테스트")
                 .setPg(pg)
-                .setOrderId("1234")
+                .setSubscriptionId("1234") //정기결제용 orderId
                 .setMethod(method)
                 .setPrice(price)
                 .setUser(user)
@@ -297,7 +297,7 @@ public class NativeActivity extends AppCompatActivity {
                     public void onDone(String data) {
                         Log.d("done", data);
                     }
-                }).requestSubscription();
+                }).requestSubscription(); //정기결제 실행함수
     }
 
 
@@ -323,7 +323,7 @@ public class NativeActivity extends AppCompatActivity {
         payload.setApplicationId(application_id)
                 .setOrderName("부트페이 결제테스트")
                 .setPg(pg)
-                .setOrderId("1234")
+                .setAuthenticationId("1234")
                 .setMethod(method)
                 .setPrice(price)
                 .setUser(user)
@@ -372,6 +372,6 @@ public class NativeActivity extends AppCompatActivity {
                     public void onDone(String data) {
                         Log.d("done", data);
                     }
-                }).requestAuthentication();
+                }).requestAuthentication(); //본인인증 실행함수
     }
 }
