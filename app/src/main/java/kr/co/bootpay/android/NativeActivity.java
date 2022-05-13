@@ -123,7 +123,8 @@ public class NativeActivity extends AppCompatActivity {
         map.put("1", "abcdef");
         map.put("2", "abcdef55");
         map.put("3", 1234);
-        payload.setMetadata(new Gson().toJson(map));
+        payload.setMetadata(map);
+//        payload.setMetadata(new Gson().toJson(map));
 
         Bootpay.init(getSupportFragmentManager(), getApplicationContext())
                 .setPayload(payload)
@@ -178,6 +179,13 @@ public class NativeActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("1", "abcdef");
+        map.put("2", "abcdef55");
+        map.put("3", 1234);
+        payload.setMetadata(map);
+
         payload.setApplicationId(application_id)
                 .setOrderName("맥\"북프로's 임다")
                 .setOrderId("1234")
@@ -259,7 +267,8 @@ public class NativeActivity extends AppCompatActivity {
         map.put("1", "abcdef");
         map.put("2", "abcdef55");
         map.put("3", 1234);
-        payload.setMetadata(new Gson().toJson(map));
+        payload.setMetadata(map);
+//        payload.setMetadata(new Gson().toJson(map));
 
         Bootpay.init(getSupportFragmentManager(), getApplicationContext())
                 .setPayload(payload)
@@ -334,7 +343,8 @@ public class NativeActivity extends AppCompatActivity {
         map.put("1", "abcdef");
         map.put("2", "abcdef55");
         map.put("3", 1234);
-        payload.setMetadata(new Gson().toJson(map));
+        payload.setMetadata(map);
+//        payload.setMetadata(new Gson().toJson(map));
 
         Bootpay.init(getSupportFragmentManager(), getApplicationContext())
                 .setPayload(payload)

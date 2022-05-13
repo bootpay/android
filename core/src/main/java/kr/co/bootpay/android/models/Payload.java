@@ -5,7 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Payload {
     private String applicationId = "";
@@ -20,7 +22,7 @@ public class Payload {
     private String authenticationId = "";
 
 //    private int useOrderId = 0; // 1: 사용, 0: 미사용
-    private String metadata = "";
+    private Map<String, Object> metadata = new HashMap<>();
     private boolean showAgreeWindow = false;
     private String userToken = "";
 
@@ -138,11 +140,11 @@ public class Payload {
 //        this.params = params;
 //        return this;
 //    }
-    public String getMetadata() {
+    public Map<String, Object> getMetadata() {
     return metadata;
 }
 
-    public Payload setMetadata(String metadata) {
+    public Payload setMetadata(Map<String, Object> metadata) {
         this.metadata = metadata;
         return this;
     }
