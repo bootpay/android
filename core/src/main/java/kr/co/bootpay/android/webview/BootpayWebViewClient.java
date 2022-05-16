@@ -2,6 +2,7 @@ package kr.co.bootpay.android.webview;
 
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -27,6 +28,10 @@ public class BootpayWebViewClient extends WebViewClient {
     @Override
     public void onPageFinished(WebView webView, String url) {
         super.onPageFinished(webView, url);
+
+
+//        Log.d("bootpay", "onPageFinished: " + url);
+//        _webView.receivePostMessage();
 
         if (!isCDNLoaded) {
             BootpayWebView _webView = (BootpayWebView) webView;

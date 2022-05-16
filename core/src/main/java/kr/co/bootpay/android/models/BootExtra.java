@@ -29,8 +29,9 @@ public class BootExtra {
     private boolean enableErrorWebhook = false;  //결제 오류시 Feedback URL로 webhook
     private boolean separatelyConfirmed = true; // confirm 이벤트를 호출할지 말지, false일 경우 자동승인
     private boolean confirmOnlyRestApi = false; // REST API로만 승인 처리
-    private String openType = "iframe"; //페이지 오픈 type [iframe, popup, redirect] 중 택 1
-    private String redirectUrl; //open_type이 redirect일 경우 페이지 이동할 URL ( 오류 및 결제 완료 모두 수신 가능 )
+    private String openType = "redirect"; //페이지 오픈 type [iframe, popup, redirect] 중 택 1
+    private boolean useBootpayInappSdk = true; //native app에서는 redirect를 완성도있게 지원하기 위한 옵션
+    private String redirectUrl = "https://api.bootpay.co.kr/v2"; //open_type이 redirect일 경우 페이지 이동할 URL ( 오류 및 결제 완료 모두 수신 가능 )
     private boolean displaySuccessResult = false; // 결제 완료되면 부트페이가 제공하는 완료창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
     private boolean displayErrorResult = true; // 결제가 실패하면 부트페이가 제공하는 실패창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
     private int disposableCupDeposit = 0; //배달대행 플랫폼을 위한 컵 보증급 가격
@@ -214,6 +215,13 @@ public class BootExtra {
 
     public BootExtra setOpenType(String openType) {
         this.openType = openType;
+        return this;
+    }
+
+    public boolean getUseBootpayInappSdk() { return useBootpayInappSdk; }
+
+    public BootExtra setUseBootpayInappSdk(boolean useBootpayInappSdk) {
+        this.useBootpayInappSdk = useBootpayInappSdk;
         return this;
     }
 

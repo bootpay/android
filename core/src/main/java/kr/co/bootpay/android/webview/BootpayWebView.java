@@ -14,6 +14,9 @@ import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -78,7 +81,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
 
     @SuppressLint("JavascriptInterface")
     void payWebSettings(Context context) {
-        addJavascriptInterface(new BootpayJavascriptBridge(), "Android");
+        addJavascriptInterface(new BootpayJavascriptBridge(), BootpayBuildConfig.JSInterfaceBridgeName);
         getSettings().setAppCacheEnabled(true);
         getSettings().setAllowFileAccess(false);
         getSettings().setAllowContentAccess(false);
@@ -181,6 +184,39 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         public void done(String data) {
             if (mEventListener != null) mEventListener.onDone(data);
         }
+
+        @JavascriptInterface
+        @Override
+        public void redirectEvent(String data) {
+            Log.d("bootpay", "redirectEvent: " + data);
+
+            try {
+                JSONObject json = new JSONObject(data);
+                String event = String.valueOf(json.get("event"));
+                switch (event) {
+                    case "error":
+                        error(data);
+                        break;
+                    case "close":
+                        close(data);
+                        break;
+                    case "cancel":
+                        cancel(data);
+                        break;
+                    case "issued":
+                        issued(data);
+                        break;
+                    case "confirm":
+                        confirm(data);
+                        break;
+                    case "done":
+                        done(data);
+                        break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void connectBootpay() {
@@ -230,6 +266,10 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         for(String js : injectedJSBeforePayStart) {
             callJavaScript(js);
         }
+    }
+
+    public void receivePostMessage() {
+        callJavaScript(BootpayConstant.message());
     }
 
     public void setIgnoreErrFailedForThisURL(@Nullable String url) {

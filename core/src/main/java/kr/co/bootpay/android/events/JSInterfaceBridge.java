@@ -20,4 +20,7 @@ public interface JSInterfaceBridge {
 
     @JavascriptInterface
     void done(String data);
+
+    @JavascriptInterface
+    void redirectEvent(String data);
 }
