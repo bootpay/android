@@ -29,11 +29,14 @@ import kr.co.bootpay.android.constants.BootpayBuildConfig;
 import kr.co.bootpay.android.constants.BootpayConstant;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.events.JSInterfaceBridge;
+import kr.co.bootpay.android.models.Payload;
 
 
 public class BootpayWebView extends WebView implements BootpayInterface {
-    BootpayDialog mDialog;
-    BootpayDialogX mDialogX;
+//    BootpayDialog mDialog;
+//    BootpayDialogX mDialogX;
+
+    Payload payload;
 
     BootpayWebViewClient mWebViewClient;
     BootpayEventListener mEventListener;
@@ -116,8 +119,8 @@ public class BootpayWebView extends WebView implements BootpayInterface {
     @Override
     public void removePaymentWindow() {
         load("Bootpay.removePaymentWindow();");
-        if(mDialog != null) mDialog.removePaymentWindow();
-        else if(mDialogX != null) mDialogX.removePaymentWindow();
+//        if(mDialog != null) mDialog.removePaymentWindow();
+//        else if(mDialogX != null) mDialogX.removePaymentWindow();
     }
 
     public void startBootpay() {
@@ -189,13 +192,14 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         @Override
         public void redirectEvent(String data) {
             Log.d("bootpay", "redirectEvent: " + data);
-
+            if("undefined".equals(data)) return;
             try {
                 JSONObject json = new JSONObject(data);
                 String event = String.valueOf(json.get("event"));
                 switch (event) {
                     case "error":
                         error(data);
+                        if(!isDisplayError()) close(data);
                         break;
                     case "close":
                         close(data);
@@ -205,12 +209,14 @@ public class BootpayWebView extends WebView implements BootpayInterface {
                         break;
                     case "issued":
                         issued(data);
+                        if(!isDisplaySuccess()) close(data);
                         break;
                     case "confirm":
                         confirm(data);
                         break;
                     case "done":
                         done(data);
+                        if(!isDisplaySuccess()) close(data);
                         break;
                 }
             } catch (JSONException e) {
@@ -226,8 +232,8 @@ public class BootpayWebView extends WebView implements BootpayInterface {
 
     public void backPressed() {
         if(canGoBack()) goBack();
-        else if(mDialog != null) mDialog.dismiss();
-        else if(mDialogX != null) mDialogX.dismiss();
+//        else if(mDialog != null) mDialog.dismiss();
+//        else if(mDialogX != null) mDialogX.dismiss();
     }
 
     void evaluateJavascriptWithFallback(String script) {
@@ -277,6 +283,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
     }
 
 
+
     public BootpayEventListener getEventListener() {
         return mEventListener;
     }
@@ -289,6 +296,22 @@ public class BootpayWebView extends WebView implements BootpayInterface {
     @Nullable
     public List<String> getInjectedJSBeforePayStart() {
         return injectedJSBeforePayStart;
+    }
+
+    public void setPayload(Payload payload) {
+        this.payload = payload;
+    }
+
+    boolean isDisplaySuccess() {
+        if(payload == null) return false;
+        if(payload.getExtra() == null) return false;
+        return payload.getExtra().isDisplaySuccessResult();
+    }
+
+    boolean isDisplayError() {
+        if(payload == null) return false;
+        if(payload.getExtra() == null) return false;
+        return payload.getExtra().isDisplayErrorResult();
     }
 }
 

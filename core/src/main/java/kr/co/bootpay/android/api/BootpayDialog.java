@@ -39,7 +39,10 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
         if(mWebView == null) mWebView = new BootpayWebView(inflater.getContext());
         if(mEventListener != null) mWebView.setEventListener(mEventListener);
 //        mWebView.addCloseEvent();
-        if(mPayload != null) mWebView.setInjectedJS(BootpayConstant.getJSPay(mPayload, mRequestType));
+        if(mPayload != null) {
+            mWebView.setInjectedJS(BootpayConstant.getJSPay(mPayload, mRequestType));
+            mWebView.setPayload(mPayload);
+        }
         mWebView.setInjectedJSBeforePayStart(BootpayConstant.getJSBeforePayStart(inflater.getContext()));
         backButtonEventBind();
         mWebView.startBootpay();
@@ -72,6 +75,10 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
                 return false;
             }
         });
+    }
+
+    public Payload getPayload() {
+        return mPayload;
     }
 
     public void requestPayment(android.app.FragmentManager fragmentManager) throws IllegalArgumentException {

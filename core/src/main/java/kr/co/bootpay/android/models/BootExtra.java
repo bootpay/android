@@ -37,6 +37,8 @@ public class BootExtra {
     private int disposableCupDeposit = 0; //배달대행 플랫폼을 위한 컵 보증급 가격
     private BootExtraCardEasyOption cardEasyOption = new BootExtraCardEasyOption();
     private List<BrowserOpenType> browserOpenType = new ArrayList<>();
+    private boolean useWelcomepayment = false; //웰컴 재판모듈 진행시 true
+
 
     public String getCardQuota() {
         return cardQuota;
@@ -276,6 +278,15 @@ public class BootExtra {
 
     public BootExtra setBrowserOpenType(List<BrowserOpenType> browserOpenType) {
         this.browserOpenType = browserOpenType;
+        return this;
+    }
+
+    public boolean getUseWelcomepayment() {
+        return useWelcomepayment;
+    }
+
+    public BootExtra setUseWelcomepayment(boolean useWelcomepayment) {
+        this.useWelcomepayment = useWelcomepayment;
         return this;
     }
 }

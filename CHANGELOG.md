@@ -1,3 +1,7 @@
+## 4.0.6
+* bootpay js 4.0.6 적용 
+* openType redirect default 적용 
+
 ## 4.0.2
 * metadata 송신 버그 수정 
 
