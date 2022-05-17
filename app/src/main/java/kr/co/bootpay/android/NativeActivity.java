@@ -239,13 +239,13 @@ public class NativeActivity extends AppCompatActivity {
         BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
 
         BootExtra extra = new BootExtra()
-                .setCardQuota("0,2,3")  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
-                .setOpenType("popup");
+                .setCardQuota("0,2,3");  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
+
 
         Double price = 1000d;
 
-        String pg = "nicepay";
-        String method = "card_rebill";
+        String pg = "나이스페이";
+        String method = "카드자동";
 
         List<BootItem> items = new ArrayList<>();
         BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(500d);
