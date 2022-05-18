@@ -105,7 +105,7 @@ public class NativeActivity extends AppCompatActivity {
         map.put("1", "abcdef");
         map.put("2", "abcdef55");
         map.put("3", 1234);
-        payload.setParams(new Gson().toJson(map));
+        payload.setMetadata(map);
 
         Bootpay.init(getSupportFragmentManager(), getApplicationContext())
                 .setPayload(payload)
@@ -128,7 +128,7 @@ public class NativeActivity extends AppCompatActivity {
 
                     @Override
                     public void onIssued(String data) {
-                        Log.d("ready", data);
+                        Log.d("issued", data);
                     }
 
                     @Override
@@ -143,11 +143,7 @@ public class NativeActivity extends AppCompatActivity {
                     public void onDone(String data) {
                         Log.d("done", data);
                     }
-
-                    @Override
-                    public void onCall(String data) {
-                        Log.d("call", data);
-                    }
+ 
                 }).requestPayment();
     }
  
