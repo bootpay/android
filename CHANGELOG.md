@@ -1,3 +1,7 @@
+## 4.0.7
+* redirect cancel시 close 실행 
+* 네이버페이 뒤로가기 버튼 제거 
+
 ## 4.0.6
 * bootpay js 4.0.6 적용 
 * openType redirect default 적용 

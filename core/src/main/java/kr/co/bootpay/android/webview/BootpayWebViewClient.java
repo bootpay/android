@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 public class BootpayWebViewClient extends WebViewClient {
 
-    protected boolean isCDNLoaded = false;
+//    protected boolean isCDNLoaded = false;
 
 
     protected @Nullable
@@ -28,18 +28,31 @@ public class BootpayWebViewClient extends WebViewClient {
     @Override
     public void onPageFinished(WebView webView, String url) {
         super.onPageFinished(webView, url);
+        updateBlindViewIfNaverLogin(webView, url);
 
-
-//        Log.d("bootpay", "onPageFinished: " + url);
-//        _webView.receivePostMessage();
-
-        if (!isCDNLoaded) {
+        if(url.contains("webview.bootpay.co.kr")) {
             BootpayWebView _webView = (BootpayWebView) webView;
             _webView.callInjectedJavaScriptBeforePayStart();
             _webView.callInjectedJavaScript();
-            isCDNLoaded = true;
+        }
+
+//        if (!isCDNLoaded) {
+//            BootpayWebView _webView = (BootpayWebView) webView;
+//            _webView.callInjectedJavaScriptBeforePayStart();
+//            _webView.callInjectedJavaScript();
+//            isCDNLoaded = true;
+//        }
+    }
+
+
+    private void updateBlindViewIfNaverLogin(WebView webView, String url) {
+        if(url.startsWith("https://nid.naver.com")) { //show
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                webView.evaluateJavascript("document.getElementById('back').remove();", null);
+            }
         }
     }
+
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {

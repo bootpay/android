@@ -206,6 +206,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
                         break;
                     case "cancel":
                         cancel(data);
+                        close(data);
                         break;
                     case "issued":
                         issued(data);
