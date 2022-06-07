@@ -14,7 +14,7 @@ import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.pref.UserInfo;
 
 public class BootpayConstant {
-    public static final String CDN_URL = "https://webview.bootpay.co.kr/4.0.6";
+    public static final String CDN_URL = "https://webview.bootpay.co.kr/4.0.7";
 
     public static final int REQUEST_TYPE_PAYMENT = 1; //일반 결제
     public static final int REQUEST_TYPE_SUBSCRIPT = 2; //정기 결제

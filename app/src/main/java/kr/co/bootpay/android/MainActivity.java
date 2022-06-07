@@ -14,12 +14,37 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void goNativeActivity(View v) {
-        Intent intent = new Intent(getApplicationContext(), NativeActivity.class);
+    public void DefaultPayment(View v) {
+        Intent intent = new Intent(getApplicationContext(), DefaultPaymentActivity.class);
         startActivity(intent);
     }
 
-    public void goWebAppActivity(View v) {
+    public void TotalPayment(View v) {
+        Intent intent = new Intent(getApplicationContext(), TotalPaymentActivity.class);
+        startActivity(intent);
+    }
+
+    public void SubscriptionPayment(View v) {
+        Intent intent = new Intent(getApplicationContext(), SubscriptionPaymentActivity.class);
+        startActivity(intent);
+    }
+
+    public void SubscriptionBootpayPayment(View v) {
+        Intent intent = new Intent(getApplicationContext(), SubscriptionBootpayPaymentActivity.class);
+        startActivity(intent);
+    }
+
+    public void Authentication(View v) {
+        Intent intent = new Intent(getApplicationContext(), AuthenticationActivity.class);
+        startActivity(intent);
+    }
+
+    public void PasswordPayment(View v) {
+        Intent intent = new Intent(getApplicationContext(), PasswordPaymentActivity.class);
+        startActivity(intent);
+    }
+
+    public void WebAppPayment(View v) {
         Intent intent = new Intent(getApplicationContext(), WebAppActivity.class);
         startActivity(intent);
     }
