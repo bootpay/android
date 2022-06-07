@@ -21,6 +21,12 @@
         </activity>
         <activity android:name=".NativeActivity"/>
         <activity android:name=".WebAppActivity"/>
+        <activity android:name=".DefaultPaymentActivity"/>
+        <activity android:name=".TotalPaymentActivity"/>
+        <activity android:name=".SubscriptionPaymentActivity"/>
+        <activity android:name=".SubscriptionBootpayPaymentActivity"/>
+        <activity android:name=".AuthenticationActivity"/>
+        <activity android:name=".PasswordPaymentActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
