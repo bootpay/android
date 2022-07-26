@@ -5,7 +5,6 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
     <!-- android 11 모든 앱 접근 권한 사용  (Google Play 가이드라인 참고 - 2021-02-19 기준 못찾았음) -->
     <!-- <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />-->
     <!-- android 11 Package Visibility 설정 (compileSdkVersion, targetSdkVersion 30 이상 설정시 필수) -->
@@ -40,6 +39,8 @@
         <package android:name="com.kbcard.cxh.appcard" /> <!-- 국민카드 -->
         <package android:name="com.kbstar.liivbank" /> <!-- 국민 리브 -->
         <package android:name="com.kbstar.reboot" /> <!-- 국민 new 리브 -->
+        <package android:name="com.kbstar.kbbank" /> <!-- KB 스타뱅킹 -->
+
         <package android:name="com.samsung.android.spay" /> <!-- 삼성페이 -->
         <package android:name="com.samsung.android.spaylite" /> <!-- 삼성페이 미니 -->
         <package android:name="com.lge.lgpay" /> <!-- 엘지페이 -->
@@ -78,5 +79,10 @@
         <package android:name="com.kt.ktauth" /> <!-- KT 본인인증 -->
         <package android:name="kr.danal.app.damoum" /> <!-- 다모음 -->
         <package android:name="uplus.membership" /> <!-- U+ 멤버스 -->
+        <package android:name="com.sktelecom.tauth" /> <!--PASS-->
+        <package android:name="com.lguplus.smartotp" /> <!--PASS-->
+
+        <!--해외결제-->
+        <package android:name="com.eg.android.AlipayGphone" />
     </queries>
 </manifest>

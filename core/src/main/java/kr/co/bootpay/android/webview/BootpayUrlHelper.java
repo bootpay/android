@@ -64,6 +64,7 @@ public class BootpayUrlHelper {
                 else if (url.startsWith("nhappvardansimclick")) intent.setPackage("nh.smart.nhallonepay");
                 else if (url.startsWith("citispay")) intent.setPackage("kr.co.citibank.citimobile");
                 else if (url.startsWith("kakaotalk")) intent.setPackage("com.kakao.talk");
+//                kvp.jjy.MispAndroid320
             }
             return intent;
         } catch (URISyntaxException e) {

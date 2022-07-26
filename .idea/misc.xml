@@ -13,6 +13,8 @@
         <entry key="app/src/main/res/layout/activity_subscription_payment.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/layout/activity_total_payment.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/layout/activity_webapp.xml" value="0.14492753623188406" />
+        <entry key="core/src/main/res/layout/layout_bootpay_dialog.xml" value="0.40942028985507245" />
+        <entry key="core/src/main/res/layout/layout_bootpay_dialog2.xml" value="0.40942028985507245" />
       </map>
     </option>
   </component>

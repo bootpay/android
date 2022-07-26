@@ -8,6 +8,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -17,9 +19,13 @@ import kr.co.bootpay.android.constants.BootpayConstant;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.webview.BootpayWebView;
+import kr.co.bootpay.core.R;
 
 public class BootpayDialogX extends DialogFragment implements BootpayDialogInterface, BootpayInterface {
     BootpayWebView mWebView = null;
+    RelativeLayout mLayoutProgress = null;
+    ProgressBar mProgressBar = null;
+
     Payload mPayload = null;
     BootpayEventListener mEventListener = null;
     boolean doubleBackToExitPressedOnce = false;
@@ -35,7 +41,17 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        if(mWebView == null) mWebView = new BootpayWebView(inflater.getContext());
+        View view = inflater.inflate(R.layout.layout_bootpay_dialog, container, false);
+        if(mWebView == null) mWebView = view.findViewById(R.id.webview);
+        mLayoutProgress = view.findViewById(R.id.layout_progress);
+        mWebView.setExtEventListener(isShow -> {
+            getActivity().runOnUiThread(() -> {
+                if(mLayoutProgress != null) mLayoutProgress.setVisibility(isShow == true ? View.VISIBLE : View.GONE);
+            });
+        });
+        mProgressBar = view.findViewById(R.id.progress);
+
+//        if(mWebView == null) mWebView = new BootpayWebView(inflater.getContext());
         if(mEventListener != null) mWebView.setEventListener(mEventListener);
         if(mPayload != null) {
             mWebView.setInjectedJS(BootpayConstant.getJSPay(mPayload, mRequestType));
@@ -44,7 +60,7 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
         mWebView.setInjectedJSBeforePayStart(BootpayConstant.getJSBeforePayStart(getContext()));
         backButtonEventBind();
         mWebView.startBootpay();
-        return mWebView;
+        return view;
     }
 
     void backButtonEventBind() {

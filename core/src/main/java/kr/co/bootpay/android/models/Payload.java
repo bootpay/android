@@ -23,7 +23,7 @@ public class Payload {
 
 //    private int useOrderId = 0; // 1: 사용, 0: 미사용
     private Map<String, Object> metadata = new HashMap<>();
-    private boolean showAgreeWindow = false;
+//    private boolean showAgreeWindow = false;
     private String userToken = "";
 
 //    private String bootKey = "";
@@ -158,14 +158,14 @@ public class Payload {
 //        return this;
 //    }
 
-    public boolean getShowAgreeWindow() {
-        return showAgreeWindow;
-    }
-
-    public Payload setShowAgreeWindow(boolean showAgreeWindow) {
-        this.showAgreeWindow = showAgreeWindow;
-        return this;
-    }
+//    public boolean getShowAgreeWindow() {
+//        return showAgreeWindow;
+//    }
+//
+//    public Payload setShowAgreeWindow(boolean showAgreeWindow) {
+//        this.showAgreeWindow = showAgreeWindow;
+//        return this;
+//    }
 
     public String getSubscriptionId() {
         return subscriptionId;
