@@ -28,6 +28,7 @@ import kr.co.bootpay.android.api.BootpayInterface;
 import kr.co.bootpay.android.constants.BootpayBuildConfig;
 import kr.co.bootpay.android.constants.BootpayConstant;
 import kr.co.bootpay.android.events.BootpayEventListener;
+import kr.co.bootpay.android.events.BootpayExtEventListener;
 import kr.co.bootpay.android.events.JSInterfaceBridge;
 import kr.co.bootpay.android.models.Payload;
 
@@ -40,6 +41,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
 
     BootpayWebViewClient mWebViewClient;
     BootpayEventListener mEventListener;
+    BootpayExtEventListener mExtEventListener;
 
 
     protected @Nullable
@@ -152,30 +154,35 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         @JavascriptInterface
         @Override
         public void error(String data) {
+            if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onError(data);
         }
 
         @JavascriptInterface
         @Override
         public void close(String data) {
+            if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onClose(data);
         }
 
         @JavascriptInterface
         @Override
         public void cancel(String data) {
+            if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onCancel(data);
         }
 
         @JavascriptInterface
         @Override
         public void issued(String data) {
+            if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onIssued(data);
         }
 
         @JavascriptInterface
         @Override
         public String confirm(String data) {
+            if (mExtEventListener != null) mExtEventListener.onProgressShow(true);
             boolean goTransaction = false;
             if (mEventListener != null) goTransaction = mEventListener.onConfirm(data);
             if(goTransaction) transactionConfirm(data);
@@ -185,6 +192,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         @JavascriptInterface
         @Override
         public void done(String data) {
+            if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onDone(data);
         }
 
@@ -262,6 +270,10 @@ public class BootpayWebView extends WebView implements BootpayInterface {
 
     public void setEventListener(BootpayEventListener listener) {
         this.mEventListener = listener;
+    }
+
+    public void setExtEventListener(BootpayExtEventListener listener) {
+        this.mExtEventListener = listener;
     }
 
     public void callInjectedJavaScript() {
