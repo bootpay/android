@@ -1,6 +1,15 @@
 package kr.co.bootpay.android.models;
 
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +45,16 @@ public class BootExtra {
     private boolean displayErrorResult = true; // 결제가 실패하면 부트페이가 제공하는 실패창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
     private int disposableCupDeposit = 0; //배달대행 플랫폼을 위한 컵 보증급 가격
     private BootExtraCardEasyOption cardEasyOption = new BootExtraCardEasyOption();
-    private List<BrowserOpenType> browserOpenType = new ArrayList<>();
+//    private List<BrowserOpenType> browserOpenType = new ArrayList<>();
     private boolean useWelcomepayment = false; //웰컴 재판모듈 진행시 true
 
+    private int timeout = 30; //배달대행 플랫폼을 위한 컵 보증급 가격
+    private boolean commonEventWebhook = false; //창닫기, 결제만료 웹훅 추가
+    private List<String> enableCardCompanies = new ArrayList<>(); //https://developers.nicepay.co.kr/manual-code-partner.php '01,02,03,04,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,40,41,42'
+    private List<String> exceptCardCompanies = new ArrayList<>(); //제외할 카드사 리스트 ( enable_card_companies가 우선순위를 갖는다 )
+    private List<String> enableEasyPayments = new ArrayList<>(); //노출될 간편결제 리스트
+    private String firstSubscriptionComment = ""; //자동결제 price > 0 조건일 때 첫 결제 관련 메세지
+    private int confirmGraceSeconds = 10; ////결제승인 유예시간 ( 승인 요청을 여러번하더라도 승인 이후 특정 시간동안 계속해서 결제 response_data 를 리턴한다 )
 
     public String getCardQuota() {
         return cardQuota;
@@ -272,14 +288,14 @@ public class BootExtra {
         return this;
     }
 
-    public List<BrowserOpenType> getBrowserOpenType() {
-        return browserOpenType;
-    }
-
-    public BootExtra setBrowserOpenType(List<BrowserOpenType> browserOpenType) {
-        this.browserOpenType = browserOpenType;
-        return this;
-    }
+//    public List<BrowserOpenType> getBrowserOpenType() {
+//        return browserOpenType;
+//    }
+//
+//    public BootExtra setBrowserOpenType(List<BrowserOpenType> browserOpenType) {
+//        this.browserOpenType = browserOpenType;
+//        return this;
+//    }
 
     public boolean getUseWelcomepayment() {
         return useWelcomepayment;
@@ -288,5 +304,125 @@ public class BootExtra {
     public BootExtra setUseWelcomepayment(boolean useWelcomepayment) {
         this.useWelcomepayment = useWelcomepayment;
         return this;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public BootExtra setTimeout(int timeout) {
+        this.timeout = timeout;
+        return this;
+    }
+
+    public boolean isCommonEventWebhook() {
+        return commonEventWebhook;
+    }
+
+    public BootExtra setCommonEventWebhook(boolean commonEventWebhook) {
+        this.commonEventWebhook = commonEventWebhook;
+        return this;
+    }
+
+    public List<String> getEnableCardCompanies() {
+        return enableCardCompanies;
+    }
+
+    public BootExtra setEnableCardCompanies(List<String> enableCardCompanies) {
+        this.enableCardCompanies = enableCardCompanies;
+        return this;
+    }
+
+    public List<String> getExceptCardCompanies() {
+        return exceptCardCompanies;
+    }
+
+    public BootExtra setExceptCardCompanies(List<String> exceptCardCompanies) {
+        this.exceptCardCompanies = exceptCardCompanies;
+        return this;
+    }
+
+    public List<String> getEnableEasyPayments() {
+        return enableEasyPayments;
+    }
+
+    public BootExtra setEnableEasyPayments(List<String> enableEasyPayments) {
+        this.enableEasyPayments = enableEasyPayments;
+        return this;
+    }
+
+    public String getFirstSubscriptionComment() {
+        return firstSubscriptionComment;
+    }
+
+    public BootExtra setFirstSubscriptionComment(String firstSubscriptionComment) {
+        this.firstSubscriptionComment = firstSubscriptionComment;
+        return this;
+    }
+
+    public int getConfirmGraceSeconds() {
+        return confirmGraceSeconds;
+    }
+
+    public BootExtra setConfirmGraceSeconds(int confirmGraceSeconds) {
+        this.confirmGraceSeconds = confirmGraceSeconds;
+        return this;
+    }
+
+
+    public JSONObject toJsonObject() {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("card_quota", cardQuota);
+            jsonObject.put("seller_name", sellerName);
+            jsonObject.put("delivery_day", deliveryDay);
+            jsonObject.put("locale", locale);
+            jsonObject.put("offer_period", offerPeriod);
+            jsonObject.put("display_cash_receipt", displayCashReceipt);
+            jsonObject.put("deposit_expiration", depositExpiration);
+
+            jsonObject.put("app_scheme", appScheme);
+            jsonObject.put("use_card_point", useCardPoint);
+            jsonObject.put("direct_card", directCard);
+
+            jsonObject.put("use_order_id", useOrderId);
+            jsonObject.put("international_card_only", internationalCardOnly);
+            jsonObject.put("phone_carrier", phoneCarrier);
+
+            jsonObject.put("direct_app_card", directAppCard);
+            jsonObject.put("direct_samsungpay", directSamsungpay);
+            jsonObject.put("test_deposit", testDeposit);
+
+            jsonObject.put("enable_error_webhook", enableErrorWebhook);
+            jsonObject.put("separately_confirmed", separatelyConfirmed);
+            jsonObject.put("confirm_only_rest_api", confirmOnlyRestApi);
+
+            jsonObject.put("open_type", openType);
+            jsonObject.put("use_bootpay_inapp_sdk", useBootpayInappSdk);
+            jsonObject.put("redirect_url", redirectUrl);
+
+            jsonObject.put("display_success_result", displaySuccessResult);
+            jsonObject.put("display_error_result", displayErrorResult);
+            jsonObject.put("disposable_cup_deposit", disposableCupDeposit);
+
+            jsonObject.put("card_easy_option", cardEasyOption);
+            jsonObject.put("use_welcomepayment", useWelcomepayment);
+
+            jsonObject.put("timeout", timeout);
+            jsonObject.put("common_event_webhook", commonEventWebhook);
+
+            jsonObject.put("enable_card_companies", new JSONArray(enableCardCompanies));
+            jsonObject.put("except_card_companies", new JSONArray(exceptCardCompanies));
+            jsonObject.put("enable_easy_payments", new JSONArray(enableEasyPayments));
+
+            jsonObject.put("first_subscription_comment", firstSubscriptionComment);
+            jsonObject.put("confirm_grace_seconds", confirmGraceSeconds);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+        return jsonObject;
     }
 }

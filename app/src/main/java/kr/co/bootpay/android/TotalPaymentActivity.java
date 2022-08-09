@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,12 +44,16 @@ public class TotalPaymentActivity extends AppCompatActivity {
 
         Payload payload = new Payload();
         payload.setApplicationId("5b8f6a4d396fa665fdc2b5e8")
+//                .setPg("나이스페이")
+//                .setMethods(Arrays.asList("카드", "휴대폰"))
                 .setOrderName("부트페이 결제테스트")
                 .setOrderId("1234")
                 .setPrice(1000d)
                 .setUser(user)
                 .setExtra(extra)
                 .setItems(items);
+
+//        payload.set
 
         Map<String, Object> map = new HashMap<>();
         map.put("1", "abcdef");

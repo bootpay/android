@@ -4,6 +4,9 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class BootItem {
     private String name; //아이템 이름
     private int qty; //상품 판매된 수량
@@ -92,5 +95,25 @@ public class BootItem {
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
         return gson.toJson(this);
+    }
+
+
+    public JSONObject toJsonObject() {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("name", name);
+            jsonObject.put("qty", qty);
+            jsonObject.put("id", id);
+            jsonObject.put("price", price);
+            jsonObject.put("cat1", cat1);
+            jsonObject.put("cat2", cat2);
+            jsonObject.put("cat3", cat3);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+        return jsonObject;
     }
 }
