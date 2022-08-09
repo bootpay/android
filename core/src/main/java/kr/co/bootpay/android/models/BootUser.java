@@ -4,6 +4,9 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class BootUser {
     private String id; //개발사가 발급한 고유 아이디
     private String username;  // 구매자 명
@@ -94,4 +97,25 @@ public class BootUser {
                 .create();
         return gson.toJson(this);
     }
+
+    public JSONObject toJsonObject() {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id);
+            jsonObject.put("username", username);
+            jsonObject.put("birth", birth);
+            jsonObject.put("email", email);
+            jsonObject.put("gender", gender);
+            jsonObject.put("area", area);
+            jsonObject.put("phone", phone);
+            jsonObject.put("addr", addr);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+        return jsonObject;
+    }
+
 }
