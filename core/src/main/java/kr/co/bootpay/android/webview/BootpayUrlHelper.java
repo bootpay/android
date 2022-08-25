@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.webkit.WebView;
 
+import androidx.core.content.IntentCompat;
+
 import java.net.URISyntaxException;
 
 
@@ -92,6 +94,7 @@ public class BootpayUrlHelper {
     }
 
     public static boolean startApp(Intent intent, Context context) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         return true;
     }
