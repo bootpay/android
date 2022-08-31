@@ -162,7 +162,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         @Override
         public void close(String data) {
             if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
-            if (mEventListener != null) mEventListener.onClose(data);
+            if (mEventListener != null) mEventListener.onClose();
         }
 
         @JavascriptInterface

@@ -46,7 +46,7 @@ public class DefaultPaymentActivity extends AppCompatActivity {
         Payload payload = new Payload();
         payload.setApplicationId("5b8f6a4d396fa665fdc2b5e8")
                 .setOrderName("부트페이 결제테스트")
-                .setPg("다날")
+                .setPg("나이스페이")
                 .setMethod("카드")
                 .setOrderId("1234")
                 .setPrice(1000d)
@@ -75,8 +75,8 @@ public class DefaultPaymentActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onClose(String data) {
-                        Log.d("bootpay", "close: " + data);
+                    public void onClose() {
+                        Log.d("bootpay", "close");
                         Bootpay.removePaymentWindow();
                     }
 

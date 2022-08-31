@@ -81,7 +81,7 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
                 if(keyCode == KeyEvent.KEYCODE_BACK) {
                     if (doubleBackToExitPressedOnce) {
                         BootpayEventListener listener = mWebView.getEventListener();
-                        if(listener != null) listener.onClose("사용자가 창을 닫았습니다");
+                        if(listener != null) listener.onClose();
                         return true;
                     }
                     doubleBackToExitPressedOnce = true;

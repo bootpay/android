@@ -141,8 +141,8 @@ public class NativeActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onClose(String data) {
-                        Log.d("bootpay", "close: " + data);
+                    public void onClose() {
+                        Log.d("bootpay", "close");
                         Bootpay.removePaymentWindow();
                     }
 
@@ -209,8 +209,8 @@ public class NativeActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onClose(String data) {
-                        Log.d("close", data);
+                    public void onClose() {
+                        Log.d("bootpay", "close");
                         Bootpay.dismissWindow();
                     }
 
@@ -285,8 +285,8 @@ public class NativeActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onClose(String data) {
-                        Log.d("bootpay", "close: " + data);
+                    public void onClose() {
+                        Log.d("bootpay", "close ");
                         Bootpay.removePaymentWindow();
                     }
 
@@ -361,8 +361,8 @@ public class NativeActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onClose(String data) {
-                        Log.d("bootpay", "close: " + data);
+                    public void onClose() {
+                        Log.d("bootpay", "close");
                         Bootpay.removePaymentWindow();
                     }
 
