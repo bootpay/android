@@ -76,8 +76,8 @@ public class TotalPaymentActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onClose(String data) {
-                        Log.d("bootpay", "close: " + data);
+                    public void onClose() {
+                        Log.d("bootpay", "close" );
                         Bootpay.removePaymentWindow();
                     }
 

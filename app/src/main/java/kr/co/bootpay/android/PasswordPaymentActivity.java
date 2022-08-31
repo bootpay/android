@@ -23,6 +23,7 @@ import kr.co.bootpay.android.models.BootItem;
 import kr.co.bootpay.android.models.BootUser;
 import kr.co.bootpay.android.models.Payload;
 
+@Deprecated
 public class PasswordPaymentActivity extends AppCompatActivity implements BootpayRestImplement {
     @Deprecated
     String restApplicationId = "5b8f6a4d396fa665fdc2b5ea"; //production
@@ -107,8 +108,8 @@ public class PasswordPaymentActivity extends AppCompatActivity implements Bootpa
                     }
 
                     @Override
-                    public void onClose(String data) {
-                        Log.d("bootpay", "close: " + data);
+                    public void onClose() {
+                        Log.d("bootpay", "close");
                         Bootpay.removePaymentWindow();
                     }
 
