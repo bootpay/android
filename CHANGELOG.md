@@ -1,3 +1,6 @@
+## 4.2.5
+* bootpay js 4.2.6 update 
+
 ## 4.2.4
 * resume, pause시에 웹뷰 코드 추가 
 
