@@ -32,6 +32,24 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
     private int mRequestType = BootpayConstant.REQUEST_TYPE_PAYMENT;
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(mWebView != null) {
+            mWebView.onResume();
+            mWebView.resumeTimers();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mWebView != null) {
+            mWebView.onPause();
+            mWebView.pauseTimers();
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_FRAME,  android.R.style.Theme_Holo_Light);
@@ -115,8 +133,13 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
 
     @Override
     public void removePaymentWindow() {
-        if(mWebView != null) mWebView.removePaymentWindow();
-        dismiss();
+        if(mWebView != null) {
+            mWebView.removePaymentWindow();
+
+        }
+        if(getShowsDialog()) {
+            dismiss();
+        }
     }
 
     @Override
