@@ -32,6 +32,26 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
     boolean doubleBackToExitPressedOnce = false;
     private int mRequestType = BootpayConstant.REQUEST_TYPE_PAYMENT;
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mWebView != null) {
+            mWebView.onResume();
+            mWebView.resumeTimers();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mWebView != null) {
+            mWebView.onPause();
+            mWebView.pauseTimers();
+        }
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,8 +146,12 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
 
     @Override
     public void removePaymentWindow() {
-        if(mWebView != null) mWebView.removePaymentWindow();
-        dismiss();
+        if(mWebView != null) {
+            mWebView.removePaymentWindow();
+        }
+        if(getShowsDialog()) {
+            dismiss();
+        }
     }
 
     @Override
