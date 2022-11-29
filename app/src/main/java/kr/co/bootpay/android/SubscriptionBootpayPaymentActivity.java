@@ -35,6 +35,7 @@ public class SubscriptionBootpayPaymentActivity extends AppCompatActivity {
     public void PaymentTest(View v) {
 
         BootExtra extra = new BootExtra()
+                .setDisplaySuccessResult(true)
                 .setCardQuota("0,2,3"); // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
 
 
