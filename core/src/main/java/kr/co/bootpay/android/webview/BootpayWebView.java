@@ -226,6 +226,14 @@ public class BootpayWebView extends WebView implements BootpayInterface {
                     case "done":
                         done(data);
                         if(!isDisplaySuccess()) close(data);
+                        else {
+                            String dataString = String.valueOf(json.get("data"));
+                            JSONObject dataJson = new JSONObject(dataString);
+                            String methodOriginSymbol = String.valueOf(dataJson.get("method_origin_symbol"));
+                            if("card_rebill_rest".equals(methodOriginSymbol)) {
+                                close(data);
+                            }
+                        }
                         break;
                 }
             } catch (JSONException e) {
