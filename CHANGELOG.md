@@ -1,3 +1,8 @@
+## 4.2.6
+* 본인인증 age_limit default 값 0 으로 셋팅
+* 카드자동결제 요청시 100원 결제 옵션 extra.subscribe_test_payment 추가
+* 카드자동결제 결제수단 등록 후 조건부적 안닫히는 현상 개선 
+
 ## 4.2.5
 * bootpay js 4.2.6 update 
 

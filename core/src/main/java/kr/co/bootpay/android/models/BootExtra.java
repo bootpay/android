@@ -1,20 +1,12 @@
 package kr.co.bootpay.android.models;
 
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import kr.co.bootpay.android.constants.Browser;
-import kr.co.bootpay.android.constants.OpenType;
 
 public class BootExtra {
     private String cardQuota; //카드 결제시 할부 기간 설정 (5만원 이상 구매시)
@@ -48,13 +40,16 @@ public class BootExtra {
 //    private List<BrowserOpenType> browserOpenType = new ArrayList<>();
     private boolean useWelcomepayment = false; //웰컴 재판모듈 진행시 true
 
-    private int timeout = 30; //배달대행 플랫폼을 위한 컵 보증급 가격
+    private int timeout = 30; //결제닫힘 대기시간
     private boolean commonEventWebhook = false; //창닫기, 결제만료 웹훅 추가
     private List<String> enableCardCompanies = new ArrayList<>(); //https://developers.nicepay.co.kr/manual-code-partner.php '01,02,03,04,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,40,41,42'
     private List<String> exceptCardCompanies = new ArrayList<>(); //제외할 카드사 리스트 ( enable_card_companies가 우선순위를 갖는다 )
     private List<String> enableEasyPayments = new ArrayList<>(); //노출될 간편결제 리스트
     private String firstSubscriptionComment = ""; //자동결제 price > 0 조건일 때 첫 결제 관련 메세지
     private int confirmGraceSeconds = 10; ////결제승인 유예시간 ( 승인 요청을 여러번하더라도 승인 이후 특정 시간동안 계속해서 결제 response_data 를 리턴한다 )
+
+    private int ageLimit = 0;
+    private boolean subscribeTestPayment = true;
 
     public String getCardQuota() {
         return cardQuota;
@@ -369,6 +364,47 @@ public class BootExtra {
         return this;
     }
 
+    public boolean isDirectAppCard() {
+        return directAppCard;
+    }
+
+    public boolean isDirectSamsungpay() {
+        return directSamsungpay;
+    }
+
+    public boolean isTestDeposit() {
+        return testDeposit;
+    }
+
+    public boolean isEnableErrorWebhook() {
+        return enableErrorWebhook;
+    }
+
+    public boolean isUseBootpayInappSdk() {
+        return useBootpayInappSdk;
+    }
+
+    public boolean isUseWelcomepayment() {
+        return useWelcomepayment;
+    }
+
+    public int getAgeLimit() {
+        return ageLimit;
+    }
+
+    public BootExtra setAgeLimit(int ageLimit) {
+        this.ageLimit = ageLimit;
+        return this;
+    }
+
+    public boolean isSubscribeTestPayment() {
+        return subscribeTestPayment;
+    }
+
+    public BootExtra setSubscribeTestPayment(boolean subscribeTestPayment) {
+        this.subscribeTestPayment = subscribeTestPayment;
+        return this;
+    }
 
     public JSONObject toJsonObject() {
 
@@ -418,6 +454,9 @@ public class BootExtra {
 
             jsonObject.put("first_subscription_comment", firstSubscriptionComment);
             jsonObject.put("confirm_grace_seconds", confirmGraceSeconds);
+
+            jsonObject.put("age_limit", ageLimit);
+            jsonObject.put("subscribe_test_payment", subscribeTestPayment);
 
         } catch (JSONException e) {
             e.printStackTrace();
