@@ -28,7 +28,7 @@ import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.models.statistics.BootStatItem;
 
 public class NativeActivity extends AppCompatActivity {
-    private String application_id = "5b8f6a4d396fa665fdc2b5e8"; //production
+//    private String application_id = "5b8f6a4d396fa665fdc2b5e8"; //production
 //    private String application_id = "5b9f51264457636ab9a07cdc"; //development
 
 
@@ -56,7 +56,7 @@ public class NativeActivity extends AppCompatActivity {
     }
 
     void bootpayInit() {
-        BootpayAnalytics.init(this, application_id); //this는 context
+        BootpayAnalytics.init(this, BootpayConstants.application_id); //this는 context
     }
 
     public void goTraceUser(View v) {
@@ -110,7 +110,7 @@ public class NativeActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
-        payload.setApplicationId(application_id)
+        payload.setApplicationId(BootpayConstants.application_id)
                 .setOrderName("부트페이 결제테스트")
                 .setPg(pg)
                 .setOrderId("1234")
@@ -187,7 +187,7 @@ public class NativeActivity extends AppCompatActivity {
         map.put("3", 1234);
         payload.setMetadata(map);
 
-        payload.setApplicationId(application_id)
+        payload.setApplicationId(BootpayConstants.application_id)
                 .setOrderName("맥\"북프로's 임다")
                 .setOrderId("1234")
                 .setPrice(price)
@@ -254,7 +254,7 @@ public class NativeActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
-        payload.setApplicationId(application_id)
+        payload.setApplicationId(BootpayConstants.application_id)
                 .setOrderName("부트페이 결제테스트")
                 .setPg(pg)
                 .setSubscriptionId("1234") //정기결제용 orderId
@@ -330,7 +330,7 @@ public class NativeActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
-        payload.setApplicationId(application_id)
+        payload.setApplicationId(BootpayConstants.application_id)
                 .setOrderName("부트페이 결제테스트")
                 .setPg(pg)
                 .setAuthenticationId("1234")
