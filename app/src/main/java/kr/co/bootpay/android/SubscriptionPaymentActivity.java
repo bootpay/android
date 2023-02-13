@@ -42,6 +42,7 @@ public class SubscriptionPaymentActivity extends AppCompatActivity {
     public void PaymentTest(View v) {
 
         BootExtra extra = new BootExtra()
+                .setSubscribeTestPayment(false)
                 .setCardQuota("0,2,3"); // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
 
 
@@ -58,10 +59,10 @@ public class SubscriptionPaymentActivity extends AppCompatActivity {
                 .setMethod("카드자동")
 //                .setOrderId("1234")
                 .setSubscriptionId("1234")
-                .setPrice(1000d)
+                .setPrice(0d)
                 .setUser(getBootUser())
-                .setExtra(extra)
-                .setItems(items);
+                .setExtra(extra);
+//                .setItems(items);
 
         Map<String, Object> map = new HashMap<>();
         map.put("1", "abcdef");
