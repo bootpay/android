@@ -26,6 +26,7 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
     RelativeLayout mLayoutProgress = null;
     ProgressBar mProgressBar = null;
 
+    boolean isDismiss = false;
     Payload mPayload = null;
     BootpayEventListener mEventListener = null;
     boolean doubleBackToExitPressedOnce = false;
@@ -44,8 +45,13 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
     public void onPause() {
         super.onPause();
         if(mWebView != null) {
-            mWebView.onPause();
-            mWebView.pauseTimers();
+            if(isDismiss) {
+                mWebView.destroy();
+                mWebView = null;
+            } else {
+                mWebView.onPause();
+                mWebView.pauseTimers();
+            }
         }
     }
 
@@ -138,6 +144,7 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
 
         }
         if(getShowsDialog()) {
+            isDismiss = true;
             dismiss();
         }
     }
