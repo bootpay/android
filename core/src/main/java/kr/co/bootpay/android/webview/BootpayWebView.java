@@ -95,11 +95,11 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         getSettings().setDomStorageEnabled(true);
         getSettings().setJavaScriptEnabled(true);
-//        getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         getSettings().setLoadsImagesAutomatically(true);
-//        getSettings().setLoadWithOverviewMode(true);
+        getSettings().setLoadWithOverviewMode(true);
         getSettings().setUseWideViewPort(true);
-//        getSettings().setSupportMultipleWindows(true);
+        getSettings().setSupportMultipleWindows(true);
 
         if (BootpayBuildConfig.DEBUG == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             context.getApplicationInfo().flags &=  context.getApplicationInfo().FLAG_DEBUGGABLE;
@@ -170,6 +170,9 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         public void cancel(String data) {
             if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onCancel(data);
+            if("popup".equals(payload.getExtra().getOpenType())) {
+                close("");
+            }
         }
 
         @JavascriptInterface

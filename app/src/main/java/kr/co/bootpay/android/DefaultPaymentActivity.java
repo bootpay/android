@@ -34,6 +34,7 @@ public class DefaultPaymentActivity extends AppCompatActivity {
         BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
 
         BootExtra extra = new BootExtra()
+                .setOpenType("popup")
                 .setCardQuota("0,2,3"); // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
 
 
@@ -46,8 +47,8 @@ public class DefaultPaymentActivity extends AppCompatActivity {
         Payload payload = new Payload();
         payload.setApplicationId(BootpayConstants.application_id)
                 .setOrderName("부트페이 결제테스트")
-                .setPg("페이레터")
-                .setMethod("카드자동")
+                .setPg("페이앱")
+                .setMethod("네이버페이")
                 .setOrderId("1234")
                 .setPrice(1000d)
                 .setUser(user)

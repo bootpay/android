@@ -17,27 +17,11 @@ android {
     }
 
 
-    signingConfigs {
-        release {
-            storeFile file('keystore') // 기준은 App 폴더 기준이다.
-            storePassword "km1178km"
-            keyAlias "key_alias"
-            keyPassword "km1178km"
-
-        }
-
-    }
 
     buildTypes {
         debug {
             minifyEnabled true 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
     compileOptions {

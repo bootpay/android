@@ -27,6 +27,7 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
     RelativeLayout mLayoutProgress = null;
     ProgressBar mProgressBar = null;
 
+    boolean isDismiss = false;
     Payload mPayload = null;
     BootpayEventListener mEventListener = null;
     boolean doubleBackToExitPressedOnce = false;
@@ -46,8 +47,13 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
     public void onPause() {
         super.onPause();
         if(mWebView != null) {
-            mWebView.onPause();
-            mWebView.pauseTimers();
+            if(isDismiss) {
+                mWebView.destroy();
+                mWebView = null;
+            } else {
+                mWebView.onPause();
+                mWebView.pauseTimers();
+            }
         }
     }
 
@@ -140,9 +146,7 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
         show(fragmentManager, mPayload.getOrderId());
     }
 
-    public void transactionConfirm(String data) {
-        if (mWebView != null) mWebView.transactionConfirm(data);
-    }
+
 
     @Override
     public void removePaymentWindow() {
@@ -150,6 +154,7 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
             mWebView.removePaymentWindow();
         }
         if(getShowsDialog()) {
+            isDismiss = true;
             dismiss();
         }
     }
@@ -162,5 +167,9 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
     @Override
     public void setPayload(Payload payload) {
         this.mPayload = payload;
+    }
+
+    public void transactionConfirm(String data) {
+        if (mWebView != null) mWebView.transactionConfirm(data);
     }
 }
