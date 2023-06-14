@@ -53,8 +53,30 @@ public class BootpayWebViewClient extends WebViewClient {
         }
     }
 
+//    shouldOv
+
+//    @Override
+//    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//        return super.shouldOverrideUrlLoading(view, url);
+//    }
+//
+//    @Override
+//    public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
+//        return super.shouldOverrideKeyEvent(view, event);
+//    }
+//
+//    @Override
+//    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//        return super.shouldOverrideUrlLoading(view, request);
+//    }
+
 
     @Override
+    public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+        super.doUpdateVisitedHistory(view, url, isReload);
+    }
+
+    //    @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         return BootpayUrlHelper.shouldOverrideUrlLoading(view, url);
     }

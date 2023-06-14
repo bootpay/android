@@ -50,6 +50,7 @@ public class BootExtra {
 
     private int ageLimit = 0;
     private boolean subscribeTestPayment = true;
+    private boolean escrow = false;
 
     public String getCardQuota() {
         return cardQuota;
@@ -406,6 +407,15 @@ public class BootExtra {
         return this;
     }
 
+    public boolean isEscrow() {
+        return escrow;
+    }
+
+    public BootExtra setEscrow(boolean escrow) {
+        this.escrow = escrow;
+        return this;
+    }
+
     public JSONObject toJsonObject() {
 
         JSONObject jsonObject = new JSONObject();
@@ -454,6 +464,8 @@ public class BootExtra {
 
             jsonObject.put("first_subscription_comment", firstSubscriptionComment);
             jsonObject.put("confirm_grace_seconds", confirmGraceSeconds);
+
+            jsonObject.put("escrow", escrow);
 
             jsonObject.put("age_limit", ageLimit);
             jsonObject.put("subscribe_test_payment", subscribeTestPayment);
