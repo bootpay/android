@@ -24,6 +24,8 @@ public class BootpayConstant {
 
     public static final String getJSPay(@Nullable Payload payload, int requestType) {
         if(payload == null) return "";
+        String payloadJson = payload.toJsonUnderscore();
+
 
         String requestMethod = "requestPayment";
         if(requestType == REQUEST_TYPE_PAYMENT) {
@@ -38,7 +40,7 @@ public class BootpayConstant {
 
         return loadParams(
                 "Bootpay." + requestMethod + "(",
-                payload.toJsonUnderscore(),
+                payloadJson,
                 ")",
                 ".then( function (res) {",
                 confirm(),

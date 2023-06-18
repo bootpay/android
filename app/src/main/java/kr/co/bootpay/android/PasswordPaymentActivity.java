@@ -90,7 +90,7 @@ public class PasswordPaymentActivity extends AppCompatActivity implements Bootpa
         Map<String, Object> map = new HashMap<>();
         map.put("1", "abcdef");
         map.put("2", "abcdef55");
-        map.put("3", 1234);
+//        map.put("3", 1234);
         payload.setMetadata(map);
 //        payload.setMetadata(new Gson().toJson(map));
 

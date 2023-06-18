@@ -3,6 +3,7 @@ package kr.co.bootpay.android.models;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -273,6 +274,7 @@ public class Payload {
             jsonObject.put("order_id", orderId);
             jsonObject.put("subscription_id", subscriptionId);
             jsonObject.put("authentication_id", authenticationId);
+            jsonObject.put("metadata", new JSONObject(metadata));
 
             jsonObject.put("extra", extra.toJsonObject());
             jsonObject.put("user", user.toJsonObject());
