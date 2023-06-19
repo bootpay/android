@@ -93,7 +93,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         getSettings().setBuiltInZoomControls(true);
         getSettings().setDisplayZoomControls(false);
         getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-//        getSettings().setDomStorageEnabled(true);
+        getSettings().setDomStorageEnabled(true);
         getSettings().setJavaScriptEnabled(true);
         getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         getSettings().setLoadsImagesAutomatically(true);
