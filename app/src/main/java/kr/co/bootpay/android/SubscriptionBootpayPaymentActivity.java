@@ -48,8 +48,8 @@ public class SubscriptionBootpayPaymentActivity extends AppCompatActivity {
         Payload payload = new Payload();
         payload.setApplicationId("5b8f6a4d396fa665fdc2b5e8")
                 .setOrderName("부트페이 결제테스트")
-                .setPg("웰컴")
-                .setMethod("카드자동")
+                .setPg("나이스페이")
+                .setMethod("카드간편")
                 //.setOrderId("1234")
                 .setSubscriptionId("1234")
                 .setPrice(1000d)

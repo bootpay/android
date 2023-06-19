@@ -45,7 +45,6 @@ public class SubscriptionPaymentActivity extends AppCompatActivity {
                 .setSubscribeTestPayment(false)
                 .setCardQuota("0,2,3"); // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
 
-
         List<BootItem> items = new ArrayList<>();
         BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(500d);
         BootItem item2 = new BootItem().setName("키보드").setId("ITEM_KEYBOARD_MOUSE").setQty(1).setPrice(500d);
@@ -118,7 +117,7 @@ public class SubscriptionPaymentActivity extends AppCompatActivity {
         user.setArea("서울");
         user.setGender(1); //1: 남자, 0: 여자
         user.setEmail("test1234@gmail.com");
-        user.setPhone("010-1234-4567");
+        user.setPhone("01012344567");
         user.setBirth("1988-06-10");
         user.setUsername("홍길동");
         return user;

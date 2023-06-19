@@ -99,15 +99,18 @@ public class BootpayConstant {
         scripts.add(getAnalyticsData(context));
         if(BootpayBuildConfig.DEBUG) scripts.add("Bootpay.setEnvironmentMode('development');");
         scripts.add(close());
-//        scripts.add(message());
-//        scripts.add("window.Bootpay.error");
-//        if(quickPopup) scripts.add("BootPay.startQuickPopup();");
+
+//        String locale = widget.payload?.extra?.locale ?? "";
+//        if(locale.length > 0) {
+//            result.add("Bootpay.setLocale('$locale');");
+//        }
+
         return scripts;
     }
 
     private static String getAnalyticsData(Context context) {
         return String.format(Locale.KOREA,
-                "Bootpay.setAnalyticsData({uuid:'%s',sk:'%s',sk_time:'%d',time:'%d'});"
+                "window.Bootpay.\\$analytics.setAnalyticsData({uuid:'%s',sk:'%s',sk_time:'%d',time:'%d'});"
                 , UserInfo.getInstance(context).getBootpayUuid()
                 , UserInfo.getInstance(context).getBootpaySk()
                 , UserInfo.getInstance(context).getBootpayLastTime()
