@@ -9,7 +9,7 @@ ext {
             'https://github.com/bootpay/android/blob/main/LICENSE'
     PUBLISH_DEVELOPER_ID = 'bootpay'
     PUBLISH_DEVELOPER_NAME = 'ehowlsla'
-    PUBLISH_DEVELOPER_EMAIL = 'rupy1014@gmail.com'
+    PUBLISH_DEVELOPER_EMAIL = 'ehowlsla@bootpay.co.kr'
     PUBLISH_SCM_CONNECTION =
             'scm:git:github.com/bootpay/android.git'
     PUBLISH_SCM_DEVELOPER_CONNECTION =
