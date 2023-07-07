@@ -30,7 +30,6 @@ public class WebAppActivity extends AppCompatActivity {
         BootpayWebView webView = findViewById(R.id.webview);
 
         //link your domain
-        webView.loadUrl("https://d-cdn.bootapi.com/test/payment/");
-//        https://createjump-front.jp.ngrok.io/ko
+        webView.loadUrl("https://www.yourpayurl.com");
     }
 }

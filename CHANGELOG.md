@@ -1,3 +1,6 @@
+## 4.3.4
+* open_type popup 결제요청시 웹앱에서 웹뷰 닫히는 현상 개선 
+
 ## 4.3.3
 * publish.gradle update 
 
