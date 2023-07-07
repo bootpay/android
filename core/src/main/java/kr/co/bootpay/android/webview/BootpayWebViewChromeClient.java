@@ -41,6 +41,15 @@ public class BootpayWebViewChromeClient extends WebChromeClient {
         newWindow.setInjectedJS(webview.getInjectedJS());
         newWindow.setInjectedJSBeforePayStart(webview.getInjectedJSBeforePayStart());
 
+        try {
+            view.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    view.scrollTo(0, 0);
+                }
+            }, 50);
+        }catch (Exception ignored){}
+
         view.addView(newWindow,
                 new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,

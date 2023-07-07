@@ -46,9 +46,11 @@ public class BootpayConstant {
                 confirm(),
                 issued(),
                 done(),
+                redirect(), //success_result 닫기 이벤트가 일로 간다
                 "}, function (res) {",
                 error(),
                 cancel(),
+                redirect(),
                 "})"
         );
     }
@@ -71,6 +73,8 @@ public class BootpayConstant {
     public static String cancel() { return  "else if (res.event === 'cancel') { " + BootpayBuildConfig.JSInterfaceBridgeName + ".cancel(JSON.stringify(res)); }"; }
 
     public static String close() { return  "document.addEventListener('bootpayclose', function (e) { Bootpay.close('결제창이 닫혔습니다'); });"; }
+
+    public static String redirect() { return "else if (res.event === 'redirectEvent') { " + BootpayBuildConfig.JSInterfaceBridgeName + ".redirectEvent(JSON.stringify(res)); }"; }
 
     public static String message() { return  "document.addEventListener('message', function (e) { " + BootpayBuildConfig.JSInterfaceBridgeName + ".message(JSON.stringify(e)); });"; }
 //    public static String message() { return  "window.BootpayError = function (e) {  Bootpay.error(JSON.stringify(e)); };"; }

@@ -99,7 +99,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         getSettings().setLoadsImagesAutomatically(true);
         getSettings().setLoadWithOverviewMode(true);
         getSettings().setUseWideViewPort(true);
-//        getSettings().setSupportMultipleWindows(true);
+        getSettings().setSupportMultipleWindows(true);
 
         if (BootpayBuildConfig.DEBUG == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             context.getApplicationInfo().flags &=  context.getApplicationInfo().FLAG_DEBUGGABLE;
@@ -120,7 +120,8 @@ public class BootpayWebView extends WebView implements BootpayInterface {
 
     @Override
     public void removePaymentWindow() {
-        load("Bootpay.removePaymentWindow();");
+//        load("Bootpay.removePaymentWindow();");
+        load("Bootpay.destroy();");
 //        if(mDialog != null) mDialog.removePaymentWindow();
 //        else if(mDialogX != null) mDialogX.removePaymentWindow();
     }
@@ -199,6 +200,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
             if (mEventListener != null) mEventListener.onDone(data);
         }
 
+
         @JavascriptInterface
         @Override
         public void redirectEvent(String data) {
@@ -213,6 +215,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
                         if(!isDisplayError()) close(data);
                         break;
                     case "close":
+                        removePaymentWindow();
                         close(data);
                         break;
                     case "cancel":
