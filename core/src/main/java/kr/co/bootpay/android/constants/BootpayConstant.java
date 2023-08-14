@@ -24,7 +24,7 @@ public class BootpayConstant {
 
     public static final String getJSPay(@Nullable Payload payload, int requestType) {
         if(payload == null) return "";
-        String payloadJson = payload.toJsonUnderscore();
+//        String payloadJson = payload.toJsonUnderscore();
 
 
         String requestMethod = "requestPayment";
@@ -32,7 +32,7 @@ public class BootpayConstant {
             requestMethod = "requestPayment";
         } else if(requestType == REQUEST_TYPE_SUBSCRIPT) {
             requestMethod = "requestSubscription";
-            if("".equals(payload.getSubscriptionId())) {  payload.setSubscriptionId(payload.getOrderId()); }
+            if("".equals(payload.getSubscriptionId())) {payload.setSubscriptionId(payload.getOrderId());}
         } else if(requestType == REQUEST_TYPE_AUTH) {
             requestMethod = "requestAuthentication";
             if("".equals(payload.getAuthenticationId())) {  payload.setAuthenticationId(payload.getOrderId()); }
@@ -40,7 +40,7 @@ public class BootpayConstant {
 
         return loadParams(
                 "Bootpay." + requestMethod + "(",
-                payloadJson,
+                payload.toJsonUnderscore(),
                 ")",
                 ".then( function (res) {",
                 confirm(),

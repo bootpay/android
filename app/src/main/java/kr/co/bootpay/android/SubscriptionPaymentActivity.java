@@ -56,8 +56,8 @@ public class SubscriptionPaymentActivity extends AppCompatActivity {
                 .setOrderName("부트페이 결제테스트")
                 .setPg("페이레터")
                 .setMethod("카드자동")
-//                .setOrderId("1234")
-                .setSubscriptionId("1234")
+                .setOrderId("1234")
+//                .setSubscriptionId("1234")
                 .setPrice(0d)
                 .setUser(getBootUser())
                 .setExtra(extra);
