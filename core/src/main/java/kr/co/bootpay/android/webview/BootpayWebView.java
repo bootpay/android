@@ -22,6 +22,7 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
 
+import kr.co.bootpay.android.Bootpay;
 import kr.co.bootpay.android.api.BootpayDialog;
 import kr.co.bootpay.android.api.BootpayDialogX;
 import kr.co.bootpay.android.api.BootpayInterface;
@@ -171,7 +172,11 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         public void cancel(String data) {
             if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onCancel(data);
-            if("popup".equals(payload.getExtra().getOpenType())) {
+            if(payload == null) { //webapp
+                removePaymentWindow();
+                return;
+            }
+            if(payload.getExtra() != null && "popup".equals(payload.getExtra().getOpenType())) {
                 close("");
             }
         }
