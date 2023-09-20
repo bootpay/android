@@ -31,5 +31,6 @@ public class WebAppActivity extends AppCompatActivity {
 
         //link your domain
         webView.loadUrl("https://www.yourpayurl.com");
+
     }
 }

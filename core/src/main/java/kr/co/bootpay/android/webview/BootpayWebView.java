@@ -127,6 +127,14 @@ public class BootpayWebView extends WebView implements BootpayInterface {
 //        else if(mDialogX != null) mDialogX.removePaymentWindow();
     }
 
+    void closeIfWebApp() {
+        if(payload == null) { //webapp
+            removePaymentWindow();
+            Bootpay.dismissWindow();
+            return;
+        }
+    }
+
     public void startBootpay() {
         connectBootpay();
     }
@@ -165,6 +173,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         public void close(String data) {
             if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onClose();
+
         }
 
         @JavascriptInterface
@@ -172,12 +181,8 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         public void cancel(String data) {
             if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onCancel(data);
-            if(payload == null) { //webapp
-                removePaymentWindow();
-                Bootpay.dismissWindow();
-                return;
-            }
-            if(payload.getExtra() != null && "popup".equals(payload.getExtra().getOpenType())) {
+
+            if(payload != null && payload.getExtra() != null && "popup".equals(payload.getExtra().getOpenType())) {
                 close("");
             }
         }
@@ -204,17 +209,18 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         public void done(String data) {
             if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onDone(data);
-            if(payload == null) { //webapp
-                removePaymentWindow();
-                Bootpay.dismissWindow();
-                return;
-            }
+//            if(payload == null) { //webapp
+//                removePaymentWindow();
+//                Bootpay.dismissWindow();
+//                return;
+//            }
         }
 
 
         @JavascriptInterface
         @Override
         public void redirectEvent(String data) {
+//          redirect 또는 success_result 닫기
             Log.d("bootpay", "redirectEvent: " + data);
             if("undefined".equals(data)) return;
             try {
@@ -232,6 +238,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
                     case "cancel":
                         cancel(data);
                         close(data);
+                        closeIfWebApp();
                         break;
                     case "issued":
                         issued(data);
@@ -251,6 +258,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
                                 close(data);
                             }
                         }
+                        closeIfWebApp();
                         break;
                 }
             } catch (JSONException e) {
