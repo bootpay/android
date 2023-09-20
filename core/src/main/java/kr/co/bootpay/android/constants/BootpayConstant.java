@@ -102,7 +102,7 @@ public class BootpayConstant {
         scripts.add("Bootpay.setDevice('ANDROID');");
         scripts.add(getAnalyticsData(context));
         if(BootpayBuildConfig.DEBUG) scripts.add("Bootpay.setEnvironmentMode('development');");
-        scripts.add(close());
+
 
 //        String locale = widget.payload?.extra?.locale ?? "";
 //        if(locale.length > 0) {
