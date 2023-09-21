@@ -209,11 +209,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         public void done(String data) {
             if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onDone(data);
-//            if(payload == null) { //webapp
-//                removePaymentWindow();
-//                Bootpay.dismissWindow();
-//                return;
-//            }
+
         }
 
 
