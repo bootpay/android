@@ -87,7 +87,10 @@ public class BootpayWebView extends WebView implements BootpayInterface {
 
     @SuppressLint("JavascriptInterface")
     void payWebSettings(Context context) {
-        addJavascriptInterface(new BootpayJavascriptBridge(), BootpayBuildConfig.JSInterfaceBridgeName);
+        if(payload != null) {
+            addJavascriptInterface(new BootpayJavascriptBridge(), BootpayBuildConfig.JSInterfaceBridgeName);
+        }
+
         getSettings().setAppCacheEnabled(true);
         getSettings().setAllowFileAccess(false);
         getSettings().setAllowContentAccess(false);
@@ -131,7 +134,13 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         if(payload == null) { //webapp
             removePaymentWindow();
             Bootpay.dismissWindow();
-            return;
+
+//            postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                }
+//            }, 200);
         }
     }
 
@@ -234,7 +243,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
                     case "cancel":
                         cancel(data);
                         close(data);
-                        closeIfWebApp();
+//                        closeIfWebApp();
                         break;
                     case "issued":
                         issued(data);
@@ -254,7 +263,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
                                 close(data);
                             }
                         }
-                        closeIfWebApp();
+//                        closeIfWebApp();
                         break;
                 }
             } catch (JSONException e) {
