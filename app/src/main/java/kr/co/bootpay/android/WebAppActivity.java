@@ -30,9 +30,6 @@ public class WebAppActivity extends AppCompatActivity {
         BootpayWebView webView = findViewById(R.id.webview);
 
         //link your domain
-        webView.loadUrl("https://365cares.co.kr/app_care/buy_membership.php");
-//        webView.loadUrl("https://dpost.co.kr/signin");
-
-
+        webView.loadUrl("https://www.yourdomain.com");
     }
 }

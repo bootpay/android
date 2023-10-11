@@ -87,9 +87,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
 
     @SuppressLint("JavascriptInterface")
     void payWebSettings(Context context) {
-        if(payload != null) {
-            addJavascriptInterface(new BootpayJavascriptBridge(), BootpayBuildConfig.JSInterfaceBridgeName);
-        }
+
 
         getSettings().setAppCacheEnabled(true);
         getSettings().setAllowFileAccess(false);
@@ -350,6 +348,9 @@ public class BootpayWebView extends WebView implements BootpayInterface {
     }
 
     public void setPayload(Payload payload) {
+        if(payload != null) {
+            addJavascriptInterface(new BootpayJavascriptBridge(), BootpayBuildConfig.JSInterfaceBridgeName);
+        }
         this.payload = payload;
     }
 
