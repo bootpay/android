@@ -80,16 +80,17 @@ public class BootpayUrlHelper {
     }
 
 
-    private static boolean isExistPackageInfo(Intent intent, Context context) {
+    public static boolean isExistPackageInfo(Intent intent, Context context) {
         try {
             return intent != null && context.getPackageManager().getPackageInfo(intent.getPackage(), PackageManager.GET_ACTIVITIES) != null;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return false;
         }
+
     }
 
-    private static boolean isExistLaunchedIntent(Intent intent, Context context) {
+    public static boolean isExistLaunchedIntent(Intent intent, Context context) {
         return intent != null &&  intent.getPackage() != null && context.getPackageManager().getLaunchIntentForPackage(intent.getPackage()) != null;
     }
 

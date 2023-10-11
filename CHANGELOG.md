@@ -1,3 +1,7 @@
+## 4.4.0
+* js version update 
+* 이벤트 못받는 현상, 결제 후 흰 화면 현상 bug fixed 
+
 ## 4.3.9
 * webapp의 경우 redirect 모드일 때 창이 안닫히는 버그 수정 
 
