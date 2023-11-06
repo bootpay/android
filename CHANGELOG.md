@@ -1,3 +1,6 @@
+## 4.4.1
+* extra field added
+
 ## 4.4.0
 * js version update 
 * 이벤트 못받는 현상, 결제 후 흰 화면 현상 bug fixed 
