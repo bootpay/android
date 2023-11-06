@@ -128,19 +128,6 @@ public class BootpayWebView extends WebView implements BootpayInterface {
 //        else if(mDialogX != null) mDialogX.removePaymentWindow();
     }
 
-    void closeIfWebApp() {
-        if(payload == null) { //webapp
-            removePaymentWindow();
-            Bootpay.dismissWindow();
-
-//            postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                }
-//            }, 200);
-        }
-    }
 
     public void startBootpay() {
         connectBootpay();

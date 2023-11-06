@@ -35,22 +35,28 @@ public class BootExtra {
     private String redirectUrl = "https://api.bootpay.co.kr/v2"; //open_type이 redirect일 경우 페이지 이동할 URL ( 오류 및 결제 완료 모두 수신 가능 )
     private boolean displaySuccessResult = false; // 결제 완료되면 부트페이가 제공하는 완료창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
     private boolean displayErrorResult = true; // 결제가 실패하면 부트페이가 제공하는 실패창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
+    private boolean subscribeTestPayment = true; //100원 결제 후 취소
     private int disposableCupDeposit = 0; //배달대행 플랫폼을 위한 컵 보증급 가격
     private BootExtraCardEasyOption cardEasyOption = new BootExtraCardEasyOption();
-//    private List<BrowserOpenType> browserOpenType = new ArrayList<>();
+    private List<BrowserOpenType> browserOpenType = new ArrayList<>();
     private boolean useWelcomepayment = false; //웰컴 재판모듈 진행시 true
 
-    private int timeout = 30; //결제닫힘 대기시간
-    private boolean commonEventWebhook = false; //창닫기, 결제만료 웹훅 추가
+    private String firstSubscriptionComment = ""; // 자동결제 price > 0 조건일 때 첫 결제 관련 메세지
+
+
     private List<String> enableCardCompanies = new ArrayList<>(); //https://developers.nicepay.co.kr/manual-code-partner.php '01,02,03,04,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,40,41,42'
     private List<String> exceptCardCompanies = new ArrayList<>(); //제외할 카드사 리스트 ( enable_card_companies가 우선순위를 갖는다 )
     private List<String> enableEasyPayments = new ArrayList<>(); //노출될 간편결제 리스트
-    private String firstSubscriptionComment = ""; //자동결제 price > 0 조건일 때 첫 결제 관련 메세지
+
     private int confirmGraceSeconds = 10; ////결제승인 유예시간 ( 승인 요청을 여러번하더라도 승인 이후 특정 시간동안 계속해서 결제 response_data 를 리턴한다 )
 
     private int ageLimit = 0;
-    private boolean subscribeTestPayment = true;
+
     private boolean escrow = false;
+
+    private int timeout = 30; //결제닫힘 대기시간
+
+    private boolean commonEventWebhook = false; //창닫기, 결제만료 웹훅 추가
 
     public String getCardQuota() {
         return cardQuota;
@@ -416,6 +422,15 @@ public class BootExtra {
         return this;
     }
 
+    public List<BrowserOpenType> getBrowserOpenType() {
+        return browserOpenType;
+    }
+
+    public BootExtra setBrowserOpenType(List<BrowserOpenType> browserOpenType) {
+        this.browserOpenType = browserOpenType;
+        return this;
+    }
+
     public JSONObject toJsonObject() {
 
         JSONObject jsonObject = new JSONObject();
@@ -457,6 +472,8 @@ public class BootExtra {
 
             jsonObject.put("timeout", timeout);
             jsonObject.put("common_event_webhook", commonEventWebhook);
+
+            jsonObject.put("browser_open_type", new JSONArray(browserOpenType));
 
             jsonObject.put("enable_card_companies", new JSONArray(enableCardCompanies));
             jsonObject.put("except_card_companies", new JSONArray(exceptCardCompanies));
