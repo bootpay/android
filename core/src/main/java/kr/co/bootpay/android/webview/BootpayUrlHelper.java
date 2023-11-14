@@ -39,6 +39,7 @@ public class BootpayUrlHelper {
                 || url.startsWith("nidlogin://")
                 || url.startsWith("mpocket.online.ansimclick://")
                 || url.startsWith("wooripay://")
+                || url.startsWith("ispmobile://")
                 || url.startsWith("kakaotalk://");
     }
 
