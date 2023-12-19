@@ -1,3 +1,8 @@
+## 4.4.2
+* direct app card 호출 
+* intent scheme added
+* js version update
+
 ## 4.4.1
 * extra field added
 * intent scheme bug fixed

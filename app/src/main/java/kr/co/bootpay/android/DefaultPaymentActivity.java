@@ -36,6 +36,8 @@ public class DefaultPaymentActivity extends AppCompatActivity {
         BootExtra extra = new BootExtra()
                 .setCardQuota("0"); // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
 
+//        extra.setDirectCardCompany("국민");
+//        extra.setDirectCardQuota("00");
 
         List<BootItem> items = new ArrayList<>();
         BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(500d);
@@ -46,8 +48,8 @@ public class DefaultPaymentActivity extends AppCompatActivity {
         Payload payload = new Payload();
         payload.setApplicationId(BootpayConstants.application_id)
                 .setOrderName("부트페이 결제테스트")
-                .setPg("페이앱")
-                .setMethod("네이버페이")
+                .setPg("나이스페이")
+                .setMethod("카드")
                 .setOrderId("1234")
                 .setPrice(1000d)
                 .setUser(user)

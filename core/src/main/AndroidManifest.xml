@@ -49,6 +49,8 @@
         <package android:name="com.lcacApp" /> <!-- 롯데카드 -->
         <package android:name="kr.co.samsungcard.mpocket" /> <!-- 삼성카드 -->
         <package android:name="com.shcard.smartpay" /> <!-- 신한카드-->
+        <package android:name="com.shinhan.smartcaremgr" /> <!-- 신한 쏠-->
+
         <package android:name="com.shinhancard.smartshinhan" /> <!-- 신한카드 (ARS/일반결제/Smart결제) -->
         <package android:name="com.hyundaicard.appcard" /> <!-- 현대카드 -->
         <package android:name="nh.smart.nhallonepay" /> <!-- 농협카드 -->
