@@ -19,12 +19,13 @@ public class BootExtra {
 
     private String appScheme; //모바일 앱에서 결제 완료 후 돌아오는 옵션 ( 아이폰만 적용 )
     private boolean useCardPoint = true; //카드 포인트 사용 여부 (토스만 가능)
-    private String directCard = ""; //해당 카드로 바로 결제창 (토스만 가능)
+    private String directCardCompany = ""; //해당 카드로 바로 결제창
+    private String directCardQuota = ""; //다이렉트 카드시 할부 정보는 필수 00, 02, 03
 
     private boolean useOrderId = false; //가맹점 order_id로 PG로 전송
     private boolean internationalCardOnly = false; //해외 결제카드 선택 여부 (토스만 가능)
     private String phoneCarrier;  //본인인증 시 고정할 통신사명, SKT,KT,LGT 중 1개만 가능
-    private boolean directAppCard = false; //카드사앱으로 direct 호출
+//    private boolean directAppCard = false; //카드사앱으로 direct 호출
     private boolean directSamsungpay = false; //삼성페이 바로 띄우기
     private boolean testDeposit = false;  //가상계좌 모의 입금
     private boolean enableErrorWebhook = false;  //결제 오류시 Feedback URL로 webhook
@@ -139,12 +140,21 @@ public class BootExtra {
         return this;
     }
 
-    public String getDirectCard() {
-        return directCard;
+    public String getDirectCardCompany() {
+        return directCardCompany;
     }
 
-    public BootExtra setDirectCard(String directCard) {
-        this.directCard = directCard;
+    public BootExtra setDirectCardCompany(String directCardCompany) {
+        this.directCardCompany = directCardCompany;
+        return this;
+    }
+
+    public String getDirectCardQuota() {
+        return directCardQuota;
+    }
+
+    public BootExtra setDirectCardQuota(String directCardQuota) {
+        this.directCardQuota = directCardQuota;
         return this;
     }
 
@@ -175,14 +185,14 @@ public class BootExtra {
         return this;
     }
 
-    public boolean getDirectAppCard() {
-        return directAppCard;
-    }
-
-    public BootExtra setDirectAppCard(boolean directAppCard) {
-        this.directAppCard = directAppCard;
-        return this;
-    }
+//    public boolean getDirectAppCard() {
+//        return directAppCard;
+//    }
+//
+//    public BootExtra setDirectAppCard(boolean directAppCard) {
+//        this.directAppCard = directAppCard;
+//        return this;
+//    }
 
     public boolean getDirectSamsungpay() {
         return directSamsungpay;
@@ -371,9 +381,9 @@ public class BootExtra {
         return this;
     }
 
-    public boolean isDirectAppCard() {
-        return directAppCard;
-    }
+//    public boolean isDirectAppCard() {
+//        return directAppCard;
+//    }
 
     public boolean isDirectSamsungpay() {
         return directSamsungpay;
@@ -445,13 +455,14 @@ public class BootExtra {
 
             jsonObject.put("app_scheme", appScheme);
             jsonObject.put("use_card_point", useCardPoint);
-            jsonObject.put("direct_card", directCard);
+            jsonObject.put("direct_card_company", directCardCompany);
+            jsonObject.put("direct_card_quota", directCardQuota);
 
             jsonObject.put("use_order_id", useOrderId);
             jsonObject.put("international_card_only", internationalCardOnly);
             jsonObject.put("phone_carrier", phoneCarrier);
 
-            jsonObject.put("direct_app_card", directAppCard);
+
             jsonObject.put("direct_samsungpay", directSamsungpay);
             jsonObject.put("test_deposit", testDeposit);
 
