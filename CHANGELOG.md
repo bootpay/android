@@ -1,3 +1,6 @@
+## 4.4.3
+* ssl error 개선 
+
 ## 4.4.2
 * direct app card 호출 
 * intent scheme added

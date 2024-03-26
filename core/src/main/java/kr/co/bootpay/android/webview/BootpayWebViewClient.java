@@ -1,27 +1,46 @@
 package kr.co.bootpay.android.webview;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.http.SslError;
 import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import kr.co.bootpay.android.events.BootpayEventListener;
 
 public class BootpayWebViewClient extends WebViewClient {
 
 //    protected boolean isCDNLoaded = false;
 
+    protected @Nullable
+    BootpayEventListener mEventListener;
 
     protected @Nullable
     String ignoreErrFailedForThisURL = null;
 
-    public BootpayWebViewClient() {}
+    public BootpayWebViewClient() {
+    }
+//    public BootpayWebViewClient(@Nullable BootpayEventListener eventListener) {
+//        this.mEventListener = eventListener;
+//    }
 
     public void setIgnoreErrFailedForThisURL(@Nullable String url) {
         ignoreErrFailedForThisURL = url;
+    }
+
+    public void setEventListener(@Nullable BootpayEventListener eventListener) {
+        this.mEventListener = eventListener;
     }
 
 
@@ -95,6 +114,54 @@ public class BootpayWebViewClient extends WebViewClient {
         return super.shouldOverrideKeyEvent(view, event);
     }
 
+    @Override
+    public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
+        if(mEventListener != null) {
+            mEventListener.onError("sslerror:" + error.toString());
+//            mEventListener.onClose();
+        }
+//        onErrorHandled("sslerror:" + error.toString());
+//        onCloseHandled("sslerror:" + error.toString());
+
+//        webView.mE
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("SSL Connection Error");
+        builder.setMessage("Your device's Android version is outdated and may not securely connect to our service. To continue using the app securely, please update your device's operating system. If you choose to proceed without updating, it may expose you to security vulnerabilities.");
+        builder.setPositiveButton("Update", (dialog, which) -> {
+            // Redirect the user to the system update settings
+
+
+            Intent intent = new Intent("android.settings.SYSTEM_UPDATE_SETTINGS");
+            if (intent.resolveActivity(view.getContext().getPackageManager()) != null) {
+                view.getContext().startActivity(intent);
+            } else {
+                // If the device does not support system update settings intent
+                Toast.makeText(view.getContext(), "System update option not available. Please check your device settings manually.", Toast.LENGTH_LONG).show();
+            }
+            if(mEventListener != null) {
+//                    mEventListener.onError("sslerror:" + error.toString());
+                mEventListener.onClose();
+            }
+        });
+        builder.setNeutralButton("Cancel", (dialog, which) -> {
+            handler.cancel();
+            if(mEventListener != null) {
+//                    mEventListener.onError("sslerror:" + error.toString());
+                mEventListener.onClose();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setOnKeyListener((dialogInterface, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                dialog.dismiss();
+                mEventListener.onClose();
+            }
+            return true;
+        });
+        dialog.show();
+    }
 
 
 //    @Override
