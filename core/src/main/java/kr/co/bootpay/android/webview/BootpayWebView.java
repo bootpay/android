@@ -293,6 +293,7 @@ public class BootpayWebView extends WebView implements BootpayInterface {
 
     public void setEventListener(BootpayEventListener listener) {
         this.mEventListener = listener;
+        this.mWebViewClient.setEventListener(listener);
     }
 
     public void setExtEventListener(BootpayExtEventListener listener) {
