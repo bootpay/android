@@ -14,7 +14,7 @@ import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.pref.UserInfo;
 
 public class BootpayConstant {
-    public static final String CDN_URL = "https://webview.bootpay.co.kr/4.3.4";
+    public static final String CDN_URL = "https://webview.bootpay.co.kr/5.0.0-rc.13";
 //    public static final String CDN_URL = "https://staging-webview.bootpay.co.kr/4.2.7";
 
 
@@ -77,6 +77,17 @@ public class BootpayConstant {
     public static String redirect() { return "else if (res.event === 'redirectEvent') { " + BootpayBuildConfig.JSInterfaceBridgeName + ".redirectEvent(JSON.stringify(res)); }"; }
 
     public static String message() { return  "document.addEventListener('message', function (e) { " + BootpayBuildConfig.JSInterfaceBridgeName + ".message(JSON.stringify(e)); });"; }
+
+    public static String readyWatch() { return "document.addEventListener('bootpay-widget-ready', function (e) { if (window.WidgetReady && window.WidgetReady.postMessage) { WidgetReady.postMessage(JSON.stringify(e.detail)); } });"; }
+
+    public static String resizeWatch() { return "document.addEventListener('bootpay-widget-resize', function (e) { if (window.WidgetResize && window.WidgetResize.postMessage) { WidgetResize.postMessage(JSON.stringify(e.detail)); } });"; }
+
+    public static String changeMethodWatch() { return "document.addEventListener('bootpay-widget-change-payment', function (e) { if (window.WidgetChangePayment && window.WidgetChangePayment.postMessage) { WidgetChangePayment.postMessage(JSON.stringify(e.detail)); } });"; }
+
+    public static String changeTermsWatch() { return "document.addEventListener('bootpay-widget-change-terms', function (e) { if (window.WidgetChangeTerms && window.WidgetChangeTerms.postMessage) { WidgetChangeTerms.postMessage(JSON.stringify(e.detail)); } });"; }
+
+
+
 //    public static String message() { return  "window.BootpayError = function (e) {  Bootpay.error(JSON.stringify(e)); };"; }
 
 //    protected static String confirm() { return  ".confirm(function(data){Android.confirm(JSON.stringify(data));})"; }
@@ -102,13 +113,6 @@ public class BootpayConstant {
         scripts.add("Bootpay.setDevice('ANDROID');");
         scripts.add(getAnalyticsData(context));
         if(BootpayBuildConfig.DEBUG) scripts.add("Bootpay.setEnvironmentMode('development');");
-
-
-//        String locale = widget.payload?.extra?.locale ?? "";
-//        if(locale.length > 0) {
-//            result.add("Bootpay.setLocale('$locale');");
-//        }
-
         return scripts;
     }
 

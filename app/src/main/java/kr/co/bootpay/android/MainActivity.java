@@ -48,4 +48,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), WebAppActivity.class);
         startActivity(intent);
     }
+
+    public void WidgetPayment(View v) {
+        Intent intent = new Intent(getApplicationContext(), WidgetActivity.class);
+        startActivity(intent);
+    }
 }
