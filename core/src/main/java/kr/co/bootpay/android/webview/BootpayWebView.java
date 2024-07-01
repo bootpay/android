@@ -26,15 +26,18 @@ import kr.co.bootpay.android.Bootpay;
 import kr.co.bootpay.android.api.BootpayDialog;
 import kr.co.bootpay.android.api.BootpayDialogX;
 import kr.co.bootpay.android.api.BootpayInterface;
+import kr.co.bootpay.android.api.BootpayWidgetInterface;
 import kr.co.bootpay.android.constants.BootpayBuildConfig;
 import kr.co.bootpay.android.constants.BootpayConstant;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.events.BootpayExtEventListener;
+import kr.co.bootpay.android.events.BootpayWidgetEventListener;
 import kr.co.bootpay.android.events.JSInterfaceBridge;
 import kr.co.bootpay.android.models.Payload;
+import kr.co.bootpay.android.models.widget.WidgetData;
 
 
-public class BootpayWebView extends WebView implements BootpayInterface {
+public class BootpayWebView extends WebView implements BootpayInterface, BootpayWidgetInterface {
 //    BootpayDialog mDialog;
 //    BootpayDialogX mDialogX;
 
@@ -43,6 +46,8 @@ public class BootpayWebView extends WebView implements BootpayInterface {
     BootpayWebViewClient mWebViewClient;
     BootpayEventListener mEventListener;
     BootpayExtEventListener mExtEventListener;
+
+    BootpayWidgetEventListener mWidgetEventListener;
 
 
     protected @Nullable
@@ -255,6 +260,26 @@ public class BootpayWebView extends WebView implements BootpayInterface {
                 e.printStackTrace();
             }
         }
+
+        @Override
+        public void readyWatch() {
+            if(mWidgetEventListener != null) mWidgetEventListener.onWidgetReady();
+        }
+
+        @Override
+        public void resizeWatch(double height) {
+            if(mWidgetEventListener != null) mWidgetEventListener.onWidgetResize(height);
+        }
+
+        @Override
+        public void changeMethodWatch(WidgetData data) {
+            if(mWidgetEventListener != null) mWidgetEventListener.onWidgetChangePayment(data);
+        }
+
+        @Override
+        public void changeTermsWatch(WidgetData data) {
+            if(mWidgetEventListener != null) mWidgetEventListener.onWidgetChangeAgreeTerm(data);
+        }
     }
 
     public void connectBootpay() {
@@ -319,8 +344,6 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         if(mWebViewClient != null) mWebViewClient.setIgnoreErrFailedForThisURL(url);
     }
 
-
-
     public BootpayEventListener getEventListener() {
         return mEventListener;
     }
@@ -353,5 +376,51 @@ public class BootpayWebView extends WebView implements BootpayInterface {
         if(payload.getExtra() == null) return false;
         return payload.getExtra().isDisplayErrorResult();
     }
+
+    @Override
+    public void renderWidget(Payload payload, BootpayWidgetEventListener listener) {
+        this.mWidgetEventListener = listener;
+
+        this.setPayload(payload);
+
+        this.setInjectedJSBeforePayStart(BootpayConstant.getJSBeforePayStart(this.getContext()));
+
+
+
+        String script = BootpayConstant.loadParams(
+                "BootpayWidget.render('#bootpay-widget', ",
+                payload.toJsonUnderscore(),
+                ");"
+        );
+        this.setInjectedJS(script);
+
+        this.startBootpay();
+//
+//        load(script);
+    }
+
+    @Override
+    public void requestPayment(Payload payload, BootpayEventListener listener) {
+        this.mEventListener = listener;
+
+        String script = BootpayConstant.loadParams(
+                "BootpayWidget.requestPayment(",
+                payload.toJsonUnderscore(),
+                ")",
+                ".then( function (res) {",
+                BootpayConstant.confirm(),
+                BootpayConstant.issued(),
+                BootpayConstant.done(),
+                BootpayConstant.redirect(), //success_result 닫기 이벤트가 일로 간다
+                "}, function (res) {",
+                BootpayConstant.error(),
+                BootpayConstant.cancel(),
+                BootpayConstant.redirect(),
+                "})"
+        );
+
+        load(script);
+    }
+
 }
 

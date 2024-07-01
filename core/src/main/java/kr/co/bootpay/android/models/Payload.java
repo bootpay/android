@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import kr.co.bootpay.android.models.widget.Oopay;
+import kr.co.bootpay.android.models.widget.WidgetData;
+import kr.co.bootpay.android.models.widget.WidgetTerm;
+
 public class Payload {
     private String applicationId = "";
     private String pg = "";
@@ -39,6 +43,23 @@ public class Payload {
     private BootExtra extra = new BootExtra();
     private BootUser user = new BootUser();
     private List<BootItem> items = new ArrayList<>();
+
+    //widget 관련
+    private String widgetKey = "";
+    private boolean widgetUseTerms;
+    private boolean widgetSandbox;
+    private Oopay widgetOopay = new Oopay();
+
+    //widget data response 관련
+    private String _widgetWalletId;
+    private WidgetData _widgetData = new WidgetData();
+    private List<WidgetTerm> _widgetSelectTerms = new ArrayList<>();
+    private boolean _widgetTermPassed;
+    private boolean _widgetCompleted;
+
+    boolean WidgetIsCompleted() {
+        return (_widgetTermPassed || false) && (_widgetCompleted || false);
+    }
 
     public Payload() { }
 
@@ -287,6 +308,11 @@ public class Payload {
                 jsonObject.put("items", new JSONArray(itemList));
             }
 
+
+            jsonObject.put("key", widgetKey);
+            jsonObject.put("use_terms", widgetUseTerms);
+            jsonObject.put("sandbox", widgetSandbox);
+
             return jsonObject.toString();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -307,5 +333,86 @@ public class Payload {
 //        gson.fr
 
         return gson.toJson(object);
+    }
+
+    public String getWidgetKey() {
+        return widgetKey;
+    }
+
+    public Payload setWidgetKey(String widgetKey) {
+        this.widgetKey = widgetKey;
+        return this;
+    }
+
+    public boolean getWidgetUseTerms() {
+        return widgetUseTerms;
+    }
+
+    public Payload setWidgetUseTerms(boolean widgetUseTerms) {
+        this.widgetUseTerms = widgetUseTerms;
+        return this;
+    }
+
+    public boolean getWidgetSandbox() {
+        return widgetSandbox;
+    }
+
+    public Payload setWidgetSandbox(boolean widgetSandbox) {
+        this.widgetSandbox = widgetSandbox;
+        return this;
+    }
+
+    public Oopay getWidgetOopay() {
+        return widgetOopay;
+    }
+
+    public Payload setWidgetOopay(Oopay widgetOopay) {
+        this.widgetOopay = widgetOopay;
+        return this;
+    }
+
+    public String getWidgetWalletId() {
+        return _widgetWalletId;
+    }
+
+    public Payload setWidgetWalletId(String _widgetWalletId) {
+        this._widgetWalletId = _widgetWalletId;
+        return this;
+    }
+
+    public WidgetData getWidgetData() {
+        return _widgetData;
+    }
+
+    public Payload setWidgetData(WidgetData _widgetData) {
+        this._widgetData = _widgetData;
+        return this;
+    }
+
+    public List<WidgetTerm> getWidgetSelectTerms() {
+        return _widgetSelectTerms;
+    }
+
+    public Payload setWidgetSelectTerms(List<WidgetTerm> _widgetSelectTerms) {
+        this._widgetSelectTerms = _widgetSelectTerms;
+        return this;
+    }
+
+    public boolean getWidgetTermPassed() {
+        return _widgetTermPassed;
+    }
+
+    public Payload setWidgetTermPassed(boolean _widgetTermPassed) {
+        this._widgetTermPassed = _widgetTermPassed;
+        return this;
+    }
+
+    public boolean getWidgetCompleted() {
+        return _widgetCompleted;
+    }
+
+    public Payload setWidgetCompleted(boolean _widgetCompleted) {
+        this._widgetCompleted = _widgetCompleted;
+        return this;
     }
 }

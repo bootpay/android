@@ -77,22 +77,19 @@ public class BootpayUrlHelper {
     }
 
     public static boolean isInstallApp(Intent intent, Context context) {
-        return isExistPackageInfo(intent, context) || isExistLaunchedIntent(intent, context);
-    }
-
-
-    public static boolean isExistPackageInfo(Intent intent, Context context) {
-        try {
-            return intent != null && context.getPackageManager().getPackageInfo(intent.getPackage(), PackageManager.GET_ACTIVITIES) != null;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        if (intent == null) {
             return false;
         }
 
-    }
+        String packageName = intent.getPackage();
+        if (packageName == null) {
+            return false;
+        }
 
-    public static boolean isExistLaunchedIntent(Intent intent, Context context) {
-        return intent != null &&  intent.getPackage() != null && context.getPackageManager().getLaunchIntentForPackage(intent.getPackage()) != null;
+        PackageManager packageManager = context.getPackageManager();
+        Intent launchIntent = packageManager.getLaunchIntentForPackage(packageName);
+        boolean isInstalled = launchIntent != null;
+        return isInstalled;
     }
 
     public static boolean startApp(Intent intent, Context context) {

@@ -72,4 +72,13 @@
         android:textColor="#fff"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
+
+    <Button
+        android:text="7. 위젯 연동하기"
+        android:onClick="WidgetPayment"
+        android:background="#4529e5"
+        android:layout_marginTop="10dp"
+        android:textColor="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
 </LinearLayout>
