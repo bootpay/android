@@ -3,7 +3,6 @@ package kr.co.bootpay.android.models;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,7 +11,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import kr.co.bootpay.android.models.widget.Oopay;
@@ -424,14 +422,11 @@ public class Payload {
         return this;
     }
 
-    public boolean getWidgetCompleted() {
-        return _widgetCompleted;
+    public boolean getWidgetIsCompleted() {
+        return _widgetCompleted && _widgetTermPassed;
     }
 
-    public Payload setWidgetCompleted(boolean _widgetCompleted) {
-        this._widgetCompleted = _widgetCompleted;
-        return this;
-    }
+
 
     public String getCurrency() {
         return currency;
@@ -448,8 +443,8 @@ public class Payload {
         if(data.getPg() != null) this.pg = data.getPg();
         if(data.getMethod() != null) this.method = data.getMethod();
 
-        this._widgetCompleted = data.isCompleted();
-        this._widgetTermPassed = data.isTermPassed();
+        this._widgetCompleted = data.getCompleted();
+        this._widgetTermPassed = data.getTermPassed();
         if(data.getCurrency() != null) this.currency = data.getCurrency();
         if(data.getSelectTerms() != null) this._widgetSelectTerms = data.getSelectTerms();
         if(data.getWalletId() != null) this._widgetWalletId = data.getWalletId();

@@ -19,6 +19,7 @@ public class BootpayConstant {
 //    public static final String CDN_URL = "https://staging-webview.bootpay.co.kr/4.2.7";
 
 
+    public static final int REQUEST_TYPE_NONE = 0; //일반 결제
     public static final int REQUEST_TYPE_PAYMENT = 1; //일반 결제
     public static final int REQUEST_TYPE_SUBSCRIPT = 2; //정기 결제
     public static final int REQUEST_TYPE_AUTH = 3; //본인 인증
