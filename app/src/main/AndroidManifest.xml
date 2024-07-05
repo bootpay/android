@@ -28,6 +28,7 @@
         <activity android:name=".AuthenticationActivity"/>
         <activity android:name=".PasswordPaymentActivity"/>
         <activity android:name=".WidgetActivity"/>
+
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

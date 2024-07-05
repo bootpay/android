@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void WidgetPayment(View v) {
+//        Intent intent = new Intent(getApplicationContext(), Test1Activity.class);
+//        startActivity(intent);
         Intent intent = new Intent(getApplicationContext(), WidgetActivity.class);
         startActivity(intent);
     }

@@ -3,8 +3,8 @@ package kr.co.bootpay.android;
 import android.app.Activity;
 import android.content.Context;
 
-import kr.co.bootpay.android.api.BootpayDialog;
-import kr.co.bootpay.android.api.BootpayDialogX;
+import kr.co.bootpay.android.webview.BootpayDialog;
+import kr.co.bootpay.android.webview.BootpayDialogX;
 import kr.co.bootpay.android.api.BootpayInterface;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.models.Payload;

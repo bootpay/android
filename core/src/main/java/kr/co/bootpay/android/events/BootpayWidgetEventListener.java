@@ -8,4 +8,5 @@ public interface BootpayWidgetEventListener {
     void onWidgetReady();
     void onWidgetChangePayment(WidgetData data);
     void onWidgetChangeAgreeTerm(WidgetData data);
+    void needReloadWidget();
 }

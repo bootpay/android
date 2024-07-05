@@ -3,6 +3,8 @@
     package="kr.co.bootpay.core">
 
 
+<!--    <activity android:name=".api.kr.co.bootpay.android.BootpayActivity"/>-->
+
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <!-- android 11 모든 앱 접근 권한 사용  (Google Play 가이드라인 참고 - 2021-02-19 기준 못찾았음) -->

@@ -7,6 +7,10 @@ import android.content.Context;
 public class Bootpay {
     protected  static BootpayBuilder builder;
 
+//    public static BootpayBuilder init(Context context) {
+//        return builder = new BootpayBuilder(context);
+//    }
+
     public static BootpayBuilder init(Activity activity, Context context) {
         return builder = new BootpayBuilder(activity, context);
     }

@@ -53,6 +53,7 @@ public class BootpayWebViewClient extends WebViewClient {
             BootpayWebView _webView = (BootpayWebView) webView;
             _webView.callInjectedJavaScriptBeforePayStart();
             _webView.callInjectedJavaScript();
+            _webView.fadeInWebView(300);
         }
 
 //        if (!isCDNLoaded) {

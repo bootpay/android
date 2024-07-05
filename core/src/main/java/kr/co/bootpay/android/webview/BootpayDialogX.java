@@ -1,7 +1,6 @@
-package kr.co.bootpay.android.api;
+package kr.co.bootpay.android.webview;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -15,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import kr.co.bootpay.android.api.BootpayDialogInterface;
+import kr.co.bootpay.android.api.BootpayInterface;
 import kr.co.bootpay.android.constants.BootpayConstant;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.models.Payload;
@@ -32,28 +33,28 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
     boolean doubleBackToExitPressedOnce = false;
     private int mRequestType = BootpayConstant.REQUEST_TYPE_PAYMENT;
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if(mWebView != null) {
-//            mWebView.onResume();
-//            mWebView.resumeTimers();
-//        }
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        if(mWebView != null) {
-//            if(isDismiss) {
-//                mWebView.destroy();
-//                mWebView = null;
-//            } else {
-//                mWebView.onPause();
-//                mWebView.pauseTimers();
-//            }
-//        }
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mWebView != null) {
+            mWebView.onResume();
+            mWebView.resumeTimers();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mWebView != null) {
+            if(isDismiss) {
+                mWebView.destroy();
+                mWebView = null;
+            } else {
+                mWebView.onPause();
+                mWebView.pauseTimers();
+            }
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,37 +82,43 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
             mWebView.setInjectedJS(BootpayConstant.getJSPay(mPayload, mRequestType));
             mWebView.setPayload(mPayload);
         }
-        mWebView.setInjectedJSBeforePayStart(BootpayConstant.getJSBeforePayStart(getContext()));
+
         backButtonEventBind();
-        mWebView.startBootpay();
+
+        if(mPayload.getWidgetKey() != null && mPayload.getWidgetKey().length() > 0) {
+            if(widgetBundle != null) {
+                mWebView.restoreState(widgetBundle);
+            }
+        } else {
+            mWebView.setInjectedJSBeforePayStart(BootpayConstant.getJSBeforePayStart(getContext()));
+            mWebView.startPayment();
+        }
+
         return view;
     }
 
     void backButtonEventBind() {
         Dialog dialog = getDialog();
-        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
-                if (keyEvent.getAction()!=KeyEvent.ACTION_DOWN)
-                    return true;
+        dialog.setOnKeyListener((dialogInterface, keyCode, keyEvent) -> {
+            if (keyEvent.getAction()!=KeyEvent.ACTION_DOWN)
+                return true;
 
-                if(keyCode == KeyEvent.KEYCODE_BACK) {
-                    if (doubleBackToExitPressedOnce) {
-                        BootpayEventListener listener = mWebView.getEventListener();
-                        if(listener != null) listener.onClose();
-                        return true;
-                    }
-                    doubleBackToExitPressedOnce = true;
-                    Toast.makeText(getContext(), "결제를 종료하시려면 '뒤로' 버튼을 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            doubleBackToExitPressedOnce = false;
-                        }
-                    }, 2000);
+            if(keyCode == KeyEvent.KEYCODE_BACK) {
+                if (doubleBackToExitPressedOnce) {
+                    BootpayEventListener listener = mWebView.getEventListener();
+                    if(listener != null) listener.onClose();
+                    return true;
                 }
-                return false;
+                doubleBackToExitPressedOnce = true;
+                Toast.makeText(getContext(), "결제를 종료하시려면 '뒤로' 버튼을 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
             }
+            return false;
         });
     }
 
@@ -122,6 +129,15 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
     public void requestPayment(androidx.fragment.app.FragmentManager fragmentManager) throws IllegalArgumentException {
         if(mPayload == null) throw new IllegalArgumentException("payload는 null 이 될 수 없습니다.");
         mRequestType = BootpayConstant.REQUEST_TYPE_PAYMENT;
+        show(fragmentManager, mPayload.getOrderId());
+    }
+
+    private Bundle widgetBundle;
+    public void requestWidgetPayment(androidx.fragment.app.FragmentManager fragmentManager) throws IllegalArgumentException {
+//        if(mPayload == null) throw new IllegalArgumentException("payload는 null 이 될 수 없습니다.");
+//        mRequestType = BootpayConstant.REQUEST_TYPE_WIDGET;
+
+        this.widgetBundle = widgetBundle;
         show(fragmentManager, mPayload.getOrderId());
     }
 

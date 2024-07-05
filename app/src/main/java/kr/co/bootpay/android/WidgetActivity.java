@@ -1,6 +1,12 @@
 package kr.co.bootpay.android;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,14 +19,22 @@ import kr.co.bootpay.android.webview.BootpayWebView;
 
 public class WidgetActivity extends AppCompatActivity {
 
+    private FrameLayout webViewContainer;
     Payload payload = new Payload();
+    Button button;
+//    BootpayWebView webView;
 
     void initPayload() {
-        payload.setApplicationId("5b8f6a4d396fa665fdc2b5e8")
+        payload.setApplicationId("5b9f51264457636ab9a07cdc")
                 .setOrderName("부트페이 결제테스트")
+                .setWidgetSandbox(true)
+                .setWidgetKey("default-widget")
+                .setWidgetSandbox(true)
+                .setWidgetUseTerms(true)
 //                .setPg("다날")
 //                .setMethod("본인인증")
-//                .setOrderId("1234")
+                .setOrderId("1234")
+                .setUserToken("6667b08b04ab6d03f274d32e")
 //                .setAuthenticationId("1234")
                 .setPrice(1000d);
 //                .setUser(user)
@@ -31,101 +45,153 @@ public class WidgetActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BootpayWidget.destroy();
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_widget);
-
-        BootpayWebView webView = findViewById(R.id.webview);
-        //link your domain
+        button = findViewById(R.id.button);
+        webViewContainer = findViewById(R.id.webViewContainer);
 
         initPayload();
-
-        webView.renderWidget(payload,
-                new BootpayWidgetEventListener() {
-                    @Override
-                    public void onWidgetResize(double height) {
-
-                    }
-
-                    @Override
-                    public void onWidgetReady() {
-
-                    }
-
-                    @Override
-                    public void onWidgetChangePayment(WidgetData data) {
-
-                    }
-
-                    @Override
-                    public void onWidgetChangeAgreeTerm(WidgetData data) {
-
-                    }
-                });
-
-//        webView.rendorWidget(payload)
-//                .onWidgetResize((height) -> {
-//                    //resize your widget
-//                })
-//                .onWidgetChangePayment((data) -> {
-//                    //change your payment
-//                })
-//                .onWidgetChangeAgreeTerms((data) -> {
-//                    //change your agree terms
-//                })
-//                .onWidgetReady(() -> {
-//                    //widget is ready
-//                });
-//
-//
-//        webView.requestPayment(payload,
-//           (data) -> {
-//            //payment success
-//        }, (data) -> {
-//            //payment fail
-//        }, (data) -> {
-//            //payment cancel
-//        }, (data) -> {
-//            //payment confirm
-//        }, (data) -> {
-//            //payment close
-//        });
-
+        loadWidgetView();
+        renderWidget();
 
     }
 
-    void goPayment() {
-        BootpayWebView webView = findViewById(R.id.webview);
-        webView.requestPayment(payload,
+
+    private void loadWidgetView() {
+        BootpayWebView webView = BootpayWidget.getView(this, getSupportFragmentManager());
+        webView.removeFromParent(this);
+        webView.addToParent(this, webViewContainer);
+//        webView.addFrom
+//        webViewContainer.addView(webView);
+//        webView.resumeWebView();
+    }
+
+    Double widgetHeight = 0.0;
+    void renderWidget() {
+        if(BootpayWidget.getView(this, getSupportFragmentManager()).getUrl() == null) {
+            BootpayWidget.renderWidget(this, payload, new BootpayWidgetEventListener() {
+                @Override
+                public void onWidgetResize(double height) {
+                    Log.d("bootpay", "onWidgetResize: " + height);
+                    widgetHeight = height;
+                }
+
+                @Override
+                public void onWidgetReady() {
+                    Log.d("bootpay", "onWidgetReady: ");
+
+                }
+
+                @Override
+                public void onWidgetChangePayment(WidgetData data) {
+                    Log.d("bootpay", "onWidgetChangePayment: " + data);
+                    payload.mergeWidgetData(data);
+                }
+
+                @Override
+                public void onWidgetChangeAgreeTerm(WidgetData data) {
+                    Log.d("bootpay", "onWidgetChangeAgreeTerm: " + data);
+                    payload.mergeWidgetData(data);
+                }
+
+                @Override
+                public void needReloadWidget() {
+                    Log.d("bootpay", "needReloadWidget ");
+                    widgetStatusReset();
+                }
+            });
+        }
+    }
+
+    void widgetStatusReset() {
+        loadWidgetView();
+//        BootpayWidget.widgetStatusReset();
+        BootpayWidget.resizeWidget(widgetHeight);
+    }
+
+    public void goPayment(View v) {
+//        BootpayWebView webView = findViewById(R.id.webview);
+//        webView.requestPayment(
+//                getSupportFragmentManager(),
+//                payload,
+//                new BootpayEventListener() {
+//                    @Override
+//                    public void onCancel(String data) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(String data) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onClose() {
+//                        Log.d("bootpay", "close");
+//                        Bootpay.removePaymentWindow();
+//
+//                    }
+//
+//                    @Override
+//                    public void onIssued(String data) {
+//
+//                    }
+//
+//                    @Override
+//                    public boolean onConfirm(String data) {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public void onDone(String data) {
+//
+//                    }
+//                });
+
+//        Bundle bundleState = new Bundle();
+//        webView.saveState(bundleState);
+        BootpayWidget.requestPayment(
+                getSupportFragmentManager(),
+                payload,
                 new BootpayEventListener() {
                     @Override
                     public void onCancel(String data) {
-
+                        Log.d("bootpay", "cancel: " + data);
                     }
 
                     @Override
                     public void onError(String data) {
-
+                        Log.d("bootpay", "error: " + data);
                     }
 
                     @Override
                     public void onClose() {
-
+                        Log.d("bootpay", "close");
+                        BootpayWidget.removePaymentWindow();
+                        loadWidgetView();
                     }
 
                     @Override
                     public void onIssued(String data) {
-
+                        Log.d("bootpay", "issued: " + data);
                     }
 
                     @Override
                     public boolean onConfirm(String data) {
+                        Log.d("bootpay", "confirm: " + data);
                         return false;
                     }
 
                     @Override
                     public void onDone(String data) {
-
+                        Log.d("bootpay", "done: " + data);
                     }
                 });
         //webView.requestPayment(payload, success, fail, cancel, confirm, close);

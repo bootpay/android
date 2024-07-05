@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,11 +7,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/black"
-    tools:context="kr.co.bootpay.android.WebAppActivity">
+    tools:context="kr.co.bootpay.android.WidgetActivity">
 
-    <kr.co.bootpay.android.webview.BootpayWebView
-        android:id="@+id/webview"
+
+    <View
+        android:id="@+id/topView"
+        android:background="@color/teal_200"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        />
-</LinearLayout>
+        android:layout_height="300dp"/>
+
+<!--    <kr.co.bootpay.android.webview.BootpayWebView-->
+<!--        android:layout_below="@+id/topView"-->
+<!--        android:id="@+id/webview"-->
+<!--        android:layout_width="fill_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        />-->
+
+    <FrameLayout
+        android:layout_below="@+id/topView"
+        android:background="@color/white"
+        android:id="@+id/webViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_below="@+id/webViewContainer"
+        android:id="@+id/bottomView"
+        android:background="@color/teal_700"
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"/>
+
+    <Button
+        android:layout_alignParentBottom="true"
+        android:id="@+id/button"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:onClick="goPayment"
+        android:enabled="false"
+        android:text="구매하기"/>
+</RelativeLayout>
