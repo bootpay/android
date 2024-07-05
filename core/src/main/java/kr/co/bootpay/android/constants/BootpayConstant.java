@@ -14,7 +14,8 @@ import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.pref.UserInfo;
 
 public class BootpayConstant {
-    public static final String CDN_URL = "https://webview.bootpay.co.kr/5.0.0-rc.13";
+    public static final String CDN_URL = "https://webview.bootpay.co.kr/5.0.0-rc.13/";
+    public static final String WIDGET_URL = CDN_URL + "widget.html";
 //    public static final String CDN_URL = "https://staging-webview.bootpay.co.kr/4.2.7";
 
 
@@ -72,19 +73,28 @@ public class BootpayConstant {
 
     public static String cancel() { return  "else if (res.event === 'cancel') { " + BootpayBuildConfig.JSInterfaceBridgeName + ".cancel(JSON.stringify(res)); }"; }
 
-    public static String close() { return  "document.addEventListener('bootpayclose', function (e) { Bootpay.close('결제창이 닫혔습니다'); });"; }
+    public static String close() { return  ""; }
+//    public static String close() { return  "document.addEventListener('bootpayclose', function (e) { A.close('결제창이 닫혔습니다'); });"; }
+//public static String close() { return  "document.addEventListener('bootpayclose', function (e) { " + BootpayBuildConfig.JSInterfaceBridgeName + ".close('결제창이 닫혔습니다');  });"; }
 
     public static String redirect() { return "else if (res.event === 'redirectEvent') { " + BootpayBuildConfig.JSInterfaceBridgeName + ".redirectEvent(JSON.stringify(res)); }"; }
 
     public static String message() { return  "document.addEventListener('message', function (e) { " + BootpayBuildConfig.JSInterfaceBridgeName + ".message(JSON.stringify(e)); });"; }
 
-    public static String readyWatch() { return "document.addEventListener('bootpay-widget-ready', function (e) { if (window.WidgetReady && window.WidgetReady.postMessage) { WidgetReady.postMessage(JSON.stringify(e.detail)); } });"; }
+//    public static String readyWatch() { return "document.addEventListener('bootpay-widget-ready', function (e) { " + BootpayBuildConfig.JSInterfaceBridgeName + ".readyWatch(JSON.stringify(e.detail)); });"; }
+    public static String readyWatch() { return "document.addEventListener('bootpay-widget-ready', function (e) { " +  BootpayBuildConfig.JSInterfaceBridgeName + ".readyWatch(); });"; }
+//    public static String readyWatch() { return "document.addEventListener('bootpay-widget-ready', function (e) { alert('readyWatch') });"; }
+//    public static String readyWatch() { return "document.addEventListener('bootpay-widget-ready', function (e) { alert(e.detail); });"; }
 
-    public static String resizeWatch() { return "document.addEventListener('bootpay-widget-resize', function (e) { if (window.WidgetResize && window.WidgetResize.postMessage) { WidgetResize.postMessage(JSON.stringify(e.detail)); } });"; }
+//    public static String resizeWatch() { return "document.addEventListener('bootpay-widget-resize', function (e) { alert('resizeWatch') });"; }
+    public static String resizeWatch() { return "document.addEventListener('bootpay-widget-resize', function (e) { " + BootpayBuildConfig.JSInterfaceBridgeName + ".resizeWatch(JSON.stringify(e.detail));  });"; }
 
-    public static String changeMethodWatch() { return "document.addEventListener('bootpay-widget-change-payment', function (e) { if (window.WidgetChangePayment && window.WidgetChangePayment.postMessage) { WidgetChangePayment.postMessage(JSON.stringify(e.detail)); } });"; }
+//    public static String changeMethodWatch() { return "document.addEventListener('bootpay-widget-change-payment', function (e) { alert('changeMethodWatch') });"; }
+    public static String changeMethodWatch() { return "document.addEventListener('bootpay-widget-change-payment', function (e) { " + BootpayBuildConfig.JSInterfaceBridgeName + ".changeMethodWatch(JSON.stringify(e.detail)); });"; }
+//    public static String changeMethodWatch() { return ""; }
 
-    public static String changeTermsWatch() { return "document.addEventListener('bootpay-widget-change-terms', function (e) { if (window.WidgetChangeTerms && window.WidgetChangeTerms.postMessage) { WidgetChangeTerms.postMessage(JSON.stringify(e.detail)); } });"; }
+//    public static String changeTermsWatch() { return "document.addEventListener('bootpay-widget-change-terms', function (e) { alert('changeTermsWatch') });"; }
+    public static String changeTermsWatch() { return "document.addEventListener('bootpay-widget-change-terms', function (e) { " + BootpayBuildConfig.JSInterfaceBridgeName + ".changeTermsWatch(JSON.stringify(e.detail)); });"; }
 
 
 

@@ -1,4 +1,4 @@
-package kr.co.bootpay.android.api;
+package kr.co.bootpay.android.webview;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -15,9 +15,10 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import kr.co.bootpay.android.api.BootpayDialogInterface;
+import kr.co.bootpay.android.api.BootpayInterface;
 import kr.co.bootpay.android.constants.BootpayConstant;
 import kr.co.bootpay.android.events.BootpayEventListener;
-import kr.co.bootpay.android.events.BootpayExtEventListener;
 import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.webview.BootpayWebView;
 import kr.co.bootpay.core.R;
@@ -92,7 +93,7 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
         }
         mWebView.setInjectedJSBeforePayStart(BootpayConstant.getJSBeforePayStart(inflater.getContext()));
         backButtonEventBind();
-        mWebView.startBootpay();
+        mWebView.startPayment();
         return view;
     }
 

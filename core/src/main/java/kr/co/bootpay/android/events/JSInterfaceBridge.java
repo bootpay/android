@@ -30,11 +30,11 @@ public interface JSInterfaceBridge {
     void readyWatch();
 
     @JavascriptInterface
-    void resizeWatch(double height);
+    void resizeWatch(String data);
 
     @JavascriptInterface
-    void changeMethodWatch(WidgetData data);
+    void changeMethodWatch(String data);
 
     @JavascriptInterface
-    void changeTermsWatch(WidgetData data);
+    void changeTermsWatch(String data);
 }

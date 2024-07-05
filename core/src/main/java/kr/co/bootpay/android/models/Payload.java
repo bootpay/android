@@ -17,6 +17,7 @@ import java.util.Map;
 
 import kr.co.bootpay.android.models.widget.Oopay;
 import kr.co.bootpay.android.models.widget.WidgetData;
+import kr.co.bootpay.android.models.widget.WidgetExtra;
 import kr.co.bootpay.android.models.widget.WidgetTerm;
 
 public class Payload {
@@ -27,6 +28,11 @@ public class Payload {
     private String orderName = "";
     private Double price = 0.0;
     private Double taxFree = 0.0;
+
+    private Double depositPrice = 0.0;
+
+    private String currency;
+
     private String orderId = "";
     private String subscriptionId = "";
     private String authenticationId = "";
@@ -309,9 +315,19 @@ public class Payload {
             }
 
 
+            if(widgetKey != null && widgetKey.length() > 0) {
+                jsonObject.put("widget", 1);
+                jsonObject.put("use_bootpay_inapp_sdk", true);
+            }
             jsonObject.put("key", widgetKey);
             jsonObject.put("use_terms", widgetUseTerms);
             jsonObject.put("sandbox", widgetSandbox);
+
+            jsonObject.put("currency", currency);
+            jsonObject.put("wallet_id", _widgetWalletId);
+            jsonObject.put("terms", new JSONArray(_widgetSelectTerms));
+            jsonObject.put("user_token", userToken);
+
 
             return jsonObject.toString();
         } catch (JSONException e) {
@@ -334,6 +350,7 @@ public class Payload {
 
         return gson.toJson(object);
     }
+
 
     public String getWidgetKey() {
         return widgetKey;
@@ -414,5 +431,36 @@ public class Payload {
     public Payload setWidgetCompleted(boolean _widgetCompleted) {
         this._widgetCompleted = _widgetCompleted;
         return this;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public Payload setCurrency(String currency) {
+        this.currency = currency;
+        return this;
+    }
+
+    public void mergeWidgetData(WidgetData data) {
+        if(data == null) return;
+        this._widgetData = data;
+        if(data.getPg() != null) this.pg = data.getPg();
+        if(data.getMethod() != null) this.method = data.getMethod();
+
+        this._widgetCompleted = data.isCompleted();
+        this._widgetTermPassed = data.isTermPassed();
+        if(data.getCurrency() != null) this.currency = data.getCurrency();
+        if(data.getSelectTerms() != null) this._widgetSelectTerms = data.getSelectTerms();
+        if(data.getWalletId() != null) this._widgetWalletId = data.getWalletId();
+
+        if(this.extra == null) this.extra = new BootExtra();
+
+        if(data.getExtra() != null) {
+            WidgetExtra widgetExtra = data.getExtra();
+            if(widgetExtra.getDirectCardCompany() != null) this.extra.setDirectCardCompany(widgetExtra.getDirectCardCompany());
+            if(widgetExtra.getDirectCardQuota() != null) this.extra.setDirectCardQuota(widgetExtra.getDirectCardQuota());
+            if(widgetExtra.getCardQuota() != null) this.extra.setCardQuota(widgetExtra.getCardQuota());
+        }
     }
 }
