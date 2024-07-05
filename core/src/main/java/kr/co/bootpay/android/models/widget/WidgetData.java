@@ -22,6 +22,7 @@ public class WidgetData {
         this.extra = new WidgetExtra();
     }
 
+//    {"pg":"nicepay","method":"card","select_terms":[],"term_passed":true,"extra":{"direct_card_company":"국민","direct_card_quota":0,"direct_card_interest":false},"completed":true}
     public static WidgetData fromJson(String json) {
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
         return gson.fromJson(json, WidgetData.class);
@@ -72,7 +73,7 @@ public class WidgetData {
         this.currency = currency;
     }
 
-    public boolean isTermPassed() {
+    public boolean getTermPassed() {
         return termPassed;
     }
 
@@ -80,7 +81,7 @@ public class WidgetData {
         this.termPassed = termPassed;
     }
 
-    public boolean isCompleted() {
+    public boolean getCompleted() {
         return completed;
     }
 

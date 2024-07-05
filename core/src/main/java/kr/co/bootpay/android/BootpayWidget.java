@@ -10,6 +10,11 @@ import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.webview.BootpayWebView;
 
 
+// 위젯 사용을 위한 인터페이스
+// webview는 싱글턴으로 관리한다
+// 사용자 화면에서 webview를 제공하고, 결제시 전체화면 dialog에서 해당 웹뷰를 재사용하고, 다시 화면으로 돌아올때 다시 제공한다
+// webview에서도 내부적으로 BootpayWidget을 사용하고, BootpayWidget에서는 BootpayWebView를 사용한다
+
 public class BootpayWidget {
 
     private static BootpayWidgetDialogX mDialogX;
@@ -49,14 +54,9 @@ public class BootpayWidget {
     }
 
     private static void widgetStatusReset() {
-        if(mWebView != null) {
-//            mWebView.loadUrl("https://www.naver.com");
-            mWebView.startWidget();
-        }
+        if(mWebView != null)  mWebView.startWidget();
         if(mWebView.getPaymentResult() == BootpayPaymentResult.NONE) {
             if(mListener != null) mListener.onCancel("{'action':'BootpayCancel','status':-100,'message':'사용자에 의한 취소'}");
-
-//            if(mListener != null) mListener.onClose();
         }
 
         mWebView.setPaymentResult(BootpayPaymentResult.NONE);
@@ -78,10 +78,8 @@ public class BootpayWidget {
 
     public static void showDialog(Activity activity) {
         if(mFragmentManagerX != null) {
-            if(mDialogX == null)
-                mDialogX = new BootpayWidgetDialogX();
-            mDialogX.showDialog(activity, mFragmentManagerX);
-//            mDialogX.show(mFragmentManagerX, "BootpayWidgetDialogX");
+            if(mDialogX == null) mDialogX = new BootpayWidgetDialogX();
+            mDialogX.fullScreenDialog(activity, mFragmentManagerX);
         }
     }
 
@@ -90,6 +88,7 @@ public class BootpayWidget {
         if(activity == null) return;
         activity.runOnUiThread(() -> {
             BootpayWebView webView = mDialogX.getWebView();
+            webView.invisibleWebView();
             webView.removeFromParent(activity);
 
             if(mDialogX != null) mDialogX.dismiss();
@@ -106,7 +105,8 @@ public class BootpayWidget {
 
 
 
-    public static void requestPayment(androidx.fragment.app.FragmentManager fragmentManager, Payload payload, BootpayEventListener listener) {
+    public static void requestPayment(Activity activity, androidx.fragment.app.FragmentManager fragmentManager, Payload payload, BootpayEventListener listener) {
+        mFragmentManagerX = fragmentManager;
         mPayload = payload;
         mListener = listener;
 
@@ -114,39 +114,9 @@ public class BootpayWidget {
         mDialogX.setPayload(payload);
         mDialogX.setEventListener(listener);
 //
-        mDialogX.requestWidgetPayment(fragmentManager);
-//        setPrivateWidgetEvent();
-
-//        setPrivateWidgetEvent(fragmentManager());
-//        setPrivateWidgetEvent(fragmentManager.getContext());
+        mDialogX.requestWidgetPayment(activity, fragmentManager);
     }
 
-//    public static void setPrivateWidgetEvent() {
-//        BootpayWebView webView = mDialogX.getWebView(); //BootpayWidget.getView(context); 와 동일 코드
-//        webView.setWidgetPrivateEventListener(new kr.co.bootpay.android.events.BootpayWidgetPrivateEventListener() {
-////            @Override
-////            public void onFullSizeScreen(String data) {
-////                //dialog 시작
-////
-////                Log.d("bootpay", "onFullSizeScreen: " + data);
-//////                if(mEventListener != null) mEventListener.onClose();
-////            }
-//
-//            @Override
-//            public void onRevertScreen(String data) {
-//                Log.d("bootpay", "onRevertScreen: " + data);
-//                //dialog 종료, 위젯 리로드
-////                if(mEventListener != null) mEventListener.onClose();
-//            }
-//
-//            @Override
-//            public void onCloseWidget() {
-//                Log.d("bootpay", "onCloseWidget: ");
-//                //paymentResult 가 none이 아니면 dialog 종료, 위젯 리로드
-////               onClose 호출해야함
-//            }
-//        });
-//    }
 
     public static void removePaymentWindow() {
         if(mDialogX != null) mDialogX.removePaymentWindow();
@@ -164,39 +134,5 @@ public class BootpayWidget {
         if(mWebView != null) mWebView.resizeWebView(height);
     }
 
-//    public static void fullSizeWidget() {
-//        if (mWebView != null) mWebView.fullSizeWebView();
-//    }
-
-//    protected  static BootpayBuilder builder;
-
-//    public static BootpayBuilder init(Context context) {
-//        return builder = new BootpayBuilder(context);
-//    }
-
-//    public static BootpayBuilder init(Activity activity, Context context) {
-//        return builder = new BootpayBuilder(activity, context);
-//    }
-//
-//    public static BootpayBuilder init(android.app.FragmentManager fragmentManager, Context context) {
-//        return builder = new BootpayBuilder(fragmentManager, context);
-//    }
-//
-//    public static BootpayBuilder init(androidx.fragment.app.FragmentManager fragmentManagerX, Context context) {
-//        return builder = new BootpayBuilder(fragmentManagerX, context);
-//    }
-//
-//
-//    public static void transactionConfirm(String data) {
-//        if (builder != null) builder.transactionConfirm(data);
-//    }
-//
-//    public static void removePaymentWindow() {
-//        if (builder != null) builder.removePaymentWindow();
-//    }
-//
-//    public static void dismissWindow() {
-//        if (builder != null) builder.dismissWindow();
-//    }
 }
 

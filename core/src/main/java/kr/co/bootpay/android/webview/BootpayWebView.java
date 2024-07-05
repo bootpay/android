@@ -207,7 +207,10 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         public void close(String data) {
             if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
             if(isWidget) {
-                if(mWidgetPrivateEventListener != null) mWidgetPrivateEventListener.onCloseWidget();
+//                invisibleWebView();
+//                pauseWebView();
+//                removeFromParent(mActivity);
+                BootpayWidget.closeDialog(mActivity);
             } else {
                 if (mEventListener != null) mEventListener.onClose();
             }
@@ -288,7 +291,7 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
                         paymentResult = BootpayPaymentResult.DONE;
                         done(data);
                         if(!isDisplaySuccess()) close(data);
-                        else {
+                        else if(isWidget != true){
                             String dataString = String.valueOf(json.get("data"));
                             JSONObject dataJson = new JSONObject(dataString);
                             String methodOriginSymbol = String.valueOf(dataJson.get("method_origin_symbol"));
@@ -302,13 +305,10 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
                           //dialog를 띄워야 함
                         invisibleWebView();
                         showWidgetDialog();
-//                        if(mWidgetPrivateEventListener != null) mWidgetPrivateEventListener.onFullSizeScreen(data);
                         break;
                     case "bootpayWidgetRevertScreen":
-//                        fadeOutWebView(300);\
                         invisibleWebView();
                         closeWidgetDialog();
-//                        if(mWidgetPrivateEventListener != null) mWidgetPrivateEventListener.onRevertScreen(data);
                         break;
                 }
             } catch (JSONException e) {
@@ -366,7 +366,7 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
 
 
 
-//        Double webViewHeight = 0.0;
+        Double webViewHeight = 0.0;
         private void handleEvent(int eventId, String data) {
             if(data == null || data.length() == 0) {
                 if(eventId == WIDGET_EVENT_READY) {
@@ -379,27 +379,17 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
                 switch (eventId) {
                     case WIDGET_EVENT_RESIZE:
                         Double height = obj.getDouble("height");
+                        if(webViewHeight == height) return;
                         if(mWidgetEventListener != null) mWidgetEventListener.onWidgetResize(height);
-
-//                        if(mActivity == null) return;
-//                        mActivity.runOnUiThread(() -> {
-//                            // DisplayMetrics를 사용하여 dp를 px로 변환
-//                            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-//                            int heightInPx = (int) (height * displayMetrics.density);
-//
-//                            // WebView의 레이아웃 파라미터 업데이트
-//                            ViewGroup.LayoutParams params = getLayoutParams();
-//                            params.height = heightInPx;
-//                            setLayoutParams(params);
-//
-//                            if(mWidgetEventListener != null) mWidgetEventListener.onWidgetResize(height);
-//                        });
-
+                        resizeWebView(height);
                         break;
                     case WIDGET_EVENT_READY:
                         if(mWidgetEventListener != null) mWidgetEventListener.onWidgetReady();
                         break;
                     case WIDGET_EVENT_CHANGE_PAYMENT:
+                        Log.d("bootpay", "WIDGET_EVENT_CHANGE_PAYMENT: " + data);
+                        WidgetData widgetData = WidgetData.fromJson(data);
+                        Log.d("bootpay", "WIDGET_EVENT_CHANGE_PAYMENT: " + widgetData.toJsonUnderscore());
                         if(mWidgetEventListener != null) mWidgetEventListener.onWidgetChangePayment(WidgetData.fromJson(data));
                         break;
                     case WIDGET_EVENT_CHANGE_AGREE_TERM:
@@ -553,6 +543,8 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         return payload.getExtra().isDisplayErrorResult();
     }
 
+
+    /** 아래부터 widget 관련 함수들 **/
     @Override
     public void renderWidget(Activity activity, Payload payload, BootpayWidgetEventListener listener) {
         this.mActivity = activity;
@@ -629,18 +621,13 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         Log.d("bootpay", "updateScript: " + updateScript);
         Log.d("bootpay", "requestPayment: " + requestScript);
 
-//        post(() -> loadUrl(String.format(Locale.KOREA, "javascript:(function(){%s})()", script)));
-
-//        load("alert(1);");
-        //update 후에 request
         load(updateScript);
         load(requestScript);
 
-
-//        load(requestScript);
     }
 
     public void removeFromParent(Activity activity) {
+        if(activity == null) return;
         mActivity = activity;
         activity.runOnUiThread(() -> {
 //            fadeOutWebView(300);
@@ -652,6 +639,7 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
     }
 
     public void addToParent(Activity activity, ViewGroup parent) {
+        if(activity == null) return;
         mActivity = activity;
         activity.runOnUiThread(() -> {
             if(parent != null) parent.addView(this);
@@ -679,7 +667,7 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         if(animator != null) animator.alpha(0).setDuration(duration);
     }
 
-    protected void invisibleWebView() {
+    public void invisibleWebView() {
         setAlpha(0);
     }
 
@@ -718,8 +706,6 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
             ViewGroup.LayoutParams params = getLayoutParams();
             params.height = heightInPx;
             setLayoutParams(params);
-
-            if(mWidgetEventListener != null) mWidgetEventListener.onWidgetResize(height);
         });
     }
 

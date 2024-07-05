@@ -1,5 +1,6 @@
 package kr.co.bootpay.android;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.events.BootpayWidgetEventListener;
+import kr.co.bootpay.android.models.BootExtra;
 import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.models.widget.WidgetData;
 import kr.co.bootpay.android.webview.BootpayWebView;
@@ -25,6 +27,9 @@ public class WidgetActivity extends AppCompatActivity {
 //    BootpayWebView webView;
 
     void initPayload() {
+//        BootExtra extra = new BootExtra();
+//        extra.setDisplaySuccessResult(true);
+
         payload.setApplicationId("5b9f51264457636ab9a07cdc")
                 .setOrderName("부트페이 결제테스트")
                 .setWidgetSandbox(true)
@@ -38,7 +43,7 @@ public class WidgetActivity extends AppCompatActivity {
 //                .setAuthenticationId("1234")
                 .setPrice(1000d);
 //                .setUser(user)
-//                .setExtra(extra)
+//                .setExtra(extra);
 //                .setItems(items);
 
 
@@ -64,13 +69,12 @@ public class WidgetActivity extends AppCompatActivity {
     }
 
 
+
+    BootpayWebView mWebView;
     private void loadWidgetView() {
-        BootpayWebView webView = BootpayWidget.getView(this, getSupportFragmentManager());
-        webView.removeFromParent(this);
-        webView.addToParent(this, webViewContainer);
-//        webView.addFrom
-//        webViewContainer.addView(webView);
-//        webView.resumeWebView();
+        mWebView = BootpayWidget.getView(this, getSupportFragmentManager());
+        mWebView.removeFromParent(this);
+        mWebView.addToParent(this, webViewContainer);
     }
 
     Double widgetHeight = 0.0;
@@ -80,7 +84,6 @@ public class WidgetActivity extends AppCompatActivity {
                 @Override
                 public void onWidgetResize(double height) {
                     Log.d("bootpay", "onWidgetResize: " + height);
-                    widgetHeight = height;
                 }
 
                 @Override
@@ -93,12 +96,14 @@ public class WidgetActivity extends AppCompatActivity {
                 public void onWidgetChangePayment(WidgetData data) {
                     Log.d("bootpay", "onWidgetChangePayment: " + data);
                     payload.mergeWidgetData(data);
+                    updatePaymentButtonState();
                 }
 
                 @Override
                 public void onWidgetChangeAgreeTerm(WidgetData data) {
                     Log.d("bootpay", "onWidgetChangeAgreeTerm: " + data);
                     payload.mergeWidgetData(data);
+                    updatePaymentButtonState();
                 }
 
                 @Override
@@ -110,6 +115,16 @@ public class WidgetActivity extends AppCompatActivity {
         }
     }
 
+    void updatePaymentButtonState() {
+        Log.d("bootpay", "updatePaymentButtonState: " + payload.getWidgetIsCompleted());
+        runOnUiThread(() -> {
+            button.setEnabled(payload.getWidgetIsCompleted());
+//            button.setBackgroundColor(payload.getWidgetIsCompleted() ? Color.GREEN : 0xFFAAAAAA);
+        });
+//        button.setEnabled(payload.getWidgetIsCompleted());
+//        button.setBackgroundColor(payload.getWidgetIsCompleted() ? Color.GREEN : 0xFFAAAAAA);
+    }
+
     void widgetStatusReset() {
         loadWidgetView();
 //        BootpayWidget.widgetStatusReset();
@@ -117,47 +132,11 @@ public class WidgetActivity extends AppCompatActivity {
     }
 
     public void goPayment(View v) {
-//        BootpayWebView webView = findViewById(R.id.webview);
-//        webView.requestPayment(
-//                getSupportFragmentManager(),
-//                payload,
-//                new BootpayEventListener() {
-//                    @Override
-//                    public void onCancel(String data) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(String data) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onClose() {
-//                        Log.d("bootpay", "close");
-//                        Bootpay.removePaymentWindow();
-//
-//                    }
-//
-//                    @Override
-//                    public void onIssued(String data) {
-//
-//                    }
-//
-//                    @Override
-//                    public boolean onConfirm(String data) {
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public void onDone(String data) {
-//
-//                    }
-//                });
 
-//        Bundle bundleState = new Bundle();
-//        webView.saveState(bundleState);
+        Log.d("bootpay", "goPayment");
+
         BootpayWidget.requestPayment(
+                this,
                 getSupportFragmentManager(),
                 payload,
                 new BootpayEventListener() {
@@ -186,7 +165,7 @@ public class WidgetActivity extends AppCompatActivity {
                     @Override
                     public boolean onConfirm(String data) {
                         Log.d("bootpay", "confirm: " + data);
-                        return false;
+                        return true;
                     }
 
                     @Override
@@ -194,6 +173,6 @@ public class WidgetActivity extends AppCompatActivity {
                         Log.d("bootpay", "done: " + data);
                     }
                 });
-        //webView.requestPayment(payload, success, fail, cancel, confirm, close);
+
     }
 }
