@@ -2,6 +2,7 @@ package kr.co.bootpay.android;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.ViewGroup;
 
 import kr.co.bootpay.android.webview.BootpayWidgetDialogX;
 import kr.co.bootpay.android.events.BootpayEventListener;
@@ -103,6 +104,14 @@ public class BootpayWidget {
         });
     }
 
+    public static void bindViewUpdate(Activity activity, androidx.fragment.app.FragmentManager fragmentManager, ViewGroup group) {
+        if(activity == null) return;
+        if(fragmentManager == null) return;
+        if(group == null) return;
+        mWebView = getView(activity, fragmentManager);
+        mWebView.removeFromParent(activity);
+        mWebView.addToParent(activity, group);
+    }
 
 
     public static void requestPayment(Activity activity, androidx.fragment.app.FragmentManager fragmentManager, Payload payload, BootpayEventListener listener) {

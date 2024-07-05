@@ -1,11 +1,8 @@
 package kr.co.bootpay.android;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -14,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.events.BootpayWidgetEventListener;
-import kr.co.bootpay.android.models.BootExtra;
 import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.models.widget.WidgetData;
 import kr.co.bootpay.android.webview.BootpayWebView;
@@ -65,16 +61,13 @@ public class WidgetActivity extends AppCompatActivity {
         initPayload();
         loadWidgetView();
         renderWidget();
-
     }
 
 
 
     BootpayWebView mWebView;
     private void loadWidgetView() {
-        mWebView = BootpayWidget.getView(this, getSupportFragmentManager());
-        mWebView.removeFromParent(this);
-        mWebView.addToParent(this, webViewContainer);
+        BootpayWidget.bindViewUpdate(this, getSupportFragmentManager(), webViewContainer);
     }
 
     Double widgetHeight = 0.0;
@@ -126,8 +119,7 @@ public class WidgetActivity extends AppCompatActivity {
     }
 
     void widgetStatusReset() {
-        loadWidgetView();
-//        BootpayWidget.widgetStatusReset();
+        BootpayWidget.bindViewUpdate(this, getSupportFragmentManager(), webViewContainer);
         BootpayWidget.resizeWidget(widgetHeight);
     }
 
