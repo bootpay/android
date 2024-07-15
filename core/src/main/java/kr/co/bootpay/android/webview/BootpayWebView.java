@@ -569,6 +569,9 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
                 payload.toJsonUnderscore(),
                 ")"
         );
+
+        Log.d("bootpay", "renderWidget: " + script);
+
         this.setInjectedJS(script);
         this.startWidget();
     }
