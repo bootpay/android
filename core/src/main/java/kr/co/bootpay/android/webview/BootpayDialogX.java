@@ -86,9 +86,9 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
         backButtonEventBind();
 
         if(mPayload.getWidgetKey() != null && mPayload.getWidgetKey().length() > 0) {
-            if(widgetBundle != null) {
-                mWebView.restoreState(widgetBundle);
-            }
+//            if(widgetBundle != null) {
+//                mWebView.restoreState(widgetBundle);
+//            }
         } else {
             mWebView.setInjectedJSBeforePayStart(BootpayConstant.getJSBeforePayStart(getContext()));
             mWebView.startPayment();
@@ -176,7 +176,7 @@ public class BootpayDialogX extends DialogFragment implements BootpayDialogInter
     }
 
 
-    public void transactionConfirm(String data) {
-        if (mWebView != null) mWebView.transactionConfirm(data);
+    public void transactionConfirm() {
+        if (mWebView != null) mWebView.transactionConfirm();
     }
 }

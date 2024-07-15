@@ -9,7 +9,7 @@ import kr.co.bootpay.android.models.Payload;
 public interface BootpayWidgetInterface {
     void renderWidget(Activity activity, Payload payload, BootpayWidgetEventListener listener);
 
-    void requestPayment(Payload payload, BootpayEventListener listener);
+    void requestWidgetPayment(Payload payload, BootpayEventListener listener);
 
 //    void requestPayment(androidx.fragment.app.FragmentManager fragmentManager, Payload payload, BootpayEventListener listener);
 

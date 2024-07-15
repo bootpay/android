@@ -94,7 +94,7 @@ public class PasswordPaymentActivity extends AppCompatActivity implements Bootpa
         payload.setMetadata(map);
 //        payload.setMetadata(new Gson().toJson(map));
 
-        Bootpay.init(getSupportFragmentManager(), getApplicationContext())
+        Bootpay.init(getSupportFragmentManager())
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
                     @Override

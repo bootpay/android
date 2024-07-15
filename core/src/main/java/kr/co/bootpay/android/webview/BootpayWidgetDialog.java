@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import android.app.DialogFragment;
 
 import kr.co.bootpay.android.BootpayWidget;
 import kr.co.bootpay.android.api.BootpayDialogInterface;
@@ -21,7 +21,7 @@ import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.core.R;
 
 
-public class BootpayWidgetDialogX extends DialogFragment implements BootpayDialogInterface, BootpayInterface {
+public class BootpayWidgetDialog extends DialogFragment implements BootpayDialogInterface, BootpayInterface {
 //    BootpayWebView mWebView = null;
 
     FrameLayout webViewContainer;
@@ -49,7 +49,7 @@ public class BootpayWidgetDialogX extends DialogFragment implements BootpayDialo
         View view = inflater.inflate(R.layout.layout_bootpay_widget_dialog, container, false);
         webViewContainer = view.findViewById(R.id.webViewContainer);
 
-        mWebView = BootpayWidget.getView(getContext(), getFragmentManager());
+        mWebView = BootpayWidget.getView(inflater.getContext(), getFragmentManager());
         mWebView.removeFromParent(mActivity);
         mWebView.addToParent(mActivity, webViewContainer);
         mWebView.fullSizeWebView();
@@ -88,17 +88,16 @@ public class BootpayWidgetDialogX extends DialogFragment implements BootpayDialo
         return BootpayWidget.getView(getContext(), mFragmentManager);
     }
 
-    private androidx.fragment.app.FragmentManager mFragmentManager;
-    public void requestPayment(androidx.fragment.app.FragmentManager fragmentManager) throws IllegalArgumentException {
+    private android.app.FragmentManager mFragmentManager;
+    public void requestPayment(android.app.FragmentManager fragmentManager) throws IllegalArgumentException {
         this.mFragmentManager = fragmentManager;
         if(mPayload == null) throw new IllegalArgumentException("payload는 null 이 될 수 없습니다.");
         mRequestType = BootpayConstant.REQUEST_TYPE_PAYMENT;
         show(fragmentManager, mPayload.getOrderId());
     }
 
-
 //    private Bundle widgetBundle;
-    public void requestWidgetPayment(Activity activity, androidx.fragment.app.FragmentManager fragmentManager) throws IllegalArgumentException {
+    public void requestWidgetPayment(Activity activity, android.app.FragmentManager fragmentManager) throws IllegalArgumentException {
         this.mActivity = activity;
         this.mFragmentManager = fragmentManager;
         if(mPayload == null) throw new IllegalArgumentException("payload는 null 이 될 수 없습니다.");
@@ -135,7 +134,7 @@ public class BootpayWidgetDialogX extends DialogFragment implements BootpayDialo
 //        if (mWebView != null) mWebView.transactionConfirm(data);
     }
 
-    public void fullScreenDialog(Activity activity, androidx.fragment.app.FragmentManager fragmentManager) {
+    public void fullScreenDialog(Activity activity, android.app.FragmentManager fragmentManager) {
         mRequestType = BootpayConstant.REQUEST_TYPE_NONE;
         this.mFragmentManager = fragmentManager;
         this.mActivity = activity;

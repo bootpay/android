@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import kr.co.bootpay.android.webview.BootpayWidgetDialog;
 import kr.co.bootpay.android.webview.BootpayWidgetDialogX;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.events.BootpayWidgetEventListener;
@@ -18,6 +19,7 @@ import kr.co.bootpay.android.webview.BootpayWebView;
 
 public class BootpayWidget {
 
+    private static BootpayWidgetDialog mDialog;
     private static BootpayWidgetDialogX mDialogX;
     private static BootpayWebView mWebView;
     private static Payload mPayload;
@@ -29,6 +31,13 @@ public class BootpayWidget {
     private static android.app.FragmentManager mFragmentManager;
 
 
+//    public static BootpayWebView getView(Context context, android.app.FragmentManager fragmentManager) {
+//        fragmentManager = fragmentManager;
+//        if(mWebView == null) {
+//            mWebView = new BootpayWebView(context);
+//        }
+//        return mWebView;
+//    }
 
 
     public static BootpayWebView getView(Context context, androidx.fragment.app.FragmentManager fragmentManagerX) {
@@ -82,17 +91,26 @@ public class BootpayWidget {
             if(mDialogX == null) mDialogX = new BootpayWidgetDialogX();
             mDialogX.fullScreenDialog(activity, mFragmentManagerX);
         }
+        if(mFragmentManager != null) {
+            if(mDialog == null) mDialog = new BootpayWidgetDialog();
+            mDialog.fullScreenDialog(activity, mFragmentManager);
+        }
     }
 
     public static void closeDialog(Activity activity) {
 
         if(activity == null) return;
         activity.runOnUiThread(() -> {
-            BootpayWebView webView = mDialogX.getWebView();
+            BootpayWebView webView = null;
+
+            if(mDialogX != null) webView = mDialogX.getWebView();
+            if(mDialog != null) webView = mDialog.getWebView();
+
             webView.invisibleWebView();
             webView.removeFromParent(activity);
 
             if(mDialogX != null) mDialogX.dismiss();
+            if(mDialog != null) mDialog.dismiss();
 
             BootpayPaymentResult result = webView.getPaymentResult();
             if(result == BootpayPaymentResult.NONE) {
@@ -113,6 +131,16 @@ public class BootpayWidget {
         mWebView.addToParent(activity, group);
     }
 
+    public static void requestPayment(Activity activity, android.app.FragmentManager fragmentManager, Payload payload, BootpayEventListener listener) {
+        mFragmentManager = fragmentManager;
+        mPayload = payload;
+        mListener = listener;
+
+        mDialog = new BootpayWidgetDialog();
+        mDialog.setPayload(payload);
+        mDialog.setEventListener(listener);
+        mDialog.requestWidgetPayment(activity, fragmentManager);
+    }
 
     public static void requestPayment(Activity activity, androidx.fragment.app.FragmentManager fragmentManager, Payload payload, BootpayEventListener listener) {
         mFragmentManagerX = fragmentManager;
@@ -122,12 +150,12 @@ public class BootpayWidget {
         mDialogX = new BootpayWidgetDialogX();
         mDialogX.setPayload(payload);
         mDialogX.setEventListener(listener);
-//
         mDialogX.requestWidgetPayment(activity, fragmentManager);
     }
 
 
     public static void removePaymentWindow() {
+        if(mDialog != null) mDialog.removePaymentWindow();
         if(mDialogX != null) mDialogX.removePaymentWindow();
     }
 
@@ -135,6 +163,10 @@ public class BootpayWidget {
         if(mDialogX != null) {
             mDialogX.dismiss();
             mDialogX = null;
+        }
+        if(mDialog != null) {
+            mDialog.dismiss();
+            mDialog = null;
         }
         destroyView();
     }
