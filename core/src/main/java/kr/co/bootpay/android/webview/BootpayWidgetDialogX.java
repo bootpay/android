@@ -64,6 +64,7 @@ public class BootpayWidgetDialogX extends DialogFragment implements BootpayDialo
 
     void backButtonEventBind() {
         Dialog dialog = getDialog();
+        if(dialog == null) return;
         dialog.setOnKeyListener((dialogInterface, keyCode, keyEvent) -> {
             if (keyEvent.getAction()!=KeyEvent.ACTION_DOWN)
                 return true;

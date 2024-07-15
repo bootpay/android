@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.events.BootpayWidgetEventListener;
+import kr.co.bootpay.android.models.BootExtra;
 import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.models.widget.WidgetData;
 import kr.co.bootpay.android.webview.BootpayWebView;
@@ -23,23 +24,23 @@ public class WidgetActivity extends AppCompatActivity {
 //    BootpayWebView webView;
 
     void initPayload() {
-//        BootExtra extra = new BootExtra();
-//        extra.setDisplaySuccessResult(true);
+        BootExtra extra = new BootExtra();
+        extra.setDisplaySuccessResult(true);
 
         payload.setApplicationId("5b9f51264457636ab9a07cdc")
                 .setOrderName("부트페이 결제테스트")
                 .setWidgetSandbox(true)
                 .setWidgetKey("default-widget")
-                .setWidgetSandbox(true)
                 .setWidgetUseTerms(true)
 //                .setPg("다날")
 //                .setMethod("본인인증")
                 .setOrderId("1234")
                 .setUserToken("6667b08b04ab6d03f274d32e")
+
 //                .setAuthenticationId("1234")
-                .setPrice(1000d);
+                .setPrice(1000d)
 //                .setUser(user)
-//                .setExtra(extra);
+                .setExtra(extra);
 //                .setItems(items);
 
 

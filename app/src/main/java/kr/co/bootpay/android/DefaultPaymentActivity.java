@@ -48,8 +48,8 @@ public class DefaultPaymentActivity extends AppCompatActivity {
         Payload payload = new Payload();
         payload.setApplicationId(BootpayConstants.application_id)
                 .setOrderName("부트페이 결제테스트")
-                .setPg("KCP")
-                .setMethod("토스")
+                .setPg("페이앱")
+                .setMethod("네이버페이")
                 .setOrderId("1234")
                 .setPrice(1000d)
                 .setUser(user)
