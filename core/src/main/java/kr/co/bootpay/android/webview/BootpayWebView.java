@@ -40,6 +40,8 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
     protected boolean isWidget = false;
     protected boolean isFullScreen = false;
 
+    Double mHeight = 400.0;
+
 
     BootpayWebViewClient mWebViewClient;
     BootpayEventListener mEventListener;
@@ -415,7 +417,7 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
             handler.postDelayed(resetEventRunnable, DEBOUNCE_DELAY);
         }
 
-        Double webViewHeight = 0.0;
+//        Double webViewHeight = 0.0;
 
         private void handleEvent(BootpayWidgetEvent widgetEvent, String data) {
             if (data == null || data.length() == 0) {
@@ -430,7 +432,8 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
                     case RESIZE:
                         if(isFullScreen == true) return;
                         Double height = obj.getDouble("height");
-                        if (webViewHeight.equals(height)) return;
+                        if (mHeight.equals(height)) return;
+                        mHeight = height;
                         if (mWidgetEventListener != null)
                             mWidgetEventListener.onWidgetResize(height);
                         BootpayWebViewHandler.resizeWebView(BootpayWebView.this, height);

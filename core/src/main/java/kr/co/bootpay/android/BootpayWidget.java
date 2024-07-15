@@ -2,8 +2,10 @@ package kr.co.bootpay.android;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.ViewGroup;
 
+import kr.co.bootpay.android.webview.BootpayWebViewHandler;
 import kr.co.bootpay.android.webview.BootpayWidgetDialog;
 import kr.co.bootpay.android.webview.BootpayWidgetDialogX;
 import kr.co.bootpay.android.events.BootpayEventListener;
@@ -98,6 +100,7 @@ public class BootpayWidget {
     }
 
     public static void closeDialog(Activity activity) {
+        Log.d("bootpay", "closeDialog");
 
         if(activity == null) return;
         activity.runOnUiThread(() -> {
@@ -107,6 +110,8 @@ public class BootpayWidget {
             if(mDialog != null) webView = mDialog.getWebView();
 
             webView.invisibleWebView();
+            BootpayWebViewHandler.resizeWebView(webView, 300.0);
+//            webView.resizeWebView(webView, 300.0);
             webView.removeFromParent(activity);
 
             if(mDialogX != null) mDialogX.dismiss();
@@ -172,7 +177,8 @@ public class BootpayWidget {
     }
 
     public static void resizeWidget(double height) {
-        if(mWebView != null) mWebView.resizeWebView(height);
+        if(mWebView != null) BootpayWebViewHandler.resizeWebView(mWebView, height);
+//        if(mWebView != null) mWebView.resizeWebView(height);
     }
 
 }

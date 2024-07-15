@@ -186,7 +186,7 @@ public class BootpayWebViewHandler {
         }, 1000);
     }
 
-    static void resizeWebView(WebView webView, Double height) {
+    static public void resizeWebView(WebView webView, Double height) {
         Activity activity = (Activity) webView.getContext();
         if (activity == null) return;
         activity.runOnUiThread(() -> {

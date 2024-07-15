@@ -39,7 +39,6 @@ public class BootpayWidgetDialogX extends DialogFragment implements BootpayDialo
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_FRAME,  android.R.style.Theme_Holo_Light);
-        backButtonEventBind();
     }
 
     @Nullable
@@ -58,6 +57,8 @@ public class BootpayWidgetDialogX extends DialogFragment implements BootpayDialo
         if(mRequestType == BootpayConstant.REQUEST_TYPE_PAYMENT) {
             mWebView.requestWidgetPayment(mPayload, mEventListener);
         }
+
+        backButtonEventBind();
         return view;
     }
 
