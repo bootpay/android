@@ -71,13 +71,14 @@ public class WidgetActivity extends AppCompatActivity {
         BootpayWidget.bindViewUpdate(this, getSupportFragmentManager(), webViewContainer);
     }
 
-    Double widgetHeight = 0.0;
+    double mWidgetHeight = 300.0;
     void renderWidget() {
         if(BootpayWidget.getView(this, getSupportFragmentManager()).getUrl() == null) {
             BootpayWidget.renderWidget(this, payload, new BootpayWidgetEventListener() {
                 @Override
                 public void onWidgetResize(double height) {
                     Log.d("bootpay", "onWidgetResize: " + height);
+                    mWidgetHeight = height;
                 }
 
                 @Override
@@ -121,7 +122,7 @@ public class WidgetActivity extends AppCompatActivity {
 
     void widgetStatusReset() {
         BootpayWidget.bindViewUpdate(this, getSupportFragmentManager(), webViewContainer);
-        BootpayWidget.resizeWidget(widgetHeight);
+        BootpayWidget.resizeWidget(mWidgetHeight);
     }
 
     public void goPayment(View v) {
