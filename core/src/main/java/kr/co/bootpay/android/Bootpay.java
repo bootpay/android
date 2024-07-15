@@ -1,7 +1,6 @@
 package kr.co.bootpay.android;
 
 import android.app.Activity;
-import android.content.Context;
 
 
 public class Bootpay {
@@ -11,28 +10,28 @@ public class Bootpay {
 //        return builder = new BootpayBuilder(context);
 //    }
 
-    public static BootpayBuilder init(Activity activity, Context context) {
-        return builder = new BootpayBuilder(activity, context);
+    public static BootpayBuilder init(Activity activity) {
+        return builder = new BootpayBuilder(activity);
     }
 
-    public static BootpayBuilder init(android.app.FragmentManager fragmentManager, Context context) {
-        return builder = new BootpayBuilder(fragmentManager, context);
+    public static BootpayBuilder init(android.app.FragmentManager fragmentManager) {
+        return builder = new BootpayBuilder(fragmentManager);
     }
 
-    public static BootpayBuilder init(androidx.fragment.app.FragmentManager fragmentManagerX, Context context) {
-        return builder = new BootpayBuilder(fragmentManagerX, context);
+    public static BootpayBuilder init(androidx.fragment.app.FragmentManager fragmentManagerX) {
+        return builder = new BootpayBuilder(fragmentManagerX);
     }
 
 
-    public static void transactionConfirm(String data) {
-        if (builder != null) builder.transactionConfirm(data);
+    public static void transactionConfirm() {
+        if (builder != null) builder.transactionConfirm();
     }
 
     public static void removePaymentWindow() {
         if (builder != null) builder.removePaymentWindow();
     }
 
-    public static void dismissWindow() {
+    public static void dismiss() {
         if (builder != null) builder.dismissWindow();
     }
 }

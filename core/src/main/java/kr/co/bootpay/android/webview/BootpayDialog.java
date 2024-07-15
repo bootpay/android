@@ -99,29 +99,26 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
 
     void backButtonEventBind() {
         Dialog dialog = getDialog();
-        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
-                if (keyEvent.getAction()!=KeyEvent.ACTION_DOWN)
-                    return true;
+        dialog.setOnKeyListener((dialogInterface, keyCode, keyEvent) -> {
+            if (keyEvent.getAction()!=KeyEvent.ACTION_DOWN)
+                return true;
 
-                if(keyCode == KeyEvent.KEYCODE_BACK) {
-                    if (doubleBackToExitPressedOnce) {
-                        BootpayEventListener listener = mWebView.getEventListener();
-                        if(listener != null) listener.onClose();
-                        return true;
-                    }
-                    doubleBackToExitPressedOnce = true;
-                    Toast.makeText(dialog.getContext(), "결제를 종료하시려면 '뒤로' 버튼을 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            doubleBackToExitPressedOnce = false;
-                        }
-                    }, 2000);
+            if(keyCode == KeyEvent.KEYCODE_BACK) {
+                if (doubleBackToExitPressedOnce) {
+                    BootpayEventListener listener = mWebView.getEventListener();
+                    if(listener != null) listener.onClose();
+                    return true;
                 }
-                return false;
+                doubleBackToExitPressedOnce = true;
+                Toast.makeText(dialog.getContext(), "결제를 종료하시려면 '뒤로' 버튼을 한번 더 눌러주세요.", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
             }
+            return false;
         });
     }
 
@@ -170,7 +167,7 @@ public class BootpayDialog extends DialogFragment implements BootpayDialogInterf
         this.mPayload = payload;
     }
 
-    public void transactionConfirm(String data) {
-        if (mWebView != null) mWebView.transactionConfirm(data);
+    public void transactionConfirm() {
+        if (mWebView != null) mWebView.transactionConfirm();
     }
 }

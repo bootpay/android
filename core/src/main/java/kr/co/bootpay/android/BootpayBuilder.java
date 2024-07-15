@@ -14,7 +14,6 @@ public class BootpayBuilder implements BootpayInterface {
     private android.app.FragmentManager mFragmentManager;
     private androidx.fragment.app.FragmentManager mFragmentManagerX;
 
-    private Context mContext;
     private BootpayDialog mDialog;
     private BootpayDialogX mDialogX;
 
@@ -22,31 +21,28 @@ public class BootpayBuilder implements BootpayInterface {
     private BootpayEventListener mBootpayEventListener;
 //    private int mRequestType = BootpayConstantV2.REQUEST_TYPE_PAYMENT;
 
-    public BootpayBuilder(Activity activity, Context context) {
+    public BootpayBuilder(Activity activity) {
         this.mActivity = activity;
         this.mFragmentManager = activity.getFragmentManager();
         this.mFragmentManagerX = null;
         this.mDialog = new BootpayDialog();
         this.mDialogX = null;
-        this.mContext = context;
     }
 
-    public BootpayBuilder(android.app.FragmentManager fragmentManager, Context context) {
+    public BootpayBuilder(android.app.FragmentManager fragmentManager) {
         this.mActivity = null;
         this.mFragmentManager = fragmentManager;
         this.mFragmentManagerX = null;
         this.mDialog = new BootpayDialog();
         this.mDialogX = null;
-        this.mContext = context;
     }
 
-    public BootpayBuilder(androidx.fragment.app.FragmentManager fragmentManager, Context context) {
+    public BootpayBuilder(androidx.fragment.app.FragmentManager fragmentManager) {
         this.mActivity = null;
         this.mFragmentManager = null;
         this.mFragmentManagerX = fragmentManager;
         this.mDialog = null;
         this.mDialogX = new BootpayDialogX();
-        this.mContext = context;
     }
 
 
@@ -113,9 +109,9 @@ public class BootpayBuilder implements BootpayInterface {
     }
 
 
-    public void transactionConfirm(String data) {
-        if (mDialog != null) mDialog.transactionConfirm(data);
-        if (mDialogX != null) mDialogX.transactionConfirm(data);
+    public void transactionConfirm() {
+        if (mDialog != null) mDialog.transactionConfirm();
+        if (mDialogX != null) mDialogX.transactionConfirm();
     }
 
     @Override

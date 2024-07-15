@@ -56,7 +56,7 @@ public class BootpayWidgetDialogX extends DialogFragment implements BootpayDialo
         mWebView.fadeInWebView(300);
 
         if(mRequestType == BootpayConstant.REQUEST_TYPE_PAYMENT) {
-            mWebView.requestPayment(mPayload, mEventListener);
+            mWebView.requestWidgetPayment(mPayload, mEventListener);
         }
         return view;
     }
@@ -96,7 +96,8 @@ public class BootpayWidgetDialogX extends DialogFragment implements BootpayDialo
         show(fragmentManager, mPayload.getOrderId());
     }
 
-    private Bundle widgetBundle;
+
+//    private Bundle widgetBundle;
     public void requestWidgetPayment(Activity activity, androidx.fragment.app.FragmentManager fragmentManager) throws IllegalArgumentException {
         this.mActivity = activity;
         this.mFragmentManager = fragmentManager;

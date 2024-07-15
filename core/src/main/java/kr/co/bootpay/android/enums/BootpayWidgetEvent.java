@@ -4,7 +4,7 @@ public enum BootpayWidgetEvent {
     READY("BootpayWidgetReady"),
     RESIZE("BootpayWidgetResize"),
     CHANGE_PAYMENT("BootpayWidgetChangePayment"),
-    CHANGE_TERMS_WATCH("BootpayWidgetChangeTermsWatch");
+    CHANGE_AGREE_TERM("BootpayWidgetChangeTermsWatch");
 
     private final String event;
 

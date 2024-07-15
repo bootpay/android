@@ -1,6 +1,5 @@
 package kr.co.bootpay.android;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +17,6 @@ import kr.co.bootpay.android.models.BootExtra;
 import kr.co.bootpay.android.models.BootItem;
 import kr.co.bootpay.android.models.BootUser;
 import kr.co.bootpay.android.models.Payload;
-import kr.co.bootpay.android.webview.BootpayWebView;
 
 public class DefaultPaymentActivity extends AppCompatActivity {
 //    BootpayWebView bootpayWebView;
@@ -63,7 +61,7 @@ public class DefaultPaymentActivity extends AppCompatActivity {
         payload.setMetadata(map);
 //        payload.setMetadata(new Gson().toJson(map));
 
-        Bootpay.init(getSupportFragmentManager(), getApplicationContext())
+        Bootpay.init(getSupportFragmentManager())
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
                     @Override
@@ -79,7 +77,8 @@ public class DefaultPaymentActivity extends AppCompatActivity {
                     @Override
                     public void onClose() {
                         Log.d("bootpay", "close");
-                        Bootpay.removePaymentWindow();
+//                        Bootpay.removePaymentWindow();
+                        Bootpay.dismiss();
                     }
 
                     @Override

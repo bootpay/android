@@ -10,20 +10,15 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kr.co.bootpay.android.constants.Browser;
-import kr.co.bootpay.android.constants.OpenType;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.models.BootExtra;
 import kr.co.bootpay.android.models.BootItem;
 import kr.co.bootpay.android.models.BootUser;
-import kr.co.bootpay.android.models.BrowserOpenType;
 import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.models.statistics.BootStatItem;
 
@@ -127,7 +122,7 @@ public class NativeActivity extends AppCompatActivity {
         payload.setMetadata(map);
 //        payload.setMetadata(new Gson().toJson(map));
 
-        Bootpay.init(getSupportFragmentManager(), getApplicationContext())
+        Bootpay.init(getSupportFragmentManager())
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
                     @Override
@@ -195,7 +190,7 @@ public class NativeActivity extends AppCompatActivity {
                 .setExtra(extra)
                 .setItems(items);
 
-        Bootpay.init(getSupportFragmentManager(), getApplicationContext())
+        Bootpay.init(getSupportFragmentManager())
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
                     @Override
@@ -211,7 +206,7 @@ public class NativeActivity extends AppCompatActivity {
                     @Override
                     public void onClose() {
                         Log.d("bootpay", "close");
-                        Bootpay.dismissWindow();
+                        Bootpay.dismiss();
                     }
 
                     @Override
@@ -271,7 +266,7 @@ public class NativeActivity extends AppCompatActivity {
         payload.setMetadata(map);
 //        payload.setMetadata(new Gson().toJson(map));
 
-        Bootpay.init(getSupportFragmentManager(), getApplicationContext())
+        Bootpay.init(getSupportFragmentManager())
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
                     @Override
@@ -347,7 +342,7 @@ public class NativeActivity extends AppCompatActivity {
         payload.setMetadata(map);
 //        payload.setMetadata(new Gson().toJson(map));
 
-        Bootpay.init(getSupportFragmentManager(), getApplicationContext())
+        Bootpay.init(getSupportFragmentManager())
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
                     @Override
