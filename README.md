@@ -1,10 +1,7 @@
 # Bootpay Android
 
-자세한 내용은 [부트페이 개발연동 문서](https://app.gitbook.com/@bootpay/s/docs/client/pg/android)를 참고해주세요.
-
-Native 방식으로 안드로이드 앱을 만들때 이 페이지를 참조하시면 됩니다. 
-
-PG 결제창은 기본적으로 Javascript로 연동됩니다. 부트페이 Android SDK는 내부적으로 Webview 방식으로 구현하였으며, 사용방법은 아래와 같습니다. 
+부트페이에서 지원하는 공식 Android 라이브러리 입니다
+* Android SDK 16부터 사용 가능합니다.
 
 ### Gradle을 통한 설치
  
@@ -12,18 +9,18 @@ PG 결제창은 기본적으로 Javascript로 연동됩니다. 부트페이 Andr
 #### build.gradle (module)
 ```groovy
 android {
-    compileSdk 32 //Android 11 지원을 위한 30 이상 버전을 추천 
+    compileSdk 34 //Android 11 지원을 위한 30 이상 버전을 추천 
 
     defaultConfig {
         ...
         minSdk 16 //16 이상 버전 이상부터 지원  
-        targetSdk 32 //Android 11 지원을 위한 30 이상 버전을 추천 
+        targetSdk 34 //Android 11 지원을 위한 30 이상 버전을 추천 
     }
 }
 
 dependencies {
     ...
-    implementation 'io.github.bootpay:android:+' //최신 버전 추천
+    implementation 'io.github.bootpay:android:+' //최신 버전 추천, + 는 항상 최신 버전을 의미합니다. 
 }
 ```
 
@@ -46,107 +43,207 @@ Android [네트워크 보안 구성](https://developer.android.com/training/arti
         android:usesCleartextTraffic="true">
 ```
 
+## 위젯 설정 
+[부트페이 관리자](https://developers.bootpay.co.kr/pg/guides/widget)에서 위젯을 생성하셔야만 사용이 가능합니다.
+
+## 위젯 렌더링
+```java
+private FrameLayout webViewContainer; //위젯을 담을 레이아웃
+@Override
+protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_widget); 
+    webViewContainer = findViewById(R.id.webViewContainer);
+ 
+    initPayload();
+    bindWidgetView();
+    renderWidget();
+}
+
+void initPayload() {
+    BootExtra extra = new BootExtra();
+    extra.setDisplaySuccessResult(true);
+
+    payload.setApplicationId("5b9f51264457636ab9a07cdc")
+            .setOrderName("부트페이 결제테스트")
+            .setWidgetSandbox(true)
+            .setWidgetKey("default-widget")
+            .setWidgetUseTerms(true)
+            .setOrderId("1234")
+            .setUserToken("6667b08b04ab6d03f274d32e")
+            .setPrice(1000d)
+            .setExtra(extra);
+}
+
+//위젯을 webViewContainer에 바인딩 합니다. 
+private void bindWidgetView() {
+    BootpayWidget.bindViewUpdate(this, getSupportFragmentManager(), webViewContainer);
+}
+
+double mWidgetHeight = 300.0;
+//위젯을 렌더링 합니다 
+void renderWidget() {
+    if(BootpayWidget.getView(this, getSupportFragmentManager()).getUrl() == null) {
+        BootpayWidget.renderWidget(this, payload, new BootpayWidgetEventListener() {
+            @Override
+            public void onWidgetResize(double height) {
+                //위젯 사이즈 변경 이벤트 
+                Log.d("bootpay", "onWidgetResize: " + height);
+                mWidgetHeight = height;
+            }
+
+            @Override
+            public void onWidgetReady() {
+                //위젯이 렌더링되면 호출되는 이벤트
+                Log.d("bootpay", "onWidgetReady: ");
+
+            }
+
+            @Override
+            public void onWidgetChangePayment(WidgetData data) {
+                Log.d("bootpay", "onWidgetChangePayment: " + data);
+                payload.mergeWidgetData(data);
+                updatePaymentButtonState();
+            }
+
+            @Override
+            public void onWidgetChangeAgreeTerm(WidgetData data) {
+                Log.d("bootpay", "onWidgetChangeAgreeTerm: " + data);
+                payload.mergeWidgetData(data);
+                updatePaymentButtonState();
+            }
+
+            @Override
+            public void needReloadWidget() {
+                Log.d("bootpay", "needReloadWidget ");
+                widgetStatusReset();
+            }
+        });
+    }
+}
+```
+
+## 위젯으로 결제하기 
+이 방법은 위젯을 사용하여 결제하는 방법입니다. 위젯을 사용하지 않고 결제를 요청하는 방법은 별도로 제공합니다.
+```java
+public void goPayment(View v) {
+    BootpayWidget.requestPayment(
+            this,
+            getSupportFragmentManager(),
+            payload,
+            new BootpayEventListener() {
+                @Override
+                public void onCancel(String data) {
+                    Log.d("bootpay", "cancel: " + data);
+                }
+
+                @Override
+                public void onError(String data) {
+                    Log.d("bootpay", "error: " + data);
+                }
+
+                @Override
+                public void onClose() {
+                    Log.d("bootpay", "close");
+                    BootpayWidget.removePaymentWindow();
+                    bindWidgetView();
+                }
+
+                @Override
+                public void onIssued(String data) {
+                    Log.d("bootpay", "issued: " + data);
+                }
+
+                @Override
+                public boolean onConfirm(String data) {
+                    Log.d("bootpay", "confirm: " + data);
+                    return true;
+                }
+
+                @Override
+                public void onDone(String data) {
+                    Log.d("bootpay", "done: " + data);
+                }
+            });
+
+}
+```
 
 ## 결제창 띄우는 예제 코드
-
+이 방법은 위젯을 사용하지 않고 결제하는 방법입니다.
 ```java
+public void PaymentTest(View v) {
+    BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
 
-public class NativeActivity extends AppCompatActivity {
-    private String application_id = "5b8f6a4d396fa665fdc2b5e8";
+    BootExtra extra = new BootExtra()
+            .setCardQuota("0"); // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
 
+    List<BootItem> items = new ArrayList<>();
+    BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(500d);
+    BootItem item2 = new BootItem().setName("키보드").setId("ITEM_KEYBOARD_MOUSE").setQty(1).setPrice(500d);
+    items.add(item1);
+    items.add(item2);
 
-    Context context;
+    Payload payload = new Payload();
+    payload.setApplicationId(BootpayConstants.application_id)
+            .setOrderName("부트페이 결제테스트")
+            .setPg("페이앱")
+            .setMethod("네이버페이")
+            .setOrderId("1234")
+            .setPrice(1000d)
+            .setUser(user)
+            .setExtra(extra)
+            .setItems(items);
 
-    Spinner spinner_pg;
-    Spinner spinner_method;
-    EditText edit_price;
-    EditText edit_non_tax;
+    Map<String, Object> map = new HashMap<>();
+    map.put("1", "abcdef");
+    map.put("2", "abcdef55");
+    map.put("3", 1234);
+    payload.setMetadata(map);
+//        payload.setMetadata(new Gson().toJson(map));
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_native);
+    Bootpay.init(getSupportFragmentManager())
+            .setPayload(payload)
+            .setEventListener(new BootpayEventListener() {
+                @Override
+                public void onCancel(String data) {
+                    Log.d("bootpay", "cancel: " + data);
+                }
 
-        this.context = this; 
-    }
- 
+                @Override
+                public void onError(String data) {
+                    Log.d("bootpay", "error: " + data);
+                }
 
-    public void goRequest(View v) {
+                @Override
+                public void onClose() {
+                    Log.d("bootpay", "close");
+//                        Bootpay.removePaymentWindow();
+                    Bootpay.dismiss();
+                }
 
-        BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
-        BootExtra extra = new BootExtra()
-                .setCardQuota("0,2,3");  // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
-                
-        Double price = 1000d;
- 
-        String pg = "나이스페이";
-        String method = "네이버페이";
+                @Override
+                public void onIssued(String data) {
+                    Log.d("bootpay", "issued: " +data);
+                }
 
-        //통계용 데이터 추가
-        List<BootItem> items = new ArrayList<>();
-        BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(500d);
-        BootItem item2 = new BootItem().setName("키보드").setId("ITEM_KEYBOARD_MOUSE").setQty(1).setPrice(500d);
-        items.add(item1);
-        items.add(item2);
- 
-
-        Payload payload = new Payload();
-        payload.setApplicationId(application_id)
-                .setOrderName("부트페이 결제테스트")
-                .setPg(pg)
-                .setOrderId("1234")
-                .setMethod(method)
-                .setPrice(price)
-                .setUser(user)
-                .setExtra(extra)
-                .setItems(items);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("1", "abcdef");
-        map.put("2", "abcdef55");
-        map.put("3", 1234);
-        payload.setMetadata(map);
-
-        Bootpay.init(getSupportFragmentManager(), getApplicationContext())
-                .setPayload(payload)
-                .setEventListener(new BootpayEventListener() {
-                    @Override
-                    public void onCancel(String data) {
-                        Log.d("cancel", data);
+                @Override
+                public boolean onConfirm(String data) {
+                    if(checkClientValidation(data)) {
+                        // Bootpay().transactionConfirm() // 승인 요청(방법 1), 이때는 return false로 해야함
+                        return true; //승인 요청(방법 2), return true시 내부적으로 승인을 요청함
+                    } else {
+                        Bootpay.dismiss(); // 결제창 닫기
+                        return false; //승인하지 않음
                     }
+                }
 
-                    @Override
-                    public void onError(String data) {
-                        Log.d("error", data);
-                    }
+                @Override
+                public void onDone(String data) {
+                    Log.d("done", data);
+                }
+            }).requestPayment();
 
-                    @Override
-                    public void onClose(String data) {
-                        Log.d("close", data);
-                        Bootpay.removePaymentWindow();
-                    }
-
-                    @Override
-                    public void onIssued(String data) {
-                        Log.d("issued", data);
-                    }
-
-                    @Override
-                    public boolean onConfirm(String data) {
-                        Log.d("confirm", data);
-//                        Bootpay.transactionConfirm(data); //재고가 있어서 결제를 진행하려 할때 true (방법 1)
-                        return true; //재고가 있어서 결제를 진행하려 할때 true (방법 2)
-//                        return false; //결제를 진행하지 않을때 false
-                    }
-
-                    @Override
-                    public void onDone(String data) {
-                        Log.d("done", data);
-                    }
- 
-                }).requestPayment();
-    }
- 
 }
 ```
 
@@ -286,7 +383,7 @@ Bootpay.init(getSupportFragmentManager(), getApplicationContext())
 ### onDone 함수
 PG에서 거래 승인 이후에 호출 되는 함수입니다. 결제 완료 후 다음 결제 결과를 호출 할 수 있는 함수 입니다.
 
-이 함수가 호출 된 후 반드시 REST API를 통해 [결제검증](https://docs.bootpay.co.kr/rest/verify)을 수행해야합니다. data 포맷은 아래와 같습니다.
+이 함수가 호출 된 후 반드시 REST API를 통해 [결제검증](https://developers.bootpay.co.kr/pg/server/receipt)을 수행해야합니다. data 포맷은 아래와 같습니다.
 
 ```text
 {
@@ -315,8 +412,15 @@ PG에서 거래 승인 이후에 호출 되는 함수입니다. 결제 완료 �
 }
 ```
 
-# 기타 문의사항이 있으시다면
+## Documentation
 
-1. [부트페이 개발연동 문서](https://app.gitbook.com/@bootpay/s/docs/client/pg/android) 참고
-2. [부트페이 홈페이지](https://www.bootpay.co.kr) 참고 - 사이트 우측 하단에 채팅으로 기술문의 주시면 됩니다.
+[부트페이 개발매뉴얼](https://developer.bootpay.co.kr/)을 참조해주세요
+
+## 기술문의
+
+[채팅](https://bootpay.channel.io/)으로 문의
+
+## License
+
+[MIT License](https://opensource.org/licenses/MIT).
 

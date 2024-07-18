@@ -34,9 +34,6 @@ public class DefaultPaymentActivity extends AppCompatActivity {
         BootExtra extra = new BootExtra()
                 .setCardQuota("0"); // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
 
-//        extra.setDirectCardCompany("국민");
-//        extra.setDirectCardQuota("00");
-
         List<BootItem> items = new ArrayList<>();
         BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(500d);
         BootItem item2 = new BootItem().setName("키보드").setId("ITEM_KEYBOARD_MOUSE").setQty(1).setPrice(500d);
@@ -88,10 +85,13 @@ public class DefaultPaymentActivity extends AppCompatActivity {
 
                     @Override
                     public boolean onConfirm(String data) {
-                        Log.d("bootpay", "confirm: " + data);
-//                        Bootpay.transactionConfirm(data); //재고가 있어서 결제를 진행하려 할때 true (방법 1)
-                        return true; //재고가 있어서 결제를 진행하려 할때 true (방법 2)
-//                        return false; //결제를 진행하지 않을때 false
+                        if(checkClientValidation(data)) {
+                            // Bootpay().transactionConfirm() // 승인 요청(방법 1), 이때는 return false로 해야함
+                            return true; //승인 요청(방법 2), return true시 내부적으로 승인을 요청함
+                        } else {
+                            Bootpay.dismiss(); // 결제창 닫기
+                            return false; //승인하지 않음
+                        }
                     }
 
                     @Override
@@ -99,5 +99,16 @@ public class DefaultPaymentActivity extends AppCompatActivity {
                         Log.d("done", data);
                     }
                 }).requestPayment();
+
+    }
+
+    private boolean checkClientValidation(String data) {
+        // 유효성 검사 로직을 작성하세요
+        return true;
+    }
+
+    private boolean proceedServerConfirm(String data) {
+        // 서버 통신 - 서버에서 유효성 검사 후 승인
+        return true;
     }
 }
