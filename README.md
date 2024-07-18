@@ -247,7 +247,7 @@ public void PaymentTest(View v) {
 }
 ```
 
-## 자동결제 요청하기 
+## 자동결제 - 빌링키 발급 요청하기 
 
 ```java 
 Payload payload = new Payload();
@@ -257,7 +257,7 @@ payload.setApplicationId(application_id)
     .setMethod("카드자동")
     .setSubscriptionId("1234") //정기결제용 orderId
     .setMethod(method)
-    .setPrice(price)
+//    .setPrice(price) 가격이 0원 이상일 경우 빌링키 발급 후 결제가 진행됩니다.
     .setUser(user)
     .setExtra(extra)
     .setItems(items);
