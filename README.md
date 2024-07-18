@@ -123,7 +123,7 @@ void renderWidget() {
 }
 ```
 
-## 위젯으로 결제하기 
+## 위젯으로 결제 요청하기 
 이 방법은 위젯을 사용하여 결제하는 방법입니다. 위젯을 사용하지 않고 결제를 요청하는 방법은 별도로 제공합니다.
 ```java
 public void goPayment(View v) {
@@ -169,8 +169,8 @@ public void goPayment(View v) {
 }
 ```
 
-## 결제창 띄우는 예제 코드
-이 방법은 위젯을 사용하지 않고 결제하는 방법입니다.
+## 결제 요청하기
+이 방법은 위젯을 사용하지 않고 결제를 요청하는 방법입니다.
 ```java
 public void PaymentTest(View v) {
     BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
@@ -247,7 +247,7 @@ public void PaymentTest(View v) {
 }
 ```
 
-## 정기결제창 띄우기 
+## 자동결제 요청하기 
 
 ```java 
 Payload payload = new Payload();
@@ -269,7 +269,7 @@ Bootpay.init(getSupportFragmentManager(), getApplicationContext())
 
 
 
-## 본인인증창 띄우기 
+## 본인인증 요청하기 
 
 ```java
 Payload payload = new Payload();
@@ -290,7 +290,8 @@ Bootpay.init(getSupportFragmentManager(), getApplicationContext())
 ```
 
 
-결제 진행 상태에 따라 LifeCycle 함수가 실행됩니다. 각 함수에 대한 상세 설명은 아래를 참고하세요.
+## Bootpay Event Listener
+결제 진행 상태에 따라 이벤트 함수가 실행됩니다. 각 이벤트에 대한 상세 설명은 아래를 참고하세요.
 
 ### onError 함수
 결제 진행 중 오류가 발생된 경우 호출되는 함수입니다. 진행중 에러가 발생되는 경우는 다음과 같습니다.
