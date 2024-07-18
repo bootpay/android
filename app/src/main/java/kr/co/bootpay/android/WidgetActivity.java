@@ -14,7 +14,6 @@ import kr.co.bootpay.android.events.BootpayWidgetEventListener;
 import kr.co.bootpay.android.models.BootExtra;
 import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.models.widget.WidgetData;
-import kr.co.bootpay.android.webview.BootpayWebView;
 
 public class WidgetActivity extends AppCompatActivity {
 
@@ -27,23 +26,15 @@ public class WidgetActivity extends AppCompatActivity {
         BootExtra extra = new BootExtra();
         extra.setDisplaySuccessResult(true);
 
-        payload.setApplicationId(BootpayConstants.application_id)
+        payload.setApplicationId("5b9f51264457636ab9a07cdc")
                 .setOrderName("부트페이 결제테스트")
                 .setWidgetSandbox(true)
                 .setWidgetKey("default-widget")
                 .setWidgetUseTerms(true)
-//                .setPg("다날")
-//                .setMethod("본인인증")
                 .setOrderId("1234")
                 .setUserToken("6667b08b04ab6d03f274d32e")
-
-//                .setAuthenticationId("1234")
                 .setPrice(1000d)
-//                .setUser(user)
                 .setExtra(extra);
-//                .setItems(items);
-
-
     }
 
     @Override
@@ -60,14 +51,13 @@ public class WidgetActivity extends AppCompatActivity {
         webViewContainer = findViewById(R.id.webViewContainer);
 
         initPayload();
-        loadWidgetView();
+        bindWidgetView();
         renderWidget();
     }
 
 
 
-    BootpayWebView mWebView;
-    private void loadWidgetView() {
+    private void bindWidgetView() {
         BootpayWidget.bindViewUpdate(this, getSupportFragmentManager(), webViewContainer);
     }
 
@@ -114,10 +104,7 @@ public class WidgetActivity extends AppCompatActivity {
         Log.d("bootpay", "updatePaymentButtonState: " + payload.getWidgetIsCompleted());
         runOnUiThread(() -> {
             button.setEnabled(payload.getWidgetIsCompleted());
-//            button.setBackgroundColor(payload.getWidgetIsCompleted() ? Color.GREEN : 0xFFAAAAAA);
         });
-//        button.setEnabled(payload.getWidgetIsCompleted());
-//        button.setBackgroundColor(payload.getWidgetIsCompleted() ? Color.GREEN : 0xFFAAAAAA);
     }
 
     void widgetStatusReset() {
@@ -126,9 +113,6 @@ public class WidgetActivity extends AppCompatActivity {
     }
 
     public void goPayment(View v) {
-
-        Log.d("bootpay", "goPayment");
-
         BootpayWidget.requestPayment(
                 this,
                 getSupportFragmentManager(),
@@ -148,7 +132,7 @@ public class WidgetActivity extends AppCompatActivity {
                     public void onClose() {
                         Log.d("bootpay", "close");
                         BootpayWidget.removePaymentWindow();
-                        loadWidgetView();
+                        bindWidgetView();
                     }
 
                     @Override
