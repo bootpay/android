@@ -55,6 +55,8 @@ public class BootExtra {
 
     private boolean escrow = false;
 
+    private boolean showCloseButton = false;
+
     private int timeout = 30; //결제닫힘 대기시간
 
     private boolean commonEventWebhook = false; //창닫기, 결제만료 웹훅 추가
@@ -441,6 +443,15 @@ public class BootExtra {
         return this;
     }
 
+    public boolean isShowCloseButton() {
+        return showCloseButton;
+    }
+
+    public BootExtra setShowCloseButton(boolean showCloseButton) {
+        this.showCloseButton = showCloseButton;
+        return this;
+    }
+
     public JSONObject toJsonObject() {
 
         JSONObject jsonObject = new JSONObject();
@@ -494,6 +505,7 @@ public class BootExtra {
             jsonObject.put("confirm_grace_seconds", confirmGraceSeconds);
 
             jsonObject.put("escrow", escrow);
+            jsonObject.put("show_close_button", showCloseButton);
 
             jsonObject.put("age_limit", ageLimit);
             jsonObject.put("subscribe_test_payment", subscribeTestPayment);

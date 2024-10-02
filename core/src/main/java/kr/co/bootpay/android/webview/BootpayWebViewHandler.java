@@ -16,6 +16,7 @@ import android.webkit.WebView;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Locale;
 
 import kr.co.bootpay.android.constants.BootpayBuildConfig;
 import kr.co.bootpay.android.constants.BootpayConstant;
@@ -72,13 +73,17 @@ public class BootpayWebViewHandler {
     }
 
     static void doScript(WebView webView, String script) {
-//        webView.post(() -> webView.loadUrl(String.format(Locale.KOREA, "javascript:(function(){%s})()", script)));
-        if (webView.getSettings().getJavaScriptEnabled() &&
-                script != null &&
-                !TextUtils.isEmpty(script)) {
-            Log.d("bootpay", "callJavaScript:" + script);
-            evaluateJavascriptWithFallback(webView, "(function() {\n" + script + ";\n})();");
-        }
+//        webView.isWi
+
+        webView.post(() -> webView.loadUrl(String.format(Locale.KOREA, "javascript:(function(){%s})()", script)));
+
+        //위젯코드
+//        if (webView.getSettings().getJavaScriptEnabled() &&
+//                script != null &&
+//                !TextUtils.isEmpty(script)) {
+//            Log.d("bootpay", "callJavaScript:" + script);
+//            evaluateJavascriptWithFallback(webView, "(function() {\n" + script + ";\n})();");
+//        }
 
 //        get
 //        webView.getactivi

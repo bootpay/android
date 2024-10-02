@@ -237,14 +237,17 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         @Override
         public void error(String data) {
             paymentResult = BootpayPaymentResult.ERROR;
-            if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
+            if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onError(data);
+            if (payload != null && payload.getExtra() != null && !"redirect".equals(payload.getExtra().getOpenType())) {
+                close("");
+            }
         }
 
         @JavascriptInterface
         @Override
         public void close(String data) {
-            if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
+            if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
             if (isWidget) {
                 BootpayWidget.closeDialog((Activity) getContext());
             } else {
@@ -257,10 +260,9 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         @Override
         public void cancel(String data) {
             paymentResult = BootpayPaymentResult.CANCEL;
-            if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
+            if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onCancel(data);
-
-            if (payload != null && payload.getExtra() != null && "popup".equals(payload.getExtra().getOpenType())) {
+            if (payload != null && payload.getExtra() != null && !"redirect".equals(payload.getExtra().getOpenType())) {
                 close("");
             }
         }
@@ -268,14 +270,14 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         @JavascriptInterface
         @Override
         public void issued(String data) {
-            if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
+            if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onIssued(data);
         }
 
         @JavascriptInterface
         @Override
         public String confirm(String data) {
-            if (mExtEventListener != null) mExtEventListener.onProgressShow(true);
+            if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(true);
             boolean goTransaction = false;
             if (mEventListener != null) goTransaction = mEventListener.onConfirm(data);
 
@@ -283,7 +285,9 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
                 if(isWidget == true && mActivity != null) {
                     mActivity.runOnUiThread(() -> BootpayWebViewHandler.transactionConfirm(BootpayWebView.this));
                 } else {
-                    BootpayWebViewHandler.transactionConfirm(BootpayWebView.this);
+//                    runon
+                    transactionConfirm();
+//                    BootpayWebViewHandler.transactionConfirm(BootpayWebView.this);
                 }
             }
 
@@ -295,8 +299,11 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         @Override
         public void done(String data) {
             paymentResult = BootpayPaymentResult.DONE;
-            if (mExtEventListener != null) mExtEventListener.onProgressShow(false);
+            if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
             if (mEventListener != null) mEventListener.onDone(data);
+            if (payload != null && payload.getExtra() != null && !"redirect".equals(payload.getExtra().getOpenType())) {
+                close("");
+            }
         }
 
         @JavascriptInterface
