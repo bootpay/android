@@ -1,3 +1,7 @@
+## 5.0.0
+* android 35 support
+* js version 5.1.4 적용
+
 ## 4.9.1
 * 앱 스키마 추가 
 

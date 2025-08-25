@@ -9,7 +9,7 @@ import kr.co.bootpay.android.constants.BootpayBuildConfig;
 import kr.co.bootpay.android.cookiejar.PersistentCookieJar;
 import kr.co.bootpay.android.cookiejar.cache.SetCookieCache;
 import kr.co.bootpay.android.cookiejar.persistence.SharedPrefsCookiePersistor;
-import kr.co.bootpay.core.BuildConfig;
+import kr.co.bootpay.android.constants.BootpayBuildConfig;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;

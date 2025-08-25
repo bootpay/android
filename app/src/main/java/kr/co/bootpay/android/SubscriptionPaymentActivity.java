@@ -22,7 +22,7 @@ import kr.co.bootpay.android.models.BootExtra;
 import kr.co.bootpay.android.models.BootItem;
 import kr.co.bootpay.android.models.BootUser;
 import kr.co.bootpay.android.models.Payload;
-import kr.co.bootpay.core.BuildConfig;
+import kr.co.bootpay.android.constants.BootpayBuildConfig;
 
 public class SubscriptionPaymentActivity extends AppCompatActivity {
 //    BootpayWebView bootpayWebView;

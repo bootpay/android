@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kr.co.bootpay.core">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
 
 <!--    <activity android:name=".api.kr.co.bootpay.android.BootpayActivity"/>-->
@@ -80,7 +79,7 @@
         <package android:name="kr.danal.app.damoum" /> <!-- 다모음 -->
         <package android:name="uplus.membership" /> <!-- U+ 멤버스 -->
         <package android:name="com.sktelecom.tauth" /> <!--PASS-->
-        <package android:name="com om.sktelecom.tauth" /> <!--KCB휴대폰본인인증(SKT)-->
+        <package android:name="com.om.sktelecom.tauth" /> <!--KCB휴대폰본인인증(SKT)-->
         <package android:name="com.lguplus.smartotp" /> <!--PASS-->
 
         <package android:name="com.tmoney.inapp" /> <!--티머니-->

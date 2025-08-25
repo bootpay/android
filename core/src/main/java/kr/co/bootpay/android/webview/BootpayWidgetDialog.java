@@ -18,7 +18,7 @@ import kr.co.bootpay.android.api.BootpayInterface;
 import kr.co.bootpay.android.constants.BootpayConstant;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.models.Payload;
-import kr.co.bootpay.core.R;
+import kr.co.bootpay.android.core.R;
 
 
 public class BootpayWidgetDialog extends DialogFragment implements BootpayDialogInterface, BootpayInterface {
