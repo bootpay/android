@@ -27,7 +27,6 @@ public class BootpayWebViewHandler {
 
     static void payWebSettings(WebView webView, Context context) {
         WebSettings settings = webView.getSettings();
-        settings.setAppCacheEnabled(true);
         settings.setAllowFileAccess(false);
         settings.setAllowContentAccess(false);
         settings.setBuiltInZoomControls(true);
