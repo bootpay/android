@@ -179,4 +179,15 @@ public class BootpayWebViewHandler {
             webView.setLayoutParams(params);
         });
     }
+
+    /**
+     * 위젯 업데이트 (iOS 패리티)
+     * @param webView WebView
+     * @param payload Payload
+     * @param refresh true면 위젯 새로고침
+     */
+    public static void updateWidget(BootpayWebView webView, Payload payload, boolean refresh) {
+        String updateScript = BootpayScript.updateWidget(payload, refresh);
+        doScript(webView, updateScript);
+    }
 }

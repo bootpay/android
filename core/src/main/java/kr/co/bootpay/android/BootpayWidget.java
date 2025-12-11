@@ -12,6 +12,7 @@ import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.events.BootpayWidgetEventListener;
 import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.webview.BootpayWebView;
+import kr.co.bootpay.android.widget.BootpayWidgetController;
 
 public class BootpayWidget {
 
@@ -23,6 +24,7 @@ public class BootpayWidget {
     private static Payload mPayload;
     private static BootpayEventListener mListener;
     private static BootpayWidgetEventListener mWidgetListener;
+    private static BootpayWidgetController mWidgetController;
     private static androidx.fragment.app.FragmentManager mFragmentManagerX;
     private static android.app.FragmentManager mFragmentManager;
 
@@ -76,6 +78,41 @@ public class BootpayWidget {
         }
         mWidgetListener = listener;
         mWebView.renderWidget(activity, payload, listener);
+    }
+
+    /**
+     * Controller 기반 위젯 렌더링 (iOS 패리티)
+     * @param activity Activity
+     * @param payload Payload
+     * @param controller BootpayWidgetController
+     */
+    public static void renderWidget(Activity activity, Payload payload, BootpayWidgetController controller) {
+        if (mWebView == null) {
+            Log.e("bootpay", "WebView is not initialized. Call getView() first.");
+            return;
+        }
+        mWidgetController = controller;
+        mWebView.setWidgetController(controller);
+        mWebView.renderWidget(activity, payload, null);
+    }
+
+    /**
+     * Controller 가져오기
+     * @return BootpayWidgetController
+     */
+    public static BootpayWidgetController getController() {
+        return mWidgetController;
+    }
+
+    /**
+     * Controller 설정하기
+     * @param controller BootpayWidgetController
+     */
+    public static void setController(BootpayWidgetController controller) {
+        mWidgetController = controller;
+        if (mWebView != null) {
+            mWebView.setWidgetController(controller);
+        }
     }
 
     public static void showDialog(Activity activity) {
@@ -170,12 +207,38 @@ public class BootpayWidget {
         mFragmentManagerX = null;
         mListener = null;
         mWidgetListener = null;
+        if (mWidgetController != null) {
+            mWidgetController.reset();
+            mWidgetController = null;
+        }
         mPayload = null;
     }
 
     public static void resizeWidget(double height) {
         if (mWebView != null) {
             BootpayWebViewHandler.resizeWebView(mWebView, height);
+        }
+    }
+
+    /**
+     * 위젯 재로드 (iOS 패리티)
+     * 에러 발생 후 위젯을 다시 로드할 때 사용
+     */
+    public static void reloadWidget() {
+        if (mWebView != null && mPayload != null) {
+            mWebView.startWidget();
+        }
+    }
+
+    /**
+     * 위젯 업데이트 (iOS 패리티)
+     * @param payload 업데이트할 Payload
+     * @param refresh true면 위젯 새로고침
+     */
+    public static void updateWidget(Payload payload, boolean refresh) {
+        if (mWebView != null) {
+            mPayload = payload;
+            BootpayWebViewHandler.updateWidget(mWebView, payload, refresh);
         }
     }
 }
