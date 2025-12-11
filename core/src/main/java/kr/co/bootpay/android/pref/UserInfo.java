@@ -1,22 +1,26 @@
 package kr.co.bootpay.android.pref;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.google.android.gms.ads.identifier.AdvertisingIdClient;
-import com.pddstudio.preferences.encrypted.EncryptedPreferences;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Locale;
 import java.util.UUID;
 
 public class UserInfo {
     private static Context context;
-    private final String encryptPassword = "1q2w3e4r";
     private static UserInfo instance;
-    private EncryptedPreferences encryptedPreferences;
+    private SharedPreferences encryptedPreferences;
 
     private UserInfo() { }
 
@@ -27,9 +31,22 @@ public class UserInfo {
     public static UserInfo getInstance(Context context) {
         if(instance == null) {
             instance = new UserInfo();
-            instance.encryptedPreferences = new EncryptedPreferences
-                    .Builder(context)
-                    .withEncryptionPassword(instance.encryptPassword).build();
+            try {
+                MasterKey masterKey = new MasterKey.Builder(context)
+                        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                        .build();
+
+                instance.encryptedPreferences = EncryptedSharedPreferences.create(
+                        context,
+                        "bootpay_secure_prefs",
+                        masterKey,
+                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                );
+            } catch (GeneralSecurityException | IOException e) {
+                // Fallback to regular SharedPreferences if encryption fails
+                instance.encryptedPreferences = context.getSharedPreferences("bootpay_prefs", Context.MODE_PRIVATE);
+            }
         }
 
         return instance;
@@ -126,10 +143,6 @@ public class UserInfo {
                 .apply();
     }
 
-//    private static String getSimOperator(Context context) {
-//        return instance.encryptedPreferences.getString("sim_operator", getSimOperatorValue(context));
-//    }
-
     private static String getSimOperator(Context context) {
         if (context != null) {
             Context applicationContext = context.getApplicationContext();
@@ -150,10 +163,6 @@ public class UserInfo {
                 .putString("sim_operator", sim_operator)
                 .apply();
     }
-
-//    public String getInstallPackageMarket(Context context) {
-//        return instance.encryptedPreferences.getString("install_package_market", getInstallerPackageNameValue(context));
-//    }
 
     private static String getInstallerPackageName(Context context) {
         if (context != null) {
