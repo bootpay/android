@@ -31,6 +31,7 @@ import kr.co.bootpay.android.events.BootpayWidgetPrivateEventListener;
 import kr.co.bootpay.android.events.JSInterfaceBridge;
 import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.models.widget.WidgetData;
+import kr.co.bootpay.android.widget.BootpayWidgetController;
 
 public class BootpayWebView extends WebView implements BootpayInterface, BootpayWidgetInterface {
 
@@ -48,6 +49,7 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
     BootpayExtEventListener mExtEventListener;
     BootpayWidgetEventListener mWidgetEventListener;
     BootpayWidgetPrivateEventListener mWidgetPrivateEventListener;
+    @Nullable BootpayWidgetController mWidgetController;
 
     protected @Nullable
     String injectedJS;
@@ -205,6 +207,15 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         this.mWidgetPrivateEventListener = listener;
     }
 
+    public void setWidgetController(@Nullable BootpayWidgetController controller) {
+        this.mWidgetController = controller;
+    }
+
+    @Nullable
+    public BootpayWidgetController getWidgetController() {
+        return mWidgetController;
+    }
+
     public BootpayPaymentResult getPaymentResult() {
         return paymentResult;
     }
@@ -238,7 +249,18 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         public void error(String data) {
             paymentResult = BootpayPaymentResult.ERROR;
             if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
+
+            // Widget controller callback
+            if (isWidget && mWidgetController != null) {
+                mWidgetController.handleError(data);
+            }
+            // Widget event listener callback
+            if (isWidget && mWidgetEventListener != null) {
+                mWidgetEventListener.onWidgetError(data);
+            }
+            // Legacy event listener callback
             if (mEventListener != null) mEventListener.onError(data);
+
             if (payload != null && payload.getExtra() != null && !"redirect".equals(payload.getExtra().getOpenType())) {
                 close("");
             }
@@ -248,6 +270,16 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         @Override
         public void close(String data) {
             if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
+
+            // Widget controller callback
+            if (isWidget && mWidgetController != null) {
+                mWidgetController.handleClose();
+            }
+            // Widget event listener callback
+            if (isWidget && mWidgetEventListener != null) {
+                mWidgetEventListener.onWidgetClose();
+            }
+
             if (isWidget) {
                 BootpayWidget.closeDialog((Activity) getContext());
             } else {
@@ -261,7 +293,18 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         public void cancel(String data) {
             paymentResult = BootpayPaymentResult.CANCEL;
             if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
+
+            // Widget controller callback
+            if (isWidget && mWidgetController != null) {
+                mWidgetController.handleCancel(data);
+            }
+            // Widget event listener callback
+            if (isWidget && mWidgetEventListener != null) {
+                mWidgetEventListener.onWidgetCancel(data);
+            }
+            // Legacy event listener callback
             if (mEventListener != null) mEventListener.onCancel(data);
+
             if (payload != null && payload.getExtra() != null && !"redirect".equals(payload.getExtra().getOpenType())) {
                 close("");
             }
@@ -271,6 +314,16 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         @Override
         public void issued(String data) {
             if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
+
+            // Widget controller callback
+            if (isWidget && mWidgetController != null) {
+                mWidgetController.handleIssued(data);
+            }
+            // Widget event listener callback
+            if (isWidget && mWidgetEventListener != null) {
+                mWidgetEventListener.onWidgetIssued(data);
+            }
+            // Legacy event listener callback
             if (mEventListener != null) mEventListener.onIssued(data);
         }
 
@@ -278,19 +331,29 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         @Override
         public String confirm(String data) {
             if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(true);
-            boolean goTransaction = false;
-            if (mEventListener != null) goTransaction = mEventListener.onConfirm(data);
 
-            if (goTransaction) {
-                if(isWidget == true && mActivity != null) {
-                    mActivity.runOnUiThread(() -> BootpayWebViewHandler.transactionConfirm(BootpayWebView.this));
-                } else {
-//                    runon
-                    transactionConfirm();
-//                    BootpayWebViewHandler.transactionConfirm(BootpayWebView.this);
-                }
+            boolean goTransaction = true; // Default to proceed
+
+            // Widget controller callback (takes priority if set)
+            if (isWidget && mWidgetController != null && mWidgetController.hasOnConfirm()) {
+                goTransaction = mWidgetController.handleConfirm(data);
+            }
+            // Widget event listener callback
+            else if (isWidget && mWidgetEventListener != null) {
+                goTransaction = mWidgetEventListener.onWidgetConfirm(data);
+            }
+            // Legacy event listener callback
+            else if (mEventListener != null) {
+                goTransaction = mEventListener.onConfirm(data);
             }
 
+            if (goTransaction) {
+                if (isWidget && mActivity != null) {
+                    mActivity.runOnUiThread(() -> BootpayWebViewHandler.transactionConfirm(BootpayWebView.this));
+                } else {
+                    transactionConfirm();
+                }
+            }
 
             return String.valueOf(goTransaction);
         }
@@ -300,7 +363,18 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         public void done(String data) {
             paymentResult = BootpayPaymentResult.DONE;
             if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
+
+            // Widget controller callback
+            if (isWidget && mWidgetController != null) {
+                mWidgetController.handleDone(data);
+            }
+            // Widget event listener callback
+            if (isWidget && mWidgetEventListener != null) {
+                mWidgetEventListener.onWidgetDone(data);
+            }
+            // Legacy event listener callback
             if (mEventListener != null) mEventListener.onDone(data);
+
             if (payload != null && payload.getExtra() != null && !"redirect".equals(payload.getExtra().getOpenType())) {
                 close("");
             }
@@ -429,6 +503,9 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         private void handleEvent(BootpayWidgetEvent widgetEvent, String data) {
             if (data == null || data.length() == 0) {
                 if (widgetEvent == BootpayWidgetEvent.READY) {
+                    // Controller callback
+                    if (mWidgetController != null) mWidgetController.handleReady();
+                    // Event listener callback
                     if (mWidgetEventListener != null) mWidgetEventListener.onWidgetReady();
                 }
                 return;
@@ -437,24 +514,35 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
                 JSONObject obj = new JSONObject(data);
                 switch (widgetEvent) {
                     case RESIZE:
-                        if(isFullScreen == true) return;
+                        if (isFullScreen) return;
                         Double height = obj.getDouble("height");
                         if (mHeight.equals(height)) return;
                         mHeight = height;
-                        if (mWidgetEventListener != null)
-                            mWidgetEventListener.onWidgetResize(height);
+                        // Controller callback
+                        if (mWidgetController != null) mWidgetController.handleResize(height);
+                        // Event listener callback
+                        if (mWidgetEventListener != null) mWidgetEventListener.onWidgetResize(height);
                         BootpayWebViewHandler.resizeWebView(BootpayWebView.this, height);
                         break;
                     case READY:
+                        // Controller callback
+                        if (mWidgetController != null) mWidgetController.handleReady();
+                        // Event listener callback
                         if (mWidgetEventListener != null) mWidgetEventListener.onWidgetReady();
                         break;
                     case CHANGE_PAYMENT:
-                        if (mWidgetEventListener != null)
-                            mWidgetEventListener.onWidgetChangePayment(WidgetData.fromJson(data));
+                        WidgetData paymentData = WidgetData.fromJson(data);
+                        // Controller callback
+                        if (mWidgetController != null) mWidgetController.handleChangePayment(paymentData);
+                        // Event listener callback
+                        if (mWidgetEventListener != null) mWidgetEventListener.onWidgetChangePayment(paymentData);
                         break;
                     case CHANGE_AGREE_TERM:
-                        if (mWidgetEventListener != null)
-                            mWidgetEventListener.onWidgetChangeAgreeTerm(WidgetData.fromJson(data));
+                        WidgetData termData = WidgetData.fromJson(data);
+                        // Controller callback
+                        if (mWidgetController != null) mWidgetController.handleChangeAgreeTerm(termData);
+                        // Event listener callback
+                        if (mWidgetEventListener != null) mWidgetEventListener.onWidgetChangeAgreeTerm(termData);
                         break;
                     default:
                         throw new IllegalArgumentException("Invalid event ID");

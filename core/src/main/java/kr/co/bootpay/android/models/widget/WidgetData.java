@@ -17,6 +17,12 @@ public class WidgetData {
     private boolean completed;
     private WidgetExtra extra = new WidgetExtra();
 
+    // iOS 패리티 추가 필드
+    private String methodOriginSymbol;  // 결제수단 원본 심볼
+    private String cardQuota;           // 할부 개월
+    private String methodSymbol;        // 결제수단 심볼
+    private String easyPay;             // 간편결제 종류
+
     public WidgetData() {
         this.selectTerms = new ArrayList<>();
         this.extra = new WidgetExtra();
@@ -95,5 +101,52 @@ public class WidgetData {
 
     public void setExtra(WidgetExtra extra) {
         this.extra = extra;
+    }
+
+    // iOS 패리티 getter/setter
+    public String getMethodOriginSymbol() {
+        return methodOriginSymbol;
+    }
+
+    public void setMethodOriginSymbol(String methodOriginSymbol) {
+        this.methodOriginSymbol = methodOriginSymbol;
+    }
+
+    public String getCardQuota() {
+        return cardQuota;
+    }
+
+    public void setCardQuota(String cardQuota) {
+        this.cardQuota = cardQuota;
+    }
+
+    public String getMethodSymbol() {
+        return methodSymbol;
+    }
+
+    public void setMethodSymbol(String methodSymbol) {
+        this.methodSymbol = methodSymbol;
+    }
+
+    public String getEasyPay() {
+        return easyPay;
+    }
+
+    public void setEasyPay(String easyPay) {
+        this.easyPay = easyPay;
+    }
+
+    @Override
+    public String toString() {
+        return "WidgetData{" +
+                "pg='" + pg + '\'' +
+                ", method='" + method + '\'' +
+                ", termPassed=" + termPassed +
+                ", completed=" + completed +
+                ", methodOriginSymbol='" + methodOriginSymbol + '\'' +
+                ", cardQuota='" + cardQuota + '\'' +
+                ", methodSymbol='" + methodSymbol + '\'' +
+                ", easyPay='" + easyPay + '\'' +
+                '}';
     }
 }
