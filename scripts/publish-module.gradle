@@ -16,8 +16,8 @@ if (secretPropsFile.exists()) {
 android {
     publishing {
         singleVariant('release') {
-            withSourcesJar()
-            withJavadocJar()
+            // 소스 JAR와 Javadoc JAR 모두 제거
+            // Android 라이브러리에서는 기본 AAR만으로 충분
         }
     }
 }
@@ -73,6 +73,9 @@ afterEvaluate {
     }
 }
 
-signing {
-    sign publishing.publications
+// 서명 설정이 있을 때만 서명 적용
+if (ext["signing.keyId"] && ext["signing.password"] && ext["signing.secretKeyRingFile"]) {
+    signing {
+        sign publishing.publications
+    }
 }

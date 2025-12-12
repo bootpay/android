@@ -69,8 +69,13 @@ public class BootpayWebViewHandler {
     }
 
     static void startWidget(WebView webView) {
-//        webView.post(() -> webView.loadUrl(String.format(Locale.KOREA, "javascript:(function(){%s})()", BootpayConstant.WIDGET_URL)));
-        webView.loadUrl(BootpayConstant.WIDGET_URL);
+        Log.d("bootpay", "[BootpayWebViewHandler] startWidget called, loading URL: " + BootpayConstant.WIDGET_URL);
+        // Use post to ensure WebView is properly attached to window before loading URL
+        webView.post(() -> {
+            Log.d("bootpay", "[BootpayWebViewHandler] startWidget - posting loadUrl");
+            webView.loadUrl(BootpayConstant.WIDGET_URL);
+            Log.d("bootpay", "[BootpayWebViewHandler] startWidget - loadUrl posted");
+        });
     }
 
     static void transactionConfirm(WebView webView) {
@@ -78,13 +83,22 @@ public class BootpayWebViewHandler {
     }
 
     static void callInjectedJavaScript(BootpayWebView webView) {
-        doScript(webView, webView.getInjectedJS());
+        String js = webView.getInjectedJS();
+        Log.d("bootpay", "[BootpayWebViewHandler] callInjectedJavaScript called, js length=" + (js != null ? js.length() : 0));
+        if (js != null && !js.isEmpty()) {
+            Log.d("bootpay", "[BootpayWebViewHandler] Executing JS script: " + js.substring(0, Math.min(js.length(), 200)) + "...");
+            doScript(webView, js);
+        } else {
+            Log.w("bootpay", "[BootpayWebViewHandler] No JS to inject!");
+        }
     }
 
     static void callInjectedJavaScriptBeforePayStart(BootpayWebView webView) {
         List<String> injectedJSBeforePayStart = webView.getInjectedJSBeforePayStart();
+        Log.d("bootpay", "[BootpayWebViewHandler] callInjectedJavaScriptBeforePayStart called, scripts count=" + (injectedJSBeforePayStart != null ? injectedJSBeforePayStart.size() : 0));
         if (injectedJSBeforePayStart != null) {
             for (String js : injectedJSBeforePayStart) {
+                Log.d("bootpay", "[BootpayWebViewHandler] Executing BeforePayStart script: " + js.substring(0, Math.min(js.length(), 50)) + "...");
                 doScript(webView, js);
             }
         }
@@ -95,12 +109,36 @@ public class BootpayWebViewHandler {
 //    }
 
     static void renderWidget(BootpayWebView webView, Payload payload) {
-//        String script = BootpayScript.createRenderWidgetScript(payload);
-        webView.setInjectedJS(BootpayScript.renderWidget(payload));
+        Log.d("bootpay", "[BootpayWebViewHandler] renderWidget called, webView=" + webView);
+        String js = BootpayScript.renderWidget(payload);
+        webView.setInjectedJS(js);
+        // setVersion, setDevice 등 기본 설정 스크립트 설정
+        webView.setInjectedJSBeforePayStart(BootpayConstant.getJSBeforePayStart(webView.getContext()));
+        Log.d("bootpay", "[BootpayWebViewHandler] calling startWidget");
         startWidget(webView);
     }
 
-    static void requestWidgetPayment(BootpayWebView webView, Payload payload) {
+    /**
+     * 위젯 리렌더링 - widget.html 페이지로 이동 후 JS 주입
+     * 결제 페이지에서 뒤로가기 시 사용
+     */
+    static void rerenderWidget(BootpayWebView webView, Payload payload) {
+        Log.d("bootpay", "[BootpayWebViewHandler] rerenderWidget called, webView=" + webView);
+        String js = BootpayScript.renderWidget(payload);
+        webView.setInjectedJS(js);
+        // setVersion, setDevice 등 기본 설정 스크립트 설정
+        webView.setInjectedJSBeforePayStart(BootpayConstant.getJSBeforePayStart(webView.getContext()));
+        // 위젯용 플래그 설정 (onPageFinished에서 JS 주입용)
+        webView.setIsRerendering(true);
+        Log.d("bootpay", "[BootpayWebViewHandler] rerenderWidget - loading widget URL");
+        // 테스트: www.naver.com 로드
+        webView.post(() -> {
+            Log.d("bootpay", "[BootpayWebViewHandler] rerenderWidget - posting loadUrl (naver test)");
+            webView.loadUrl("https://www.naver.com");
+        });
+    }
+
+    public static void requestWidgetPayment(BootpayWebView webView, Payload payload) {
         String updateScript = BootpayScript.updateWidget(payload, false);
         String requestScript = BootpayScript.requestPayment(payload);
 
@@ -123,7 +161,13 @@ public class BootpayWebViewHandler {
     static void addToParent(WebView webView, Activity activity, ViewGroup parent) {
         if (activity == null) return;
         activity.runOnUiThread(() -> {
-            if (parent != null) parent.addView(webView);
+            if (parent != null) {
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                );
+                parent.addView(webView, params);
+            }
             resumeWebView(webView);
         });
     }
@@ -145,6 +189,10 @@ public class BootpayWebViewHandler {
 
     static void invisibleWebView(WebView webView) {
         webView.setAlpha(0);
+    }
+
+    static void visibleWebView(WebView webView) {
+        webView.setAlpha(1);
     }
 
     static void fadeInWebView(WebView webView, long duration) {

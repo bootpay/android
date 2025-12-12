@@ -47,10 +47,19 @@ public class BootpayWebViewClient extends WebViewClient {
     @Override
     public void onPageFinished(WebView webView, String url) {
         super.onPageFinished(webView, url);
+        Log.d("bootpay", "[WebViewClient] onPageFinished: " + url);
         updateBlindViewIfNaverLogin(webView, url);
 
         if(url.contains("webview.bootpay.co.kr")) {
+            Log.d("bootpay", "[WebViewClient] Bootpay URL detected, injecting JS");
             BootpayWebView _webView = (BootpayWebView) webView;
+
+            // 리렌더링 시 플래그 초기화
+            if (_webView.isRerendering()) {
+                Log.d("bootpay", "[WebViewClient] Rerendering detected, resetting flag");
+                _webView.setIsRerendering(false);
+            }
+
             _webView.callInjectedJavaScriptBeforePayStart();
             _webView.callInjectedJavaScript();
             _webView.fadeInWebView(300);

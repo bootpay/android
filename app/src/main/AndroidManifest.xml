@@ -26,7 +26,8 @@
         <activity android:name=".SubscriptionBootpayPaymentActivity"/>
         <activity android:name=".AuthenticationActivity"/>
         <activity android:name=".PasswordPaymentActivity"/>
-        <activity android:name=".WidgetControllerActivity"/>
+        <activity android:name=".WidgetControllerActivity" android:exported="true"/>
+        <activity android:name=".PaymentResultActivity"/>
 
     </application>
 

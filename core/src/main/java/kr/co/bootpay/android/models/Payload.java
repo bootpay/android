@@ -314,10 +314,8 @@ public class Payload {
 
 
             if(widgetKey != null && widgetKey.length() > 0) {
-                jsonObject.put("widget", 1);
-                jsonObject.put("use_bootpay_inapp_sdk", true);
+                jsonObject.put("widget_key", widgetKey);
             }
-            jsonObject.put("key", widgetKey);
             jsonObject.put("use_terms", widgetUseTerms);
             jsonObject.put("sandbox", widgetSandbox);
 

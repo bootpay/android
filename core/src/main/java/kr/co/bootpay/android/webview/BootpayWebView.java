@@ -1,14 +1,24 @@
 package kr.co.bootpay.android.webview;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.animation.DecelerateInterpolator;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +33,7 @@ import kr.co.bootpay.android.BootpayWidget;
 import kr.co.bootpay.android.api.BootpayInterface;
 import kr.co.bootpay.android.api.BootpayWidgetInterface;
 import kr.co.bootpay.android.constants.BootpayBuildConfig;
+import kr.co.bootpay.android.constants.BootpayConstant;
 import kr.co.bootpay.android.enums.BootpayWidgetEvent;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.events.BootpayExtEventListener;
@@ -40,8 +51,16 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
 
     protected boolean isWidget = false;
     protected boolean isFullScreen = false;
+    protected boolean isRerendering = false;
 
     Double mHeight = 400.0;
+
+    // Fullscreen expansion properties (iOS parity)
+    private boolean isExpanded = false;
+    private ViewGroup originalParent = null;
+    private int originalIndex = -1;
+    private ViewGroup.LayoutParams originalLayoutParams = null;
+    private View backgroundView = null;
 
 
     BootpayWebViewClient mWebViewClient;
@@ -167,6 +186,17 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         BootpayWebViewHandler.renderWidget(this, payload);
     }
 
+    /**
+     * 위젯 리렌더링 - widget.html 페이지로 이동 후 JS 주입
+     */
+    public void rerenderWidget(Activity activity, Payload payload) {
+        this.isWidget = true;
+        this.isFullScreen = false;  // 전체화면 상태 리셋
+        this.mActivity = activity;
+        this.setPayload(payload);
+        BootpayWebViewHandler.rerenderWidget(this, payload);
+    }
+
     @Override
     public void requestWidgetPayment(Payload payload, BootpayEventListener listener) {
         this.isWidget = true;
@@ -199,6 +229,10 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         BootpayWebViewHandler.invisibleWebView(this);
     }
 
+    public void visibleWebView() {
+        BootpayWebViewHandler.visibleWebView(this);
+    }
+
     public void fadeInWebView(long duration) {
         BootpayWebViewHandler.fadeInWebView(this, duration);
     }
@@ -214,6 +248,14 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
     @Nullable
     public BootpayWidgetController getWidgetController() {
         return mWidgetController;
+    }
+
+    public void setIsRerendering(boolean isRerendering) {
+        this.isRerendering = isRerendering;
+    }
+
+    public boolean isRerendering() {
+        return isRerendering;
     }
 
     public BootpayPaymentResult getPaymentResult() {
@@ -234,6 +276,217 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         BootpayWebViewHandler.fullSizeWebView(this);
     }
 
+    // MARK: - Fullscreen Expansion (iOS parity)
+
+    /**
+     * 전체화면으로 확장합니다. (iOS expandToFullscreen 참조)
+     * Activity/Dialog 전환 없이 같은 WebView를 DecorView로 이동
+     */
+    public void expandToFullscreen(boolean animated) {
+        if (isExpanded) return;
+
+        Activity activity = (Activity) getContext();
+        if (activity == null) return;
+
+        Window window = activity.getWindow();
+        if (window == null) return;
+
+        ViewGroup decorView = (ViewGroup) window.getDecorView();
+        FrameLayout contentView = decorView.findViewById(android.R.id.content);
+
+        isExpanded = true;
+        isFullScreen = true;
+
+        // 원래 상태 저장
+        ViewGroup parent = (ViewGroup) getParent();
+        if (parent != null) {
+            originalParent = parent;
+            originalIndex = parent.indexOfChild(this);
+            originalLayoutParams = getLayoutParams();
+
+            // 원래 부모에서 제거
+            parent.removeView(this);
+        }
+
+        // 배경 뷰 생성 (반투명 검정)
+        backgroundView = new View(activity);
+        backgroundView.setBackgroundColor(Color.argb(0, 0, 0, 0));
+        FrameLayout.LayoutParams bgParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        );
+        contentView.addView(backgroundView, bgParams);
+
+        // WebView를 contentView에 추가 (전체 화면 가득 채움)
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        );
+        contentView.addView(this, params);
+
+        // 스크롤 활성화 (전체화면에서는 스크롤 필요)
+        getSettings().setSupportZoom(false);
+        setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
+
+        // 애니메이션
+        if (animated) {
+            // 이전 애니메이션 취소 및 리스너 클리어
+            animate().cancel();
+            animate().setListener(null);
+
+            setAlpha(0f);
+            animate()
+                    .alpha(1f)
+                    .setDuration(350)
+                    .setInterpolator(new DecelerateInterpolator())
+                    .setListener(null) // 리스너 없음
+                    .start();
+
+            backgroundView.setBackgroundColor(Color.argb(128, 0, 0, 0));
+            backgroundView.setAlpha(0f);
+            backgroundView.animate()
+                    .alpha(1f)
+                    .setDuration(350)
+                    .start();
+        } else {
+            setAlpha(1f);
+            backgroundView.setBackgroundColor(Color.argb(128, 0, 0, 0));
+        }
+
+        Log.d("bootpay", "[BootpayWebView] expandToFullscreen completed");
+    }
+
+    /**
+     * 원래 크기로 복원합니다. (iOS collapseToOriginal 참조)
+     * @param animated 애니메이션 여부
+     */
+    public void collapseToOriginal(boolean animated) {
+        collapseToOriginal(animated, false);
+    }
+
+    /**
+     * 원래 크기로 복원합니다. (iOS collapseToOriginal 참조)
+     * @param animated 애니메이션 여부
+     * @param reloadWidget true면 축소 시작 전에 위젯 URL 먼저 로드
+     */
+    public void collapseToOriginal(boolean animated, boolean reloadWidget) {
+        if (!isExpanded) return;
+
+        Activity activity = (Activity) getContext();
+        if (activity == null) return;
+
+        // 먼저 상태 초기화 (중복 호출 방지)
+        isExpanded = false;
+        isFullScreen = false;
+
+        // 위젯 URL 먼저 로드 (축소 애니메이션 중에 위젯이 보이도록)
+        if (reloadWidget) {
+            Log.d("bootpay", "[BootpayWebView] collapseToOriginal - loading widget URL first");
+            loadUrl(BootpayConstant.WIDGET_URL);
+        }
+
+        ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
+        FrameLayout contentView = decorView.findViewById(android.R.id.content);
+
+        // 저장된 원래 상태 로컬 복사 (람다에서 사용)
+        final ViewGroup savedOriginalParent = originalParent;
+        final int savedOriginalIndex = originalIndex;
+        final ViewGroup.LayoutParams savedOriginalLayoutParams = originalLayoutParams;
+
+        // 즉시 상태 초기화 (다음 expandToFullscreen이 올바르게 동작하도록)
+        originalParent = null;
+        originalIndex = -1;
+        originalLayoutParams = null;
+
+        Runnable restoreAction = () -> {
+            // 배경 뷰 제거
+            if (backgroundView != null) {
+                contentView.removeView(backgroundView);
+                backgroundView = null;
+            }
+
+            // contentView에서 WebView 제거
+            if (getParent() == contentView) {
+                contentView.removeView(this);
+            }
+
+            // 원래 부모로 복원
+            if (savedOriginalParent != null && getParent() == null) {
+                if (savedOriginalLayoutParams != null) {
+                    savedOriginalParent.addView(this, savedOriginalIndex >= 0 ? Math.min(savedOriginalIndex, savedOriginalParent.getChildCount()) : savedOriginalParent.getChildCount(), savedOriginalLayoutParams);
+                } else {
+                    savedOriginalParent.addView(this, savedOriginalIndex >= 0 ? Math.min(savedOriginalIndex, savedOriginalParent.getChildCount()) : savedOriginalParent.getChildCount());
+                }
+            }
+
+            Log.d("bootpay", "[BootpayWebView] collapseToOriginal completed");
+        };
+
+        if (animated) {
+            // 이전 애니메이션 취소 및 리스너 클리어
+            animate().cancel();
+            animate().setListener(null);
+
+            animate()
+                    .alpha(0f)
+                    .setDuration(350)
+                    .setInterpolator(new DecelerateInterpolator())
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            setAlpha(1f);
+                            // 리스너 제거 (다음 애니메이션에 영향 주지 않도록)
+                            animate().setListener(null);
+                            activity.runOnUiThread(restoreAction);
+                        }
+                    })
+                    .start();
+
+            if (backgroundView != null) {
+                backgroundView.animate()
+                        .alpha(0f)
+                        .setDuration(350)
+                        .start();
+            }
+        } else {
+            restoreAction.run();
+        }
+    }
+
+    /**
+     * 위젯 재렌더링 (취소 후 초기 상태로 복원)
+     * iOS reloadWidget 참조
+     */
+    public void reloadWidget() {
+        Log.d("bootpay", "[BootpayWebView] reloadWidget called");
+
+        // 전체화면 상태 리셋
+        isFullScreen = false;
+
+        // 위젯 URL 다시 로드
+        post(() -> {
+            Log.d("bootpay", "[BootpayWebView] Reloading widget URL: " + BootpayConstant.WIDGET_URL);
+            loadUrl(BootpayConstant.WIDGET_URL);
+        });
+    }
+
+    /**
+     * 전체화면 토글
+     */
+    public void toggleFullscreen(boolean animated) {
+        if (isExpanded) {
+            collapseToOriginal(animated);
+        } else {
+            expandToFullscreen(animated);
+        }
+    }
+
+    /**
+     * 현재 전체화면 상태인지 확인
+     */
+    public boolean isExpanded() {
+        return isExpanded;
+    }
 
     private class BootpayJavascriptBridge implements JSInterfaceBridge {
 //        private final BootpayWebView webView;
@@ -465,14 +718,17 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         private long DEBOUNCE_DELAY = 400;
 
         private void debounceWidgetEvent(Handler handler, BootpayWidgetEvent widgetEvent, String data) {
+            // RESIZE 이벤트는 debounce 없이 항상 처리 (높이가 변경되면 즉시 반영)
+            // 다른 이벤트는 debounce 적용
+            if (widgetEvent == BootpayWidgetEvent.RESIZE) {
+                handleEvent(widgetEvent, data);
+                return;
+            }
+
             Runnable resetEventRunnable = null;
             boolean isProcessingEvent = false;
 
             switch (widgetEvent) {
-                case RESIZE:
-                    isProcessingEvent = isProcessingEventResize;
-                    resetEventRunnable = widgetResize;
-                    break;
                 case READY:
                     isProcessingEvent = isProcessingEventReady;
                     resetEventRunnable = widgetReady;

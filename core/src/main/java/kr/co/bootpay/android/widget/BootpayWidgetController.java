@@ -156,6 +156,11 @@ public class BootpayWidgetController {
         return this;
     }
 
+    @Nullable
+    public OnNeedReloadCallback getOnNeedReload() {
+        return onNeedReload;
+    }
+
     // Close action
     public WidgetCloseAction getCloseAction() {
         return closeAction;
@@ -307,5 +312,22 @@ public class BootpayWidgetController {
      */
     public void reloadWidget() {
         BootpayWidget.reloadWidget();
+    }
+
+    /**
+     * 위젯 리렌더링 (iOS 패리티)
+     * 전체화면에서 뒤로가기 시 위젯을 다시 렌더링
+     * 먼저 widget.html 페이지로 이동 후 renderWidget 호출
+     */
+    public void rerender() {
+        Activity activity = activityRef != null ? activityRef.get() : null;
+        if (activity == null) {
+            throw new IllegalStateException("Activity must be bound. Call bind(activity, fragmentManager) first.");
+        }
+        Payload payload = BootpayWidget.getPayload();
+        if (payload != null) {
+            // 위젯 페이지로 먼저 이동 후 렌더링 (startWidget -> onPageFinished -> renderWidget)
+            BootpayWidget.rerenderWidget(activity, payload, this);
+        }
     }
 }

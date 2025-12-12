@@ -62,6 +62,29 @@ public class BootpayWidgetDialogX extends DialogFragment implements BootpayDialo
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // 카드사앱 등에서 돌아왔을 때 WebView 다시 resume
+        if (mWebView != null) {
+            mWebView.onResume();
+            mWebView.resumeTimers();
+            // WebView 다시 visible로 만들기
+            mWebView.setAlpha(1);
+            // Note: reload() removed - Activity-based approach is preferred for better lifecycle management
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // 카드사앱 등으로 이동할 때 WebView pause
+        if (mWebView != null) {
+            mWebView.onPause();
+            mWebView.pauseTimers();
+        }
+    }
+
 
     void backButtonEventBind() {
         Dialog dialog = getDialog();

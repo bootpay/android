@@ -14,7 +14,7 @@ import kr.co.bootpay.android.models.Payload;
 import kr.co.bootpay.android.pref.UserInfo;
 
 public class BootpayConstant {
-    public static final String CDN_URL = "https://webview.bootpay.co.kr/5.1.4/";
+    public static final String CDN_URL = "https://webview.bootpay.co.kr/5.2.2/";
     public static final String WIDGET_URL = CDN_URL + "widget.html";
 //    public static final String CDN_URL = "https://staging-webview.bootpay.co.kr/4.2.7";
 
@@ -129,7 +129,7 @@ public class BootpayConstant {
 
     private static String getAnalyticsData(Context context) {
         return String.format(Locale.KOREA,
-                "window.Bootpay.\\$analytics.setAnalyticsData({uuid:'%s',sk:'%s',sk_time:'%d',time:'%d'});"
+                "window.Bootpay.$analytics.setAnalyticsData({uuid:'%s',sk:'%s',sk_time:'%d',time:'%d'});"
                 , UserInfo.getInstance(context).getBootpayUuid()
                 , UserInfo.getInstance(context).getBootpaySk()
                 , UserInfo.getInstance(context).getBootpayLastTime()

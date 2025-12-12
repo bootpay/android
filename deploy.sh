@@ -39,8 +39,21 @@ cd ../../../
 echo "✅ 번들 생성 완료: $(ls -lh android-bundle.zip)"
 
 echo "🔐 Step 4: 인증 정보 설정..."
-OSSRH_USERNAME="i4oDa5"
-OSSRH_PASSWORD="uh9Wgv6DYCHET2H8M2XLDIKnP82Eigtdz"
+# local.properties에서 인증 정보 읽기
+if [ -f "local.properties" ]; then
+    OSSRH_USERNAME=$(grep "^ossrhUsername=" local.properties | cut -d'=' -f2)
+    OSSRH_PASSWORD=$(grep "^ossrhPassword=" local.properties | cut -d'=' -f2)
+    
+    if [ -z "$OSSRH_USERNAME" ] || [ -z "$OSSRH_PASSWORD" ]; then
+        echo "❌ local.properties에서 ossrhUsername 또는 ossrhPassword를 찾을 수 없습니다."
+        exit 1
+    fi
+    
+    echo "✅ 인증 정보를 local.properties에서 읽어왔습니다."
+else
+    echo "❌ local.properties 파일을 찾을 수 없습니다."
+    exit 1
+fi
 BEARER_TOKEN=$(echo -n "${OSSRH_USERNAME}:${OSSRH_PASSWORD}" | base64)
 
 echo "⬆️  Step 5: Central Portal에 업로드..."

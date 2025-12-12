@@ -21,8 +21,8 @@ public class WebAppActivity extends AppCompatActivity {
 
         webView = findViewById(R.id.webview);
         //link your domain
-//        webView.loadUrl("https://dev-js.bootapi.com/test/payment/");
-        webView.loadUrl("https://www.naver.com/");
+        webView.loadUrl("https://dev-js.bootapi.com/test/payment/");
+//        webView.loadUrl("https://www.naver.com/");
     }
 
     public void goPayment(View v) {
