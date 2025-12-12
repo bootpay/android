@@ -5,6 +5,7 @@ import android.content.Context;
 
 import kr.co.bootpay.android.webview.BootpayDialog;
 import kr.co.bootpay.android.webview.BootpayDialogX;
+import kr.co.bootpay.android.webview.BootpayPaymentActivity;
 import kr.co.bootpay.android.api.BootpayInterface;
 import kr.co.bootpay.android.events.BootpayEventListener;
 import kr.co.bootpay.android.models.Payload;
@@ -19,7 +20,9 @@ public class BootpayBuilder implements BootpayInterface {
 
     private Payload mPayload;
     private BootpayEventListener mBootpayEventListener;
-//    private int mRequestType = BootpayConstantV2.REQUEST_TYPE_PAYMENT;
+
+    // Activity-based approach flag (default: true)
+    private boolean useActivity = true;
 
     public BootpayBuilder(Activity activity) {
         this.mActivity = activity;
@@ -45,6 +48,15 @@ public class BootpayBuilder implements BootpayInterface {
         this.mDialogX = new BootpayDialogX();
     }
 
+    /**
+     * Set whether to use Activity-based payment flow (recommended for better lifecycle management)
+     * Default is true
+     */
+    public BootpayBuilder setUseActivity(boolean useActivity) {
+        this.useActivity = useActivity;
+        return this;
+    }
+
 
     private Object getHostUIComponent() {
         if(mActivity != null) return mActivity;
@@ -64,6 +76,18 @@ public class BootpayBuilder implements BootpayInterface {
     }
 
     public void requestPayment() {
+        // Use Activity-based approach
+        if (useActivity && getActivityContext() != null) {
+            BootpayPaymentActivity.launch(
+                getActivityContext(),
+                mPayload,
+                mBootpayEventListener,
+                kr.co.bootpay.android.constants.BootpayConstant.REQUEST_TYPE_PAYMENT
+            );
+            return;
+        }
+
+        // Fallback to Dialog approach
         if(mDialog != null) {
             if(mPayload != null) mDialog.setPayload(mPayload);
             if(mBootpayEventListener != null) mDialog.setEventListener(mBootpayEventListener);
@@ -79,6 +103,18 @@ public class BootpayBuilder implements BootpayInterface {
     }
 
     public void requestSubscription() {
+        // Use Activity-based approach
+        if (useActivity && getActivityContext() != null) {
+            BootpayPaymentActivity.launch(
+                getActivityContext(),
+                mPayload,
+                mBootpayEventListener,
+                kr.co.bootpay.android.constants.BootpayConstant.REQUEST_TYPE_SUBSCRIPT
+            );
+            return;
+        }
+
+        // Fallback to Dialog approach
         if(mDialog != null) {
             if(mPayload != null) mDialog.setPayload(mPayload);
             if(mBootpayEventListener != null) mDialog.setEventListener(mBootpayEventListener);
@@ -94,6 +130,18 @@ public class BootpayBuilder implements BootpayInterface {
     }
 
     public void requestAuthentication() {
+        // Use Activity-based approach
+        if (useActivity && getActivityContext() != null) {
+            BootpayPaymentActivity.launch(
+                getActivityContext(),
+                mPayload,
+                mBootpayEventListener,
+                kr.co.bootpay.android.constants.BootpayConstant.REQUEST_TYPE_AUTH
+            );
+            return;
+        }
+
+        // Fallback to Dialog approach
         if(mDialog != null) {
             if(mPayload != null) mDialog.setPayload(mPayload);
             if(mBootpayEventListener != null) mDialog.setEventListener(mBootpayEventListener);
@@ -108,19 +156,49 @@ public class BootpayBuilder implements BootpayInterface {
         }
     }
 
+    /**
+     * Get Activity context for launching payment activity
+     */
+    private Context getActivityContext() {
+        return mActivity;
+    }
 
     public void transactionConfirm() {
+        // Activity-based approach
+        BootpayPaymentActivity currentActivity = BootpayPaymentActivity.getCurrentActivity();
+        if (currentActivity != null) {
+            currentActivity.transactionConfirm();
+            return;
+        }
+
+        // Dialog fallback
         if (mDialog != null) mDialog.transactionConfirm();
         if (mDialogX != null) mDialogX.transactionConfirm();
     }
 
     @Override
     public void removePaymentWindow() {
+        // Activity-based approach
+        BootpayPaymentActivity currentActivity = BootpayPaymentActivity.getCurrentActivity();
+        if (currentActivity != null) {
+            currentActivity.removePaymentWindow();
+            return;
+        }
+
+        // Dialog fallback
         if(mDialog  != null) mDialog.removePaymentWindow();
         if(mDialogX != null) mDialogX.removePaymentWindow();
     }
 
     public void dismissWindow() {
+        // Activity-based approach
+        BootpayPaymentActivity currentActivity = BootpayPaymentActivity.getCurrentActivity();
+        if (currentActivity != null) {
+            currentActivity.finish();
+            return;
+        }
+
+        // Dialog fallback
         if(mDialog  != null) mDialog.dismiss();
         if(mDialogX != null) mDialogX.dismiss();
     }

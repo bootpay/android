@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-<!--    <activity android:name=".api.kr.co.bootpay.android.BootpayActivity"/>-->
-
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <application>
+        <!-- Payment Activity for fullscreen payment -->
+        <activity
+            android:name="kr.co.bootpay.android.webview.BootpayPaymentActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
+
+        <!-- Widget Payment Activity for fullscreen widget payment -->
+        <activity
+            android:name="kr.co.bootpay.android.webview.BootpayWidgetPaymentActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
+    </application>
 
 
     <queries>

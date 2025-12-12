@@ -79,10 +79,8 @@ public class BootpayWebViewChromeClient extends WebChromeClient {
 
     @Override
     public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-        if(BootpayBuildConfig.DEBUG) {
-            return super.onConsoleMessage(consoleMessage);
-        }
-
+        // 항상 JS 콘솔 로그 출력 (디버깅용)
+        android.util.Log.d("bootpay-js", "[" + consoleMessage.messageLevel() + "] " + consoleMessage.message() + " -- line " + consoleMessage.lineNumber() + " of " + consoleMessage.sourceId());
         return true;
     }
 

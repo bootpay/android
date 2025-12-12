@@ -23,25 +23,27 @@ public class BootpayScript {
     }
 
     public static String renderWidget(Payload payload) {
-        if (BootpayBuildConfig.DEBUG) {
-            return BootpayConstant.loadParams(
-                    "BootpayWidget.setEnvironmentMode('development');",
-                    BootpayConstant.readyWatch(),
-                    BootpayConstant.resizeWatch(),
-                    BootpayConstant.changeMethodWatch(),
-                    BootpayConstant.changeTermsWatch(),
-                    BootpayConstant.close(),
-                    "BootpayWidget.render('#bootpay-widget', ",
-                    payload.toJsonUnderscore(),
-                    ")"
-            );
-        } else {
-            return BootpayConstant.loadParams(
-                    "BootpayWidget.render('#bootpay-widget', ",
-                    payload.toJsonUnderscore(),
-                    ")"
-            );
-        }
+        // BootpayWidget이 정의될 때까지 기다린 후 실행
+        String waitForBootpayWidget = "function waitForBootpayWidget(callback) { " +
+                "if (typeof BootpayWidget !== 'undefined') { callback(); } " +
+                "else { setTimeout(function() { waitForBootpayWidget(callback); }, 50); } " +
+                "} ";
+
+        // 참고: setEnvironmentMode('development')는 dev-widget 서버가 X-Frame-Options deny 설정으로
+        // iframe 로드를 거부하므로 사용하지 않음
+        return BootpayConstant.loadParams(
+                waitForBootpayWidget,
+                "waitForBootpayWidget(function() { ",
+                BootpayConstant.readyWatch(),
+                BootpayConstant.resizeWatch(),
+                BootpayConstant.changeMethodWatch(),
+                BootpayConstant.changeTermsWatch(),
+                BootpayConstant.close(),
+                "BootpayWidget.render('#bootpay-widget', ",
+                payload.toJsonUnderscore(),
+                ");",
+                "});"
+        );
     }
 
     public static String requestPayment(Payload payload) {
