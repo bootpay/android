@@ -3,6 +3,8 @@ package kr.co.bootpay.android;
 import android.app.Activity;
 import android.content.Context;
 
+import androidx.fragment.app.FragmentActivity;
+
 import kr.co.bootpay.android.webview.BootpayDialog;
 import kr.co.bootpay.android.webview.BootpayDialogX;
 import kr.co.bootpay.android.webview.BootpayPaymentActivity;
@@ -32,6 +34,11 @@ public class BootpayBuilder implements BootpayInterface {
         this.mDialogX = null;
     }
 
+    /**
+     * @deprecated Use {@link #BootpayBuilder(Activity)} or {@link #BootpayBuilder(FragmentActivity)} instead.
+     * Dialog-based approach has lifecycle issues with external app transitions.
+     */
+    @Deprecated
     public BootpayBuilder(android.app.FragmentManager fragmentManager) {
         this.mActivity = null;
         this.mFragmentManager = fragmentManager;
@@ -40,7 +47,25 @@ public class BootpayBuilder implements BootpayInterface {
         this.mDialogX = null;
     }
 
+    /**
+     * Recommended constructor for FragmentActivity (AppCompatActivity).
+     * Uses Activity-based payment flow for better lifecycle management.
+     */
+    public BootpayBuilder(FragmentActivity activity) {
+        this.mActivity = activity;
+        this.mFragmentManager = null;
+        this.mFragmentManagerX = activity.getSupportFragmentManager();
+        this.mDialog = null;
+        this.mDialogX = new BootpayDialogX();
+    }
+
+    /**
+     * @deprecated Use {@link #BootpayBuilder(FragmentActivity)} instead.
+     * Dialog-based approach has lifecycle issues with external app transitions.
+     */
+    @Deprecated
     public BootpayBuilder(androidx.fragment.app.FragmentManager fragmentManager) {
+        // Try to extract Activity from FragmentManager for Activity-based approach
         this.mActivity = null;
         this.mFragmentManager = null;
         this.mFragmentManagerX = fragmentManager;
