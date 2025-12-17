@@ -33,22 +33,24 @@ public class DefaultPaymentActivity extends AppCompatActivity {
 
         BootExtra extra = new BootExtra()
                 .setOpenType("iframe")
-                .setCardQuota("0"); // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
+                .setCardQuota("0,2,3"); // 일시불, 2개월, 3개월 할부 허용
 
+        // 상품 정보 (화면에 표시된 상품)
         List<BootItem> items = new ArrayList<>();
-        BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(500d);
-        BootItem item2 = new BootItem().setName("키보드").setId("ITEM_KEYBOARD_MOUSE").setQty(1).setPrice(500d);
-        items.add(item1);
-        items.add(item2);
+        BootItem item = new BootItem()
+                .setName("프리미엄 레더 토트백")
+                .setId("ITEM_PREMIUM_LEATHER_BAG")
+                .setQty(1)
+                .setPrice(80100d);
+        items.add(item);
 
         Payload payload = new Payload();
         payload.setApplicationId(BootpayConstants.application_id)
-                .setOrderName("부트페이 결제테스트")
+                .setOrderName("프리미엄 레더 토트백")
                 .setPg("나이스페이")
-
                 .setMethod("카드")
-                .setOrderId("1234")
-                .setPrice(1000d)
+                .setOrderId("ORDER_" + System.currentTimeMillis())
+                .setPrice(80100d)
                 .setUser(user)
                 .setExtra(extra)
                 .setItems(items);

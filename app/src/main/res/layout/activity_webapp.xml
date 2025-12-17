@@ -11,15 +11,7 @@
 
     <kr.co.bootpay.android.webview.BootpayWebView
         android:id="@+id/webview"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         />
-
-    <Button
-        android:layout_alignParentBottom="true"
-        android:id="@+id/button"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:onClick="goPayment"
-        android:text="구매하기"/>
 </RelativeLayout>
