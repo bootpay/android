@@ -122,7 +122,7 @@ public class NativeActivity extends AppCompatActivity {
         payload.setMetadata(map);
 //        payload.setMetadata(new Gson().toJson(map));
 
-        Bootpay.init(getSupportFragmentManager())
+        Bootpay.init(this) // Activity 기반 결제 (권장)
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
                     @Override
@@ -190,7 +190,7 @@ public class NativeActivity extends AppCompatActivity {
                 .setExtra(extra)
                 .setItems(items);
 
-        Bootpay.init(getSupportFragmentManager())
+        Bootpay.init(this) // Activity 기반 결제 (권장)
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
                     @Override
@@ -266,7 +266,7 @@ public class NativeActivity extends AppCompatActivity {
         payload.setMetadata(map);
 //        payload.setMetadata(new Gson().toJson(map));
 
-        Bootpay.init(getSupportFragmentManager())
+        Bootpay.init(this) // Activity 기반 결제 (권장)
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
                     @Override
@@ -342,7 +342,7 @@ public class NativeActivity extends AppCompatActivity {
         payload.setMetadata(map);
 //        payload.setMetadata(new Gson().toJson(map));
 
-        Bootpay.init(getSupportFragmentManager())
+        Bootpay.init(this) // Activity 기반 결제 (권장)
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
                     @Override
