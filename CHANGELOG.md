@@ -1,3 +1,6 @@
+## 5.0.2
+* Fragment에서 직접 초기화 지원: `Bootpay.init(Fragment)` 추가
+
 ## 5.0.1
 * Activity 기반 결제 API 추가 (권장 방식)
 * FragmentManager 기반 init 메소드 deprecated 처리
