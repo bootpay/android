@@ -2,6 +2,7 @@ package kr.co.bootpay.android;
 
 import android.app.Activity;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 
@@ -21,6 +22,21 @@ public class Bootpay {
         // FragmentActivity 인스턴스인 경우 Activity 기반 결제 사용
         if (activity instanceof FragmentActivity) {
             return builder = new BootpayBuilder((FragmentActivity) activity);
+        }
+        return builder = new BootpayBuilder(activity);
+    }
+
+    /**
+     * Initialize Bootpay from a Fragment.
+     * Automatically extracts the parent Activity for payment flow.
+     *
+     * @param fragment The fragment from which to initialize Bootpay
+     * @throws IllegalStateException if fragment is not attached to an activity
+     */
+    public static BootpayBuilder init(Fragment fragment) {
+        FragmentActivity activity = fragment.getActivity();
+        if (activity == null) {
+            throw new IllegalStateException("Fragment must be attached to an activity");
         }
         return builder = new BootpayBuilder(activity);
     }
