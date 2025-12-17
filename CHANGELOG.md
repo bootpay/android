@@ -1,3 +1,8 @@
+## 5.0.1
+* Activity 기반 결제 API 추가 (권장 방식)
+* FragmentManager 기반 init 메소드 deprecated 처리
+* 외부앱 전환 시 라이프사이클 안정성 개선
+
 ## 5.0.0
 * android 35 support
 * js version 5.1.4 적용
