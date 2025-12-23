@@ -53,4 +53,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), WidgetControllerActivity.class);
         startActivity(intent);
     }
+
+    public void CommercePayment(View v) {
+        Intent intent = new Intent(getApplicationContext(), CommercePaymentActivity.class);
+        startActivity(intent);
+    }
 }

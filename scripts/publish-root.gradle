@@ -33,13 +33,11 @@ nexusPublishing {
         sonatype {
             // staging profile 없이 시도
             // stagingProfileId = sonatypeStagingProfileId
-//            username = ossrhUsername
-//            password = ossrhPassword
             username = ossrhToken
             password = ossrhTokenPassword
-            // 기본 Maven Central Repository URL 시도
-            nexusUrl.set(uri("https://central.sonatype.com/"))
-            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/"))
+            // OSSRH (Maven Central) URL
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
         }
     }
 }

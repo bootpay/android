@@ -18,6 +18,13 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
+
+        <!-- Commerce Activity for commerce checkout -->
+        <activity
+            android:name="kr.co.bootpay.android.commerce.CommerceActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
     </application>
 
 
