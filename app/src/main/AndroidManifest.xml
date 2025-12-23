@@ -28,6 +28,7 @@
         <activity android:name=".PasswordPaymentActivity"/>
         <activity android:name=".WidgetControllerActivity" android:exported="true"/>
         <activity android:name=".PaymentResultActivity"/>
+        <activity android:name=".CommercePaymentActivity"/>
 
     </application>
 

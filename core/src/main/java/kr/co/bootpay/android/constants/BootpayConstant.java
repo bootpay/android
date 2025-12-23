@@ -16,6 +16,7 @@ import kr.co.bootpay.android.pref.UserInfo;
 public class BootpayConstant {
     public static final String CDN_URL = "https://webview.bootpay.co.kr/5.2.2/";
     public static final String WIDGET_URL = CDN_URL + "widget.html";
+    public static final String COMMERCE_URL = "https://webview.bootpay.co.kr/commerce/1.0.5/index.html";
 //    public static final String CDN_URL = "https://staging-webview.bootpay.co.kr/4.2.7";
 
 
