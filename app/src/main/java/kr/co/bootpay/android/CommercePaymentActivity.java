@@ -561,10 +561,10 @@ public class CommercePaymentActivity extends AppCompatActivity {
                 .setExtra(extra);
 
         // usage_api_url 설정
-        String usageApiUrl = "production".equals(currentEnv)
-                ? "https://api.bootapi.com/v1/billing/usage"
-                : "https://dev-api.bootapi.com/v1/billing/usage";
-        payload.setUsageApiUrl(usageApiUrl);
+//        String usageApiUrl = "production".equals(currentEnv)
+//                ? "https://api.bootapi.com/v1/billing/usage"
+//                : "https://dev-api.bootapi.com/v1/billing/usage";
+//        payload.setUsageApiUrl(usageApiUrl);
 
         // Commerce 결제 요청
         BootpayCommerce.requestCheckout(this, payload)
