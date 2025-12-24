@@ -25,6 +25,12 @@ public interface CommerceEventListener {
     void onCancel(Map<String, Object> data);
 
     /**
+     * 가상계좌 발급 완료 시 호출
+     * @param data 가상계좌 발급 데이터
+     */
+    void onIssued(Map<String, Object> data);
+
+    /**
      * 결제창 닫힘 시 호출
      */
     void onClose();
