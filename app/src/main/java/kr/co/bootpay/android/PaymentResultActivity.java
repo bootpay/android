@@ -402,6 +402,31 @@ public class PaymentResultActivity extends AppCompatActivity {
             addDetailRow("영수증 ID", data.get("receipt_id").toString());
         }
 
+        // 가상계좌 정보 표시 (issued 이벤트)
+        if ("issued".equals(event)) {
+            if (data.get("bankname") != null) {
+                addDetailRow("입금 은행", data.get("bankname").toString());
+            }
+            if (data.get("account") != null) {
+                addDetailRow("계좌번호", data.get("account").toString());
+            }
+            if (data.get("accounthodler") != null) {
+                addDetailRow("예금주", data.get("accounthodler").toString());
+            }
+            if (data.get("expiredate") != null) {
+                String expireDate = data.get("expiredate").toString();
+                addDetailRow("입금 기한", formatExpireDate(expireDate));
+            }
+            if (data.get("price") != null) {
+                try {
+                    int price = Integer.parseInt(data.get("price").toString());
+                    addDetailRow("입금 금액", formatPrice(price));
+                } catch (NumberFormatException ignored) {
+                    addDetailRow("입금 금액", data.get("price").toString());
+                }
+            }
+        }
+
         // metadata 표시
         Object metadataObj = data.get("metadata");
         if (metadataObj instanceof Map) {
@@ -462,6 +487,25 @@ public class PaymentResultActivity extends AppCompatActivity {
         }
         if (json.has("receipt_id")) {
             addDetailRow("영수증 ID", json.optString("receipt_id"));
+        }
+
+        // 가상계좌 정보 표시 (issued 이벤트)
+        if ("issued".equals(event)) {
+            if (json.has("bankname")) {
+                addDetailRow("입금 은행", json.optString("bankname"));
+            }
+            if (json.has("account")) {
+                addDetailRow("계좌번호", json.optString("account"));
+            }
+            if (json.has("accounthodler")) {
+                addDetailRow("예금주", json.optString("accounthodler"));
+            }
+            if (json.has("expiredate")) {
+                addDetailRow("입금 기한", formatExpireDate(json.optString("expiredate")));
+            }
+            if (json.has("price")) {
+                addDetailRow("입금 금액", formatPrice(json.optInt("price", 0)));
+            }
         }
 
         // metadata 표시
@@ -600,6 +644,21 @@ public class PaymentResultActivity extends AppCompatActivity {
             Date date = inputFormat.parse(dateString);
             if (date != null) {
                 SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA);
+                return outputFormat.format(date);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dateString;
+    }
+
+    private String formatExpireDate(String dateString) {
+        try {
+            // 가상계좌 만료일 형식: "2021-01-17 00:00:00"
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            Date date = inputFormat.parse(dateString);
+            if (date != null) {
+                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm까지", Locale.KOREA);
                 return outputFormat.format(date);
             }
         } catch (ParseException e) {
