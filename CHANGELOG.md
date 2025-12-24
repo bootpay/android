@@ -1,3 +1,8 @@
+## 5.0.3
+* BootpayCommerce SDK 추가 (Commerce 결제 지원)
+* onIssued 콜백 추가 (가상계좌 발급 이벤트)
+* 결제 결과 화면에 가상계좌 상세 정보 표시
+
 ## 5.0.2
 * Fragment에서 직접 초기화 지원: `Bootpay.init(Fragment)` 추가
 
