@@ -277,12 +277,23 @@ public class CommerceWebView extends WebView {
         switch (event) {
             case "done":
                 if (eventListener != null) eventListener.onDone(data);
+                debounceClose();
+                BootpayCommerce.removePaymentWindow();
+                break;
+            case "issued":
+                if (eventListener != null) eventListener.onIssued(data);
+                debounceClose();
+                BootpayCommerce.removePaymentWindow();
                 break;
             case "cancel":
                 if (eventListener != null) eventListener.onCancel(data);
+                debounceClose();
+                BootpayCommerce.removePaymentWindow();
                 break;
             case "error":
                 if (eventListener != null) eventListener.onError(data);
+                debounceClose();
+                BootpayCommerce.removePaymentWindow();
                 break;
             default:
                 // event가 없으면 receipt_id로 판단
@@ -291,11 +302,10 @@ public class CommerceWebView extends WebView {
                 } else {
                     if (eventListener != null) eventListener.onCancel(data);
                 }
+                debounceClose();
+                BootpayCommerce.removePaymentWindow();
                 break;
         }
-
-        debounceClose();
-        BootpayCommerce.removePaymentWindow();
     }
 
     /**
@@ -338,6 +348,11 @@ public class CommerceWebView extends WebView {
                     switch (event) {
                         case "done":
                             if (eventListener != null) eventListener.onDone(dataMap);
+                            debounceClose();
+                            BootpayCommerce.removePaymentWindow();
+                            break;
+                        case "issued":
+                            if (eventListener != null) eventListener.onIssued(dataMap);
                             debounceClose();
                             BootpayCommerce.removePaymentWindow();
                             break;

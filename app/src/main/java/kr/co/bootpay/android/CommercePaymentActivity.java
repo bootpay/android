@@ -572,6 +572,10 @@ public class CommercePaymentActivity extends AppCompatActivity {
                     Log.d(TAG, "결제 완료: " + data);
                     runOnUiThread(() -> showPaymentResult("결제 완료", data));
                 })
+                .onIssued(data -> {
+                    Log.d(TAG, "가상계좌 발급: " + data);
+                    runOnUiThread(() -> showPaymentResult("가상계좌 발급", data));
+                })
                 .onError(data -> {
                     Log.e(TAG, "결제 에러: " + data);
                     runOnUiThread(() -> showPaymentResult("결제 에러", data));
@@ -591,6 +595,8 @@ public class CommercePaymentActivity extends AppCompatActivity {
         String event;
         if ("결제 완료".equals(title)) {
             event = "done";
+        } else if ("가상계좌 발급".equals(title)) {
+            event = "issued";
         } else if ("결제 취소".equals(title)) {
             event = "cancel";
         } else {

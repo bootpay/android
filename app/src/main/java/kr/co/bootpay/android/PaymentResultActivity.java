@@ -362,6 +362,14 @@ public class PaymentResultActivity extends AppCompatActivity {
                 messageText.setText("구독이 성공적으로 시작되었습니다.\n14일 무료 체험이 제공됩니다.");
                 break;
 
+            case "issued":
+                setSuccessState();
+                titleText.setText("가상계좌 발급 완료");
+                String issuedMsg = data.get("message") != null ?
+                        data.get("message").toString() : "가상계좌가 발급되었습니다.\n입금 후 자동으로 구독이 시작됩니다.";
+                messageText.setText(issuedMsg);
+                break;
+
             case "cancel":
                 setWarningState();
                 titleText.setText("결제 취소");
@@ -420,6 +428,12 @@ public class PaymentResultActivity extends AppCompatActivity {
                 setSuccessState();
                 titleText.setText("구독 신청 완료");
                 messageText.setText("구독이 성공적으로 시작되었습니다.\n14일 무료 체험이 제공됩니다.");
+                break;
+
+            case "issued":
+                setSuccessState();
+                titleText.setText("가상계좌 발급 완료");
+                messageText.setText(json.optString("message", "가상계좌가 발급되었습니다.\n입금 후 자동으로 구독이 시작됩니다."));
                 break;
 
             case "cancel":

@@ -99,6 +99,17 @@ public class BootpayCommerce {
     }
 
     /**
+     * 가상계좌 발급 콜백 설정
+     */
+    public BootpayCommerce onIssued(OnIssuedListener listener) {
+        if (eventListener == null) {
+            eventListener = new CommerceEventListenerAdapter();
+        }
+        ((CommerceEventListenerAdapter) eventListener).setOnIssuedListener(listener);
+        return this;
+    }
+
+    /**
      * 결제창 닫힘 콜백 설정
      */
     public BootpayCommerce onClose(OnCloseListener listener) {
@@ -143,6 +154,10 @@ public class BootpayCommerce {
         void onCancel(Map<String, Object> data);
     }
 
+    public interface OnIssuedListener {
+        void onIssued(Map<String, Object> data);
+    }
+
     public interface OnCloseListener {
         void onClose();
     }
@@ -154,6 +169,7 @@ public class BootpayCommerce {
         private OnDoneListener onDoneListener;
         private OnErrorListener onErrorListener;
         private OnCancelListener onCancelListener;
+        private OnIssuedListener onIssuedListener;
         private OnCloseListener onCloseListener;
 
         void setOnDoneListener(OnDoneListener listener) {
@@ -166,6 +182,10 @@ public class BootpayCommerce {
 
         void setOnCancelListener(OnCancelListener listener) {
             this.onCancelListener = listener;
+        }
+
+        void setOnIssuedListener(OnIssuedListener listener) {
+            this.onIssuedListener = listener;
         }
 
         void setOnCloseListener(OnCloseListener listener) {
@@ -185,6 +205,11 @@ public class BootpayCommerce {
         @Override
         public void onCancel(Map<String, Object> data) {
             if (onCancelListener != null) onCancelListener.onCancel(data);
+        }
+
+        @Override
+        public void onIssued(Map<String, Object> data) {
+            if (onIssuedListener != null) onIssuedListener.onIssued(data);
         }
 
         @Override
