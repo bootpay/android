@@ -1,3 +1,12 @@
+### 5.1.0
+- webview CDN URL을 5.3.0으로 업데이트
+- client_key 인증 방식 추가 (기존 application_id 방식과 병행 지원)
+- minSdk 16 → 24로 상향 (Android 7.0+)
+- Java 호환성 1.8 → 11로 업데이트
+- Android Gradle Plugin 8.2.2 → 8.5.0 업데이트
+- Gradle 8.5 → 8.7 업데이트
+- androidx.appcompat alpha → 1.7.0 stable로 변경
+
 ## 5.0.0
 * android 35 support
 * js version 5.1.4 적용

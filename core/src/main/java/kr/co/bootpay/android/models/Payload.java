@@ -20,6 +20,7 @@ import kr.co.bootpay.android.models.widget.WidgetTerm;
 
 public class Payload {
     private String applicationId = "";
+    private String clientKey = "";
     private String pg = "";
     private String method = "";
     private List<String> methods = new ArrayList<>();
@@ -88,6 +89,15 @@ public class Payload {
 
     public Payload setApplicationId(String applicationId) {
         this.applicationId = applicationId;
+        return this;
+    }
+
+    public String getClientKey() {
+        return clientKey;
+    }
+
+    public Payload setClientKey(String clientKey) {
+        this.clientKey = clientKey;
         return this;
     }
 
@@ -285,7 +295,11 @@ public class Payload {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            jsonObject.put("application_id", applicationId);
+            if(clientKey != null && clientKey.length() > 0) {
+                jsonObject.put("client_key", clientKey);
+            } else {
+                jsonObject.put("application_id", applicationId);
+            }
             jsonObject.put("pg", pg);
             if(methods.size() > 0) {
                 jsonObject.put("method", new JSONArray(methods));
