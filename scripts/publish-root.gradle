@@ -37,7 +37,6 @@ nexusPublishing {
 //            password = ossrhPassword
             username = ossrhToken
             password = ossrhTokenPassword
-            // 기본 Maven Central Repository URL 시도
             nexusUrl.set(uri("https://central.sonatype.com/"))
             snapshotRepositoryUrl.set(uri("https://central.sonatype.com/"))
         }

@@ -5,7 +5,7 @@ echo "🚀 Bootpay Android SDK 배포 시작..."
 echo "========================================"
 
 # 프로젝트 루트로 이동
-cd /Users/taesupyoon/bootpay/client/android/android_0825
+cd "$(dirname "$0")"
 
 # publish.gradle에서 버전 정보 읽기
 PUBLISH_VERSION=$(grep "PUBLISH_VERSION = " publish.gradle | sed 's/.*PUBLISH_VERSION = '\''\(.*\)'\''/\1/')
@@ -28,12 +28,7 @@ echo "📦 Step 2: 새로운 publication 생성..."
 echo "📦 Step 3: 번들 생성..."
 cd core/build/repo
 zip -r ../../../android-bundle.zip \
-  ${PUBLISH_GROUP_ID//.//}/${PUBLISH_ARTIFACT_ID}/${PUBLISH_VERSION}/*.aar \
-  ${PUBLISH_GROUP_ID//.//}/${PUBLISH_ARTIFACT_ID}/${PUBLISH_VERSION}/*.pom \
-  ${PUBLISH_GROUP_ID//.//}/${PUBLISH_ARTIFACT_ID}/${PUBLISH_VERSION}/*.module \
-  ${PUBLISH_GROUP_ID//.//}/${PUBLISH_ARTIFACT_ID}/${PUBLISH_VERSION}/*.md5 \
-  ${PUBLISH_GROUP_ID//.//}/${PUBLISH_ARTIFACT_ID}/${PUBLISH_VERSION}/*.sha1 \
-  ${PUBLISH_GROUP_ID//.//}/${PUBLISH_ARTIFACT_ID}/${PUBLISH_VERSION}/*.asc
+  ${PUBLISH_GROUP_ID//.//}/${PUBLISH_ARTIFACT_ID}/${PUBLISH_VERSION}/
 cd ../../../
 
 echo "✅ 번들 생성 완료: $(ls -lh android-bundle.zip)"
