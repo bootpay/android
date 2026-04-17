@@ -27,15 +27,12 @@ import kr.co.bootpay.android.constants.BootpayBuildConfig;
 public class SubscriptionPaymentActivity extends AppCompatActivity {
 //    BootpayWebView bootpayWebView;
 
-    String applicationId = "5b8f6a4d396fa665fdc2b5e8";
+    String applicationId = BootpayConstants.application_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subscription_payment);
-        if(BootpayBuildConfig.DEBUG) {
-            applicationId = "5b9f51264457636ab9a07cdc";
-        }
     }
 
 
