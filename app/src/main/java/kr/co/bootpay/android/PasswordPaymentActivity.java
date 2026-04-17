@@ -26,21 +26,15 @@ import kr.co.bootpay.android.models.Payload;
 @Deprecated
 public class PasswordPaymentActivity extends AppCompatActivity implements BootpayRestImplement {
     @Deprecated
-    String restApplicationId = "5b8f6a4d396fa665fdc2b5ea"; //production
+    String restApplicationId = BootpayConstants.rest_application_id;
     @Deprecated
-    String privateKey = "rm6EYECr6aroQVG2ntW0A6LpWnkTgP4uQ3H18sDDUYw="; //production
-    String applicationId = "5b8f6a4d396fa665fdc2b5e8";
+    String privateKey = BootpayConstants.private_key;
+    String applicationId = BootpayConstants.application_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_payment);
-
-        if(BootpayBuildConfig.DEBUG) {
-            restApplicationId = "59b731f084382614ebf72215";
-            privateKey = "WwDv0UjfwFa04wYG0LJZZv1xwraQnlhnHE375n52X0U=";
-            applicationId = "5b9f51264457636ab9a07cdc";
-        }
     }
 
 
