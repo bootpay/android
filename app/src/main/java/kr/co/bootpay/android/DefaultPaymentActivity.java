@@ -42,7 +42,7 @@ public class DefaultPaymentActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
-        payload.setApplicationId(BootpayConstants.application_id)
+        payload.setClientKey(BootpayConstants.client_key)
                 .setOrderName("부트페이 결제테스트")
                 .setPg("나이스페이")
 

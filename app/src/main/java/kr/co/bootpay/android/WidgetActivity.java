@@ -26,7 +26,7 @@ public class WidgetActivity extends AppCompatActivity {
         BootExtra extra = new BootExtra();
         extra.setDisplaySuccessResult(true);
 
-        payload.setApplicationId(BootpayConstants.application_id)
+        payload.setClientKey(BootpayConstants.client_key)
                 .setOrderName("부트페이 결제테스트")
                 .setWidgetSandbox(true)
                 .setWidgetKey("default-widget")
