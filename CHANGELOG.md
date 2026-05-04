@@ -1,3 +1,7 @@
+## Unreleased
+- example: 결제/인증 payload 예제를 client_key 기준으로 전환하고 local.properties production fallback을 유지
+- legacy application_id/private_key 토큰 헬퍼는 호환용으로 유지
+
 ### 5.1.1
 - `BootpayUrlHelper` URL 라우팅 개선 (나이스페이 앱카드 관련)
   - `isSpecialCase()`에 `kakaobank://`, `monimopay://`, `smcard://` 스킴 추가

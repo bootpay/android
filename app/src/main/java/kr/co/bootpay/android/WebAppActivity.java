@@ -32,7 +32,7 @@ public class WebAppActivity extends AppCompatActivity {
 
         BootpayDialogX mDialogX = new BootpayDialogX();
         Payload payload = new Payload();
-        payload.setApplicationId(BootpayConstants.application_id)
+        payload.setClientKey(BootpayConstants.client_key)
                 .setOrderName("부트페이 결제테스트")
                 .setWidgetSandbox(true)
                 .setWidgetKey("default-widget")

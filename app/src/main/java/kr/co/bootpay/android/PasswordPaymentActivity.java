@@ -28,8 +28,8 @@ public class PasswordPaymentActivity extends AppCompatActivity implements Bootpa
     @Deprecated
     String restApplicationId = BootpayConstants.rest_application_id;
     @Deprecated
-    String privateKey = BootpayConstants.private_key;
-    String applicationId = BootpayConstants.application_id;
+    String serverKey = BootpayConstants.server_key;
+    String clientKey = BootpayConstants.client_key;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class PasswordPaymentActivity extends AppCompatActivity implements Bootpa
 
     public void PaymentTest(View v) {
 
-        BootpayRest.getRestToken(this, this, restApplicationId, privateKey);
+        BootpayRest.getRestTokenWithClientKey(this, this, clientKey, serverKey);
     }
 
     public BootUser getBootUser() {
@@ -70,7 +70,7 @@ public class PasswordPaymentActivity extends AppCompatActivity implements Bootpa
         items.add(item2);
 
         Payload payload = new Payload();
-        payload.setApplicationId(applicationId)
+        payload.setClientKey(clientKey)
                 .setOrderName("부트페이 결제테스트")
                 .setPg("나이스페이")
                 .setMethod("카드간편")

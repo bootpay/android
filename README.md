@@ -64,7 +64,7 @@ void initPayload() {
     BootExtra extra = new BootExtra();
     extra.setDisplaySuccessResult(true);
 
-    payload.setApplicationId("5b9f51264457636ab9a07cdc")
+    payload.setClientKey("YOUR_CLIENT_KEY")
             .setOrderName("부트페이 결제테스트")
             .setWidgetSandbox(true)
             .setWidgetKey("default-widget")
@@ -185,7 +185,7 @@ public void PaymentTest(View v) {
     items.add(item2);
 
     Payload payload = new Payload();
-    payload.setApplicationId(BootpayConstants.application_id)
+    payload.setClientKey(BootpayConstants.client_key)
             .setOrderName("부트페이 결제테스트")
             .setPg("페이앱")
             .setMethod("네이버페이")
@@ -251,7 +251,7 @@ public void PaymentTest(View v) {
 
 ```java 
 Payload payload = new Payload();
-payload.setApplicationId(application_id)
+payload.setClientKey(client_key)
     .setOrderName("부트페이 결제테스트")
     .setPg("나이스페이")
     .setMethod("카드자동")
@@ -273,7 +273,7 @@ Bootpay.init(getSupportFragmentManager(), getApplicationContext())
 
 ```java
 Payload payload = new Payload();
-payload.setApplicationId(application_id)
+payload.setClientKey(client_key)
     .setOrderName("부트페이 결제테스트")
     .setPg("다날")
     .setMethod("본인인증")

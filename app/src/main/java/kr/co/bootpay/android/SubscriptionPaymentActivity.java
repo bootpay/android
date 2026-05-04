@@ -27,7 +27,7 @@ import kr.co.bootpay.android.constants.BootpayBuildConfig;
 public class SubscriptionPaymentActivity extends AppCompatActivity {
 //    BootpayWebView bootpayWebView;
 
-    String applicationId = BootpayConstants.application_id;
+    String clientKey = BootpayConstants.client_key;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class SubscriptionPaymentActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
-        payload.setApplicationId(applicationId)
+        payload.setClientKey(clientKey)
                 .setOrderName("부트페이 결제테스트")
                 .setPg("페이레터")
                 .setMethod("카드자동")

@@ -105,7 +105,7 @@ public class NativeActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
-        payload.setApplicationId(BootpayConstants.application_id)
+        payload.setClientKey(BootpayConstants.client_key)
                 .setOrderName("부트페이 결제테스트")
                 .setPg(pg)
                 .setOrderId("1234")
@@ -182,7 +182,7 @@ public class NativeActivity extends AppCompatActivity {
         map.put("3", 1234);
         payload.setMetadata(map);
 
-        payload.setApplicationId(BootpayConstants.application_id)
+        payload.setClientKey(BootpayConstants.client_key)
                 .setOrderName("맥\"북프로's 임다")
                 .setOrderId("1234")
                 .setPrice(price)
@@ -249,7 +249,7 @@ public class NativeActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
-        payload.setApplicationId(BootpayConstants.application_id)
+        payload.setClientKey(BootpayConstants.client_key)
                 .setOrderName("부트페이 결제테스트")
                 .setPg(pg)
                 .setSubscriptionId("1234") //정기결제용 orderId
@@ -325,7 +325,7 @@ public class NativeActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
-        payload.setApplicationId(BootpayConstants.application_id)
+        payload.setClientKey(BootpayConstants.client_key)
                 .setOrderName("부트페이 결제테스트")
                 .setPg(pg)
                 .setAuthenticationId("1234")
