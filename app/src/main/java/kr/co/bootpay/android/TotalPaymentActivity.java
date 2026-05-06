@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +42,9 @@ public class TotalPaymentActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
+        // 통합결제는 method/methods 를 지정하지 않는다 — 결제수단 선택 UI 가 직접 노출됨
         payload.setClientKey(BootpayConstants.client_key)
 //                .setPg("나이스페이")
-//                .setMethods(Arrays.asList("카드", "휴대폰"))
                 .setOrderName("부트페이 결제테스트")
                 .setOrderId("1234")
                 .setPrice(1000d)
