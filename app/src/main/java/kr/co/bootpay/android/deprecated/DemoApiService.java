@@ -5,11 +5,9 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import kr.co.bootpay.android.constants.BootpayBuildConfig;
 import kr.co.bootpay.android.cookiejar.PersistentCookieJar;
 import kr.co.bootpay.android.cookiejar.cache.SetCookieCache;
 import kr.co.bootpay.android.cookiejar.persistence.SharedPrefsCookiePersistor;
-import kr.co.bootpay.android.constants.BootpayBuildConfig;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -39,7 +37,7 @@ public class DemoApiService {
                 .create();
 
         String url = "https://api.bootpay.co.kr/";
-        if(BootpayBuildConfig.DEBUG) url = "https://dev-api.bootpay.co.kr/";
+        if (kr.co.bootpay.android.BootpayConstants.IS_DEBUG) url = "https://dev-api.bootpay.co.kr/";
 
         api =  new Retrofit.Builder()
                 .baseUrl(url)
