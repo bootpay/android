@@ -20,6 +20,11 @@ import kr.co.bootpay.android.models.Payload;
 
 public class DefaultPaymentActivity extends AppCompatActivity {
 //    BootpayWebView bootpayWebView;
+    private enum AuthMode {
+        CLIENT_KEY,
+        LEGACY_APPLICATION_ID,
+        MISSING_KEY
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,6 +34,18 @@ public class DefaultPaymentActivity extends AppCompatActivity {
 
 
     public void PaymentTest(View v) {
+        requestPayment(AuthMode.CLIENT_KEY);
+    }
+
+    public void LegacyPaymentTest(View v) {
+        requestPayment(AuthMode.LEGACY_APPLICATION_ID);
+    }
+
+    public void MissingKeyPaymentTest(View v) {
+        requestPayment(AuthMode.MISSING_KEY);
+    }
+
+    private void requestPayment(AuthMode authMode) {
         BootUser user = new BootUser().setPhone("010-1234-5678"); // 구매자 정보
 
         BootExtra extra = new BootExtra()
@@ -42,8 +59,8 @@ public class DefaultPaymentActivity extends AppCompatActivity {
         items.add(item2);
 
         Payload payload = new Payload();
-        payload.setClientKey(BootpayConstants.client_key)
-                .setOrderName("부트페이 결제테스트")
+        applyAuth(payload, authMode);
+        payload.setOrderName("부트페이 결제테스트")
                 .setPg("나이스페이")
 
                 .setMethod("카드")
@@ -102,6 +119,15 @@ public class DefaultPaymentActivity extends AppCompatActivity {
                     }
                 }).requestPayment();
 
+    }
+
+    private void applyAuth(Payload payload, AuthMode authMode) {
+        if (authMode == AuthMode.CLIENT_KEY) {
+            payload.setClientKey(BootpayConstants.client_key);
+        } else if (authMode == AuthMode.LEGACY_APPLICATION_ID) {
+            payload.setApplicationId(BootpayConstants.application_id);
+        }
+        // MISSING_KEY는 의도적으로 client_key/application_id를 모두 비워 NEED_CLIENT_KEY 검증에 사용합니다.
     }
 
     private boolean checkClientValidation(String data) {

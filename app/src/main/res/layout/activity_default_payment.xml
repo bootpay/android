@@ -10,10 +10,28 @@
 
 
     <Button
-        android:text="PG일반 테스트"
+        android:text="PG 일반 테스트 (client_key)"
         android:background="#4529e5"
         android:textColor="#fff"
         android:onClick="PaymentTest"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <Button
+        android:text="PG 일반 테스트 (legacy application_id)"
+        android:background="#6c757d"
+        android:textColor="#fff"
+        android:onClick="LegacyPaymentTest"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <Button
+        android:text="PG 일반 테스트 (키 없음 - NEED_CLIENT_KEY)"
+        android:background="#dc3545"
+        android:textColor="#fff"
+        android:onClick="MissingKeyPaymentTest"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
