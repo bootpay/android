@@ -1,6 +1,17 @@
-## Unreleased
-- example: 결제/인증 payload 예제를 client_key 기준으로 전환하고 local.properties production fallback을 유지
-- legacy application_id/private_key 토큰 헬퍼는 호환용으로 유지
+## 5.2.0
+- feat: 통합 환경 모드 API `Bootpay.setEnvironmentMode(String)` 추가
+  - 다른 SDK (JS / iOS / Flutter / RN) 와 일관된 인터페이스
+  - `"development"` | `"stage"` | `"production"` (그 외 값은 production fallback)
+  - 내부적으로 `BootpayConstant.ENVIRONMENT_MODE` 와 매핑
+- feat: 결제 WebView stage 환경 지원
+  - DEBUG 빌드는 자동으로 development, ENVIRONMENT_MODE 가 stage 면 stage 주입
+  - `Bootpay.setEnvironmentMode("stage")` 런타임 호출로 토글
+- chore: `BootpayConstant.ENVIRONMENT_MODE` 기본값을 `"production"` 으로 명시
+  - 배포 안전성 강화 — 별도 호출 없이도 항상 실서비스로 동작
+- chore(example): local.properties 기반 client_key 예제로 정리, production fallback 유지
+  - legacy application_id/private_key 토큰 헬퍼는 호환용으로 유지
+  - `BOOTPAY_SERVER_KEY` 등 secret 는 클라이언트 예제에서 제거
+- chore: `BootpayBuildConfig.VERSION` 5.1.0 → 5.2.0 (analytics/setVersion 동기화)
 
 ### 5.1.1
 - `BootpayUrlHelper` URL 라우팅 개선 (나이스페이 앱카드 관련)
