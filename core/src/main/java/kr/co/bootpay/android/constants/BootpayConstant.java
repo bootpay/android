@@ -18,6 +18,12 @@ public class BootpayConstant {
     public static final String WIDGET_URL = CDN_URL + "widget.html";
 //    public static final String CDN_URL = "https://staging-webview.bootpay.co.kr/4.2.7";
 
+    /**
+     * WebView 결제 환경. "development" | "stage" | "production".
+     * 기본값은 항상 "production". 배포 시 절대 변경하지 말 것.
+     * 로컬 테스트는 {@code Bootpay.setEnvironmentMode("development")} 등을 런타임에 호출.
+     */
+    public static String ENVIRONMENT_MODE = "production";
 
     public static final int REQUEST_TYPE_NONE = 0; //일반 결제
     public static final int REQUEST_TYPE_PAYMENT = 1; //일반 결제
@@ -123,7 +129,10 @@ public class BootpayConstant {
         scripts.add("Bootpay.setVersion('" + VERSION + "', 'android');");
         scripts.add("Bootpay.setDevice('ANDROID');");
         scripts.add(getAnalyticsData(context));
-        if(BootpayBuildConfig.DEBUG) scripts.add("Bootpay.setEnvironmentMode('development');");
+        if (BootpayBuildConfig.DEBUG || !"production".equals(ENVIRONMENT_MODE)) {
+            String mode = (BootpayBuildConfig.DEBUG && "production".equals(ENVIRONMENT_MODE)) ? "development" : ENVIRONMENT_MODE;
+            scripts.add("Bootpay.setEnvironmentMode('" + mode + "');");
+        }
         return scripts;
     }
 
