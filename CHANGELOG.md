@@ -10,7 +10,7 @@
   - 배포 안전성 강화 — 별도 호출 없이도 항상 실서비스로 동작
 - chore(example): local.properties 기반 client_key 예제로 정리, production fallback 유지
   - legacy application_id/private_key 토큰 헬퍼는 호환용으로 유지
-  - `BOOTPAY_SERVER_KEY` 등 secret 는 클라이언트 예제에서 제거
+  - `BOOTPAY_SECRET_KEY` 등 secret 는 클라이언트 예제에서 제거
 - chore: `BootpayBuildConfig.VERSION` 5.1.0 → 5.2.0 (analytics/setVersion 동기화)
 
 ### 5.1.1

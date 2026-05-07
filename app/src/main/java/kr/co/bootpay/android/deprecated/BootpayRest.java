@@ -19,10 +19,10 @@ public class BootpayRest {
     }
 
 
-    /** 권장 방식: client_key/server_key 인증. 기존 getRestToken(application_id/private_key)은 legacy 호환용으로 유지합니다. */
-    public static void getRestTokenWithClientKey(Context context, BootpayRestImplement parent, String clientKey, String serverKey) {
+    /** 권장 방식: client_key/secret_key 인증. 기존 getRestToken(application_id/private_key)은 legacy 호환용으로 유지합니다. */
+    public static void getRestTokenWithClientKey(Context context, BootpayRestImplement parent, String clientKey, String secretKey) {
         if (presenter == null) presenter = new DemoApiPresenter(new DemoApiService(context), parent);
-        presenter.getRestTokenWithClientKey(clientKey, serverKey);
+        presenter.getRestTokenWithClientKey(clientKey, secretKey);
     }
 
     @Deprecated
