@@ -60,10 +60,10 @@ public class DemoApiPresenter {
     }
 
 
-    public void getRestTokenWithClientKey(String clientKey, String serverKey) {
+    public void getRestTokenWithClientKey(String clientKey, String secretKey) {
         final DemoApiPresenter parentScope = this;
 
-        Call<TokenData> dataCall = service.getApi().getRestTokenWithClientKey(clientKey, serverKey);
+        Call<TokenData> dataCall = service.getApi().getRestTokenWithClientKey(clientKey, secretKey);
         dataCall.enqueue(new Callback<TokenData>() {
             @Override
             public void onResponse(Call<TokenData> call, Response<TokenData> response) {

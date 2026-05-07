@@ -23,5 +23,5 @@ public class BootpayConstants {
     // Commerce API
     public static String client_key = BuildConfig.BOOTPAY_CLIENT_KEY;
 
-    // 주의: server_key (secret) 는 클라이언트에 절대 포함하지 말 것 — 서버 SDK 에서만 사용
+    // 주의: secret_key (secret) 는 클라이언트에 절대 포함하지 말 것 — 서버 SDK 에서만 사용
 }
