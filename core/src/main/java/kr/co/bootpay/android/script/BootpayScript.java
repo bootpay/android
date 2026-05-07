@@ -23,9 +23,11 @@ public class BootpayScript {
     }
 
     public static String renderWidget(Payload payload) {
-        if (BootpayBuildConfig.DEBUG) {
+        boolean overrideEnv = !"production".equals(BootpayConstant.ENVIRONMENT_MODE);
+        if (BootpayBuildConfig.DEBUG || overrideEnv) {
+            String mode = (BootpayBuildConfig.DEBUG && !overrideEnv) ? "development" : BootpayConstant.ENVIRONMENT_MODE;
             return BootpayConstant.loadParams(
-                    "BootpayWidget.setEnvironmentMode('development');",
+                    "BootpayWidget.setEnvironmentMode('" + mode + "');",
                     BootpayConstant.readyWatch(),
                     BootpayConstant.resizeWatch(),
                     BootpayConstant.changeMethodWatch(),
