@@ -34,20 +34,38 @@ cd ../../../
 echo "✅ 번들 생성 완료: $(ls -lh android-bundle.zip)"
 
 echo "🔐 Step 4: 인증 정보 설정..."
-OSSRH_USERNAME="i4oDa5"
-OSSRH_PASSWORD="uh9Wgv6DYCHET2H8M2XLDIKnP82Eigtdz"
-BEARER_TOKEN=$(echo -n "${OSSRH_USERNAME}:${OSSRH_PASSWORD}" | base64)
+# 자격증명은 gitignored 파일(local.properties)에서만 읽는다.
+# 이 스크립트는 public 리포에 커밋되므로 값을 절대 하드코딩하지 말 것.
+if [ -f local.properties ]; then
+  OSSRH_USERNAME=$(grep '^ossrhToken=' local.properties | cut -d= -f2-)
+  OSSRH_PASSWORD=$(grep '^ossrhTokenPassword=' local.properties | cut -d= -f2-)
+fi
+OSSRH_USERNAME="${OSSRH_USERNAME:-$CENTRAL_TOKEN_USERNAME}"
+OSSRH_PASSWORD="${OSSRH_PASSWORD:-$CENTRAL_TOKEN_PASSWORD}"
+if [ -z "$OSSRH_USERNAME" ] || [ -z "$OSSRH_PASSWORD" ]; then
+  echo "❌ 자격증명이 없습니다."
+  echo "   local.properties 에 ossrhToken / ossrhTokenPassword 를 설정하거나"
+  echo "   CENTRAL_TOKEN_USERNAME / CENTRAL_TOKEN_PASSWORD 환경변수를 주세요."
+  exit 1
+fi
+BEARER_TOKEN=$(printf '%s:%s' "${OSSRH_USERNAME}" "${OSSRH_PASSWORD}" | base64 | tr -d '\n')
 
 echo "⬆️  Step 5: Central Portal에 업로드..."
 DEPLOYMENT_ID=$(curl --silent --request POST \
   --header "Authorization: Bearer ${BEARER_TOKEN}" \
   --form bundle=@android-bundle.zip \
-  https://central.sonatype.com/api/v1/publisher/upload)
+  https://central.sonatype.com/api/v1/publisher/upload | tr -d '\r\n')
 
-if [ -z "$DEPLOYMENT_ID" ]; then
-    echo "❌ 업로드 실패!"
-    exit 1
-fi
+# 인증 실패시 Central Portal 은 200 에 에러 JSON 을 실어 보낸다.
+# 빈 값만 검사하면 {"error":{"message":"Invalid token"}} 를 배포 ID 로 오인한다.
+case "$DEPLOYMENT_ID" in
+    ''|*'"error"'*|*'<html'*)
+        echo "❌ 업로드 실패: ${DEPLOYMENT_ID:-(빈 응답)}"
+        echo "   토큰이 만료됐다면 https://central.sonatype.com/account 에서 재발급 후"
+        echo "   local.properties 의 ossrhToken / ossrhTokenPassword 를 갱신하세요."
+        exit 1
+        ;;
+esac
 
 echo "✅ 업로드 성공!"
 echo "📋 Deployment ID: $DEPLOYMENT_ID"
