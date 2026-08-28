@@ -36,9 +36,13 @@ echo "✅ 번들 생성 완료: $(ls -lh android-bundle.zip)"
 echo "🔐 Step 4: 인증 정보 설정..."
 # 자격증명은 gitignored 파일(local.properties)에서만 읽는다.
 # 이 스크립트는 public 리포에 커밋되므로 값을 절대 하드코딩하지 말 것.
+# Central Portal Bearer 는 ossrhUsername / ossrhPassword 쌍을 쓴다.
+# ossrhToken / ossrhTokenPassword 는 구 OSSRH(s01.oss.sonatype.org) 용이고
+# 그 엔드포인트는 종료됐다 — 이 쌍으로 upload 하면 "Invalid token" 이 난다.
+# (server/java/deploy.sh 와 동일한 규약)
 if [ -f local.properties ]; then
-  OSSRH_USERNAME=$(grep '^ossrhToken=' local.properties | cut -d= -f2-)
-  OSSRH_PASSWORD=$(grep '^ossrhTokenPassword=' local.properties | cut -d= -f2-)
+  OSSRH_USERNAME=$(grep '^ossrhUsername=' local.properties | cut -d= -f2-)
+  OSSRH_PASSWORD=$(grep '^ossrhPassword=' local.properties | cut -d= -f2-)
 fi
 OSSRH_USERNAME="${OSSRH_USERNAME:-$CENTRAL_TOKEN_USERNAME}"
 OSSRH_PASSWORD="${OSSRH_PASSWORD:-$CENTRAL_TOKEN_PASSWORD}"
