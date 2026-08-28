@@ -1,3 +1,11 @@
+## 5.2.1
+- fix: `onCloseWindow` 가 본체를 떼어내고 close 를 알리지 않던 문제
+  - 팝업/본체 구분 없이 `mainView.removeView(window)` 를 하고 앱에는 아무것도 알리지 않았다
+  - `onCreateWindow` 가 만든 팝업일 때만 제거하고,
+    본체가 닫히면 `BootpayWebView.notifyWindowClosed()` 로 close 를 통지한다
+  - close 처리를 `dispatchClose()` 로 뽑아 JS 브릿지 `close(data)` 와 공유
+    (브릿지 시그니처·동작은 그대로. `notifyWindowClosed` 는 신규 public 메서드)
+
 ## 5.2.0
 - feat: 통합 환경 모드 API `Bootpay.setEnvironmentMode(String)` 추가
   - 다른 SDK (JS / iOS / Flutter / RN) 와 일관된 인터페이스
