@@ -88,6 +88,27 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         BootpayWebViewHandler.removePaymentWindow(this);
     }
 
+    /**
+     * 결제 페이지가 window.close() 로 창을 닫으려 할 때 네이티브에서 호출한다.
+     * Android WebView 는 window.close() 를 onCloseWindow 로 네이티브에만 알리고
+     * JS 로는 아무 이벤트도 주지 않아, 그대로 두면 결제 페이지의 닫기(X) 가
+     * SDK 사용자에게 전달되지 않고 결제창이 남는다.
+     */
+    public void notifyWindowClosed() {
+        dispatchClose();
+        BootpayWebViewHandler.removePaymentWindow(this);
+    }
+
+    void dispatchClose() {
+        if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
+        if (isWidget) {
+            BootpayWidget.closeDialog((Activity) getContext());
+        } else {
+            if (mEventListener != null) mEventListener.onClose();
+        }
+        isFullScreen = false;
+    }
+
     public void setInjectedJS(@Nullable String injectedJS) {
         this.injectedJS = injectedJS;
     }
@@ -247,13 +268,7 @@ public class BootpayWebView extends WebView implements BootpayInterface, Bootpay
         @JavascriptInterface
         @Override
         public void close(String data) {
-            if (mExtEventListener != null && isWidget) mExtEventListener.onProgressShow(false);
-            if (isWidget) {
-                BootpayWidget.closeDialog((Activity) getContext());
-            } else {
-                if (mEventListener != null) mEventListener.onClose();
-            }
-            isFullScreen = false;
+            dispatchClose();
         }
 
         @JavascriptInterface

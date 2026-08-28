@@ -69,12 +69,18 @@ public class BootpayWebViewChromeClient extends WebChromeClient {
     @Override
     public void onCloseWindow(WebView window) {
         super.onCloseWindow(window);
-        if(mainView != null) {
+        // window.close() 로 닫히는 것은 onCreateWindow 가 만든 팝업뿐이다.
+        // 본체를 부모에서 떼어내면 화면이 빈 채로 남으므로 팝업일 때만 제거한다.
+        if (mainView != null && window != mainView) {
             mainView.removeView(window);
+            window.setVisibility(View.GONE);
+            return;
         }
-//        main
-        window.setVisibility(View.GONE);
-//        mainView.re
+        // 본체가 닫히는 경우. onCloseWindow 는 네이티브에만 오고 JS 로는 아무 이벤트도
+        // 가지 않으므로, 결제 페이지의 닫기(X) 를 SDK 사용자에게 직접 통지한다.
+        if (window instanceof BootpayWebView) {
+            ((BootpayWebView) window).notifyWindowClosed();
+        }
     }
 
     @Override
