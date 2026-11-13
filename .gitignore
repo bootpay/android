@@ -20,3 +20,6 @@ android-bundle.zip
 
 # omj automation runtime
 .omj/
+
+# 서명 개인키 — 커밋 금지 (26-11-13: 공개 리포에 2024-03 부터 노출돼 있었다)
+*.gpg
